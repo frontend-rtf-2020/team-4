@@ -9,7 +9,7 @@ var indexRouter = require('./routes/routes');
 var app = express();
 
 
-mongoose.connect("");//здесь должна быть строка подключения
+//mongoose.connect("");//здесь должна быть строка подключения
 
 app.use(logger('dev'));
 app.use(express.json());
