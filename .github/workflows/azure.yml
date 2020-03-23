@@ -11,7 +11,10 @@
 on:
   release:
     types: [created]
-
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 env:
   AZURE_WEBAPP_NAME: mytask-board    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
