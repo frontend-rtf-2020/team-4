@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'front/build')));
 
-app.use('/', indexRouter);
+app.use('/api', indexRouter);
 //app.use('/users', usersRouter);
 
 module.exports = app;
