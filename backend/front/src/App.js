@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter , Route , Switch} from 'react-router-dom'
 import Header from './Components/Header';
 import Footer from './Components/Footer';
+import BoardList from "./Components/BoardListPage/BoardList";
+import BoardItem from "./Components/BoardListPage/BoardItem";
+import {StartComponent} from "./Components/StartComponent";
 
 
-function App() {
-  return (
-    <div className="App">
-        <Header/>
-        <div>
-            <h1>Tema 4:</h1>
-            <ol>
-                <li>Кальская Юлия</li>
-                <li>Лукьянов Андрей</li>
-                <li>Сатункин Владимир</li>
-                <li>Ткачук Денис</li>
-            </ol>
-        </div>
-        <Footer/>
-    </div>
-  );
+class App extends React.Component {
+    render() {
+        return (
+            <div className="App">
+                <Header/>
+                <div>
+                    <BrowserRouter>
+                        <Switch>
+                            <Route path="/item" render={(props) => <BoardItem />}/>
+                            <Route path="/list" render={(props) => <BoardList />} />
+                            <Route path='/' component={StartComponent}/>
+                        </Switch>
+                    </BrowserRouter>
+                </div>
+                <Footer/>
+            </div>
+        );
+    }
 }
 
 export default App;
