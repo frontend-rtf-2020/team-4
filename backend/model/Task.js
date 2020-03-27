@@ -2,13 +2,36 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Task = mongoose.model('Task', new Schema({
-    userId: Schema.Types.ObjectId,
-    column: Schema.Types.ObjectId,
-    name: String,
-    description: String,
-    addingDate: Date,
-    endDate: Date,
-    done: Boolean
+    creatorId : {
+        type : Schema.Types.ObjectId,
+        required : true
+    },
+
+    column : {
+        type : Schema.Types.ObjectId,
+        required : true
+    },
+    name : {
+        type : String,
+        required : true
+    },
+    description : {
+        type : String,
+        required : false
+    },
+    addingDate : {
+        type : Date,
+        default : Date.now(),
+        required : true
+    },
+    endDate : {
+        type : Date,
+        required : false
+    },
+    done : {
+        type : Boolean,
+        required : false
+    }
 }));
 
 module.exports = Task;

@@ -34,13 +34,16 @@ jobs:
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
-        pushd ./backend/
-        pushd ./front/
+        pushd ./frontend/
         npm install
         npm run build --if-present
         #npm run test --if-present
+        mkdir ../backend/frontend/
+        cp -r ./build/* ../backend/frontend/
         popd
+        pushd ./backend/
         npm install
+        popd
         #npm run build --if-present
         #npm run test --if-present
     - name: 'Deploy to Azure WebApp'

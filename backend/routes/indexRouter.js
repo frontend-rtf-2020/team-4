@@ -6,7 +6,7 @@ var router = express.Router();
 /* Only for testing */
 router.get('/*', function(req, res, next) {
     console.log('received');
-    res.sendFile(path.resolve("./front/build/index.html"));
+    res.sendFile(path.resolve("./frontend/index.html"));
     //res.render('index', { title: 'Express' });
 });
 

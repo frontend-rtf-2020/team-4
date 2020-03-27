@@ -2,11 +2,26 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Board = mongoose.model('Board', new Schema({
-    creatorId: Schema.Types.ObjectId,
-    name: String,
-    members: [Schema.Types.ObjectId],
-    addingDate: Date,
-    endDate: Date,
+    creatorId : {
+        type : Schema.Types.ObjectId,
+        required : true
+    },
+    name : {
+        type: String,
+        required : true
+    },
+    members : {
+        type : Schema.Types.ObjectId,
+        required : true
+    },
+    addingDate : {
+        type : Date,
+        required : true
+    },
+    endDate : {
+        type : Date,
+        required : true
+    },
 }));
 
 module.exports = Board;
