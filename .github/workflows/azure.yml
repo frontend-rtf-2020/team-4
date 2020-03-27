@@ -38,6 +38,7 @@ jobs:
         npm install
         npm run build --if-present
         #npm run test --if-present
+        cp ./build/* ../backend/frontend/build
         popd
         pushd ./backend/
         npm install
