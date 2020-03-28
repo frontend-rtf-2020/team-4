@@ -8,7 +8,7 @@ const session = require("express-session");
 const User = require('./model/User');
 const apiRouter = require('./routes/routes');
 const indexRouter = require('./routes/indexRouter');
-require('dotenv').config();
+//require('dotenv').config();
 const app = express();
 
 
