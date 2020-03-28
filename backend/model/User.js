@@ -11,7 +11,7 @@ const User  = mongoose.model('User', new Schema({
         type : String,
         required : true
     },
-    hash : {
+    password : {
         type : String,
         required : true
     },
@@ -21,7 +21,7 @@ const User  = mongoose.model('User', new Schema({
     }
 }));
 
-User.methods.setPassword = function(password){
+/**User.methods.setPassword = function(password){
       this.salt = crypto.randomBytes(100).toString('hex');
       this.hash = crypto.pbkdf2Sync(password, this.salt, 888, 64, `sha512`).toString(`hex`);
 };
@@ -29,5 +29,5 @@ User.methods.setPassword = function(password){
 User.methods.validPassword = function(password){
         let currentHash = crypto.pbkdf2Sync(password, this.salt, 888, 64, `sha512`).toString(`hex`);
         return this.hash === currentHash;
-};
+};*/
 module.exports = User;

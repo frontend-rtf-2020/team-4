@@ -1,22 +1,38 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const mongoose = require('mongoose');
-var apiRouter = require('./routes/routes');
+const passport = require('passport');
+const session = require("express-session");
+const User = require('./model/User');
+const apiRouter = require('./routes/routes');
 const indexRouter = require('./routes/indexRouter');
-//var usersRouter = require('./routes/users');
+//require('dotenv').config();
+const app = express();
 
-var app = express();
 
+mongoose.connect(process.env.DB_CONNECTION_URL);
 
-//mongoose.connect("");//здесь должна быть строка подключения
+//здесь регистрируется стратегии(2-ой аргумент)
+passport.use('register', () => {});
+
+passport.use('authorize', () => {});
+
+passport.serializeUser((user, done) => done(null, user._id));
+
+passport.deserializeUser((id, done) => User.findById(id, (err, user) => done(err, user)));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, './frontend')));
+
+
+app.use(session({ secret: 'anything' }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api', apiRouter);
 app.use('/', indexRouter);

@@ -4,12 +4,14 @@ const Schema = mongoose.Schema;
 const Task = mongoose.model('Task', new Schema({
     creatorId : {
         type : Schema.Types.ObjectId,
-        required : true
+        required : true,
+        ref: 'User'
     },
 
     column : {
         type : Schema.Types.ObjectId,
-        required : true
+        required : true,
+        ref: 'Column'
     },
     name : {
         type : String,

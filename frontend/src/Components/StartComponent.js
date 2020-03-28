@@ -7,13 +7,14 @@ export class StartComponent extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/api/test')
+        fetch('/api/db_test')
             .then(d=>d.text())
             .then(t=>this.setState({data: t}));
     }
 
     render() {
-        return (<><h1>Team 4:</h1>
+        return (<div>
+            <h1>Team 4:</h1>
             <ol>
                 <li>Кальская Юлия</li>
                 <li>Лукьянов Андрей</li>
@@ -21,6 +22,6 @@ export class StartComponent extends React.Component {
                 <li>Ткачук Денис</li>
                 {this.state.data}
             </ol>
-        </>);
+        </div>);
     }
 }

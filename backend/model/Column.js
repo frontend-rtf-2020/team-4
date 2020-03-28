@@ -4,19 +4,22 @@ const Schema = mongoose.Schema;
 const Column = mongoose.model('Board', new Schema({
     creatorId : {
         type : Schema.Types.ObjectId,
-        required : true
+        required : true,
+        ref: 'User'
     },
-    editorsId : {
+    editorsId : [ {
         type : String,
-        required : false
-    },
+        required : false,
+        ref: 'User'
+    } ],
     name : {
         type : String,
         required : true
     },
     board : {
         type : Schema.Types.ObjectId,
-        required : true
+        required : true,
+        ref: 'Board'
     },
     addingDate : {
         type : Date,

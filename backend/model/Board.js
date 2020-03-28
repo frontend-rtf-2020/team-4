@@ -4,16 +4,18 @@ const Schema = mongoose.Schema;
 const Board = mongoose.model('Board', new Schema({
     creatorId : {
         type : Schema.Types.ObjectId,
-        required : true
+        required : true,
+        ref: 'User'
     },
     name : {
         type: String,
         required : true
     },
-    members : {
+    members : [{
         type : Schema.Types.ObjectId,
-        required : true
-    },
+        required : true,
+        ref: 'User'
+    }],
     addingDate : {
         type : Date,
         required : true
