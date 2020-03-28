@@ -8,7 +8,6 @@ const session = require("express-session");
 const User = require('./model/User');
 const apiRouter = require('./routes/routes');
 const indexRouter = require('./routes/indexRouter');
-//var usersRouter = require('./routes/users');
 require('dotenv').config();
 const app = express();
 
