@@ -7,7 +7,7 @@ export class StartComponent extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/api/test')
+        fetch('/api/db_test')
             .then(d=>d.text())
             .then(t=>this.setState({data: t}));
     }
