@@ -27,7 +27,7 @@ header {/*
 }
 
 header, footer {
-  background-color: #330044;
+  background-color: #2ba9e4;
 }
 
 footer {
@@ -35,8 +35,9 @@ footer {
 }
 
 .App-link {
-  color: #61dafb;
+  color: #60ceec;
 }
+
 /*
 @keyframes App-logo-spin {
   from {

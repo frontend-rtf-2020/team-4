@@ -1,0 +1,27 @@
+.Reg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    width: 100%;
+    background: linear-gradient(270deg, #cef2fa 0%, #59bfef 100%);
+}
+
+.Reg > div {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.Reg h1 {
+    color: #fff;
+    text-align: center;
+}
+
+.RegForm{
+    background: #eee;
+    box-sizing: 2px 2px 2px rgb(0,0,0,.5);
+    padding: 15px;
+    border-radius: 5px;
+    max-width: 1000px;
+    margin: 20px;
+}
