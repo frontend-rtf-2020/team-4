@@ -13,9 +13,9 @@ require('dotenv').config();
 const app = express();
 
 
-mongoose.connect(process.env.DB_CONNECTION_URL);//здесь должна быть строка подключения
+mongoose.connect(process.env.DB_CONNECTION_URL);
 
-
+//здесь регистрируется стратегии(2-ой аргумент)
 passport.use('register', null);
 
 passport.use('authorize', null);
