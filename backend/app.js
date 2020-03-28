@@ -16,9 +16,9 @@ const app = express();
 mongoose.connect(process.env.DB_CONNECTION_URL);
 
 //здесь регистрируется стратегии(2-ой аргумент)
-passport.use('register', null);
+passport.use('register', () => {});
 
-passport.use('authorize', null);
+passport.use('authorize', () => {});
 
 passport.serializeUser((user, done) => done(null, user._id));
 
