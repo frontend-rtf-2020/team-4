@@ -6,11 +6,11 @@ const mongoose = require('mongoose');
 var apiRouter = require('./routes/routes');
 const indexRouter = require('./routes/indexRouter');
 //var usersRouter = require('./routes/users');
-
+require('dotenv').config();
 var app = express();
 
 
-//mongoose.connect("");//здесь должна быть строка подключения
+mongoose.connect(process.env.DB_CONNECTION_URL);//здесь должна быть строка подключения
 
 app.use(logger('dev'));
 app.use(express.json());
