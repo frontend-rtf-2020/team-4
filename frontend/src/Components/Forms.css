@@ -1,28 +1,33 @@
-.Auth {
-    display: flexbox;
+.FormBlock {
+    display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
     padding-top: 100px;
     flex-grow: 1;
     width: 100%;
     background: linear-gradient(270deg, #cef2fa 0%, #59bfef 100%);
 }
 
-.Auth > div {
+.FormBlock > div {
     width: 100%;
     max-width: 1000px;
 }
 
-.Auth h1 {
+.FormBlock h1 {
     color: #fff;
     text-align: center;
 }
 
-.AuthForm{
-    background: #eee;
-    box-sizing: 2px 2px 2px rgb(0,0,0,.5);
+.Form {
+    text-align: center;
+    background: #eee;/*
+    box-sizing: 2px 2px 2px rgb(0,0,0,.5);*/
     padding: 15px;
+    width: fit-content;
+    min-width: 150px;
+    min-height: 150px;
     border-radius: 5px;
-    max-width: 1000px;
     margin: 20px;
 
 }

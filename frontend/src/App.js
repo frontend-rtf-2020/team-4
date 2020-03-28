@@ -6,8 +6,8 @@ import Footer from './Components/Footer';
 import BoardList from "./Components/BoardListPage/BoardList";
 import BoardItem from "./Components/BoardListPage/BoardItem";
 import {StartComponent} from "./Components/StartComponent";
-import Authorization from "./Components/Authorization/Authorization";
-import Registration from "./Components/Registration/Registration";
+import Authorization from "./Components/Authorization";
+import Registration from "./Components/Registration";
 
 
 class App extends React.Component {

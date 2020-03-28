@@ -1,31 +1,28 @@
 import React from "react";
-import classes from './Authorization.css'
-import Input from '../UI/Input.js'
+import './Forms.css'
+
+import Input from './UI/Input.js'
 
 export default class Authorization extends React.Component{
-    
+
     loginHandler = () => {
 
-    }
+    };
 
     submitHandler = event => {
         event.preventDefault()
-    }
-      
+    };
+
     render (){
         return(
-            <div className="Auth">
-                <div>
-                    <h1>Authorization</h1>
-                </div>
-                <form onSubmit={this.submitHandler} className="AuthForm">
+            <div className="FormBlock">
+                <h1>Authorization</h1>
+                <form onSubmit={this.submitHandler} className="Form" action='/authorize' method='post'>
                     <Input label="login/email"/>
-                    <Input label="password"/>
+                    <Input label="password" type='password'/>
                     <button
                         type="success"
-                        onClick={this.loginHandler}
-                        
-                    >
+                        onClick={this.loginHandler}>
                         Sign in
                     </button>
                 </form>

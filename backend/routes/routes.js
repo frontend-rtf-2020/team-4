@@ -8,13 +8,7 @@ router.get('/test', function(req, res, next) {
     //res.render('index', { title: 'Express' });
 });
 
-router.get('/db_test', function(req, resp, next) {/**
-    const u = new User();
-    u.login = "sads";
-    u.password = "dvxcoxvox";
-    u.email = "cf";
-    u.salt = "1";
-    u.save();*/
+router.get('/db_test', function(req, resp, next) {
     User.find((err, res) => {
         resp.json(res);
     })
