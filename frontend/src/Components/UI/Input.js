@@ -6,11 +6,11 @@ const Input = (props) => {
     const cls = [classes.Input]
     const htmlFor= `${inputType}-${Math.random()}`
 
-
     return(
         <div className={cls.join(' ')}>
-            <lable htmlFor={htmlFor}>{props.lable}</lable>
+            <label htmlFor={htmlFor}>{props.label}</label>
             <input
+                placeholder={props.label}
                 type={inputType}
                 id={htmlFor}
                 value={props.value}
