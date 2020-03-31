@@ -15,7 +15,7 @@ const Task = mongoose.model('Task', new Schema({
     },
     name : {
         type : String,
-        required : true
+        required : true,
     },
     description : {
         type : String,
@@ -23,8 +23,8 @@ const Task = mongoose.model('Task', new Schema({
     },
     addingDate : {
         type : Date,
-        default : Date.now(),
-        required : true
+        default : Date.now,
+        required : true,
     },
     endDate : {
         type : Date,
