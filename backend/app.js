@@ -3,9 +3,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const inittialze = require('./passport/init');
 const passport = require('passport');
 const session = require("express-session");
-const User = require('./model/User');
 const apiRouter = require('./routes/routes');
 const indexRouter = require('./routes/indexRouter');
 //require('dotenv').config();
@@ -14,14 +14,7 @@ const app = express();
 
 mongoose.connect(process.env.DB_CONNECTION_URL);
 
-//здесь регистрируется стратегии(2-ой аргумент)
-passport.use('register', () => {});
-
-passport.use('authorize', () => {});
-
-passport.serializeUser((user, done) => done(null, user._id));
-
-passport.deserializeUser((id, done) => User.findById(id, (err, user) => done(err, user)));
+inittialze(passport);
 
 app.use(logger('dev'));
 app.use(express.json());

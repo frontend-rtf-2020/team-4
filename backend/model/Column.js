@@ -8,7 +8,7 @@ const Column = mongoose.model('Board', new Schema({
         ref: 'User'
     },
     editorsId : [ {
-        type : String,
+        type : Schema.Types.ObjectId,
         required : false,
         ref: 'User'
     } ],
