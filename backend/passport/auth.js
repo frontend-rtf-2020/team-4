@@ -1,9 +1,8 @@
-let passport = require('passport');
-import User from "../model/User"
 
+import User from "../model/User"
 let LocalStrategy = require('passport-local').Strategy;
 
-passport.use(new LocalStrategy({
+const signIn = new LocalStrategy({
     usernameField: 'identificator',
     passwordField: 'password'
 }, function (username, password, done) {
@@ -14,4 +13,4 @@ err ? done(err) : user
             : done(null, false, {message: 'Incorrect email or login'});
 
     });
-}));
+});
