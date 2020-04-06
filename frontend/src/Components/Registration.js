@@ -3,12 +3,12 @@ import './Forms.css'
 import Input from './UI/Input.js'
 
 export default class Registration extends React.Component{
-    registerHandler = () => {
-
+    registerHandler = event => {
+        //event.preventDefault();
     };
     render (){
         return(
-            <div className="FormBlock">
+            <>
                 <div>
                     <h1>Registration</h1>
                 </div>
@@ -22,7 +22,7 @@ export default class Registration extends React.Component{
                      Sign up
                     </button>
                 </form>
-            </div>
+            </>
         )
     }
 }

@@ -5,19 +5,15 @@ import Input from './UI/Input.js'
 
 export default class Authorization extends React.Component{
 
-    loginHandler = () => {
-
-    };
-
-    submitHandler = event => {
-        event.preventDefault()
+    loginHandler = event => {
+        //event.preventDefault()
     };
 
     render (){
         return(
-            <div className="FormBlock">
+            <>
                 <h1>Authorization</h1>
-                <form onSubmit={this.submitHandler} className="Form" action='/authorize' method='post'>
+                <form  className="Form" action='/authorize' method='post'>
                     <Input label="login/email"/>
                     <Input label="password" type='password'/>
                     <button
@@ -26,7 +22,7 @@ export default class Authorization extends React.Component{
                         Sign in
                     </button>
                 </form>
-            </div>
+            </>
         )
     }
 }

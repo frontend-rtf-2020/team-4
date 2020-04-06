@@ -1,7 +1,7 @@
 
 const User = require('../model/User');
 //здесь регистрируется стратегии(2-ой аргумент)
-export default function initialize(passport) {
+function initialize(passport) {
     passport.use('register' , ()=>{
     });
 
@@ -13,3 +13,5 @@ export default function initialize(passport) {
     passport.deserializeUser((id , done)=>User.findById(id , (err , user)=>done(err , user)));
 
 }
+
+module.exports = initialize;

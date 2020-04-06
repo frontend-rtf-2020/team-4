@@ -1,23 +1,4 @@
-.FormBlock {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding-top: 100px;
-    flex-grow: 1;
-    width: 100%;
-    background: linear-gradient(270deg, #cef2fa 0%, #59bfef 100%);
-}
 
-.FormBlock > div {
-    width: 100%;
-    max-width: 1000px;
-}
-
-.FormBlock h1 {
-    color: #fff;
-    text-align: center;
-}
 
 .Form {
     text-align: center;

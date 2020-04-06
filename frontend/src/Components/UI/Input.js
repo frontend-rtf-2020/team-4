@@ -5,7 +5,6 @@ const Input = (props) => {
     const inputType = props.type || 'text';
     //const cls = [classes.Input];
     ///const htmlFor= `${inputType}-${Math.random()}`;
-
     return(
         <div /*className={cls.join(' ')}*/ className='Input'>
             <label htmlFor={props.id}>{props.label}</label>
@@ -14,11 +13,10 @@ const Input = (props) => {
                 type={inputType}
                 id={props.id}
                 value={props.value}
-                onChange={props.onChange}
-            />
+                onChange={props.onChange}/>
             <span>{props.errorMessage}</span>
         </div>
     )
-}
+};
 
 export default Input

@@ -15,15 +15,18 @@ class App extends React.Component {
         return (
             <div className="App">
                 <Header/>
-                    <BrowserRouter>
-                        <Switch>
-                            <Route path="/item" render={(props) => <BoardItem />}/>
-                            <Route path="/list" render={(props) => <BoardList />} />
-                            <Route path="/auth" render={(props) => <Authorization />} />
-                            <Route path="/reg" render={(props) => <Registration />} />
-                            <Route path='/' component={StartComponent}/>
-                        </Switch>
-                    </BrowserRouter>
+                    <div className='mainPart'>
+                        <BrowserRouter>
+                            <Switch>
+                                <Route path="/item" render={(props) => <BoardItem />}/>
+                                <Route path="/list" render={(props) => <BoardList />} />
+                                <Route path="/auth" render={(props) => <Authorization />} />
+                                <Route path="/reg" render={(props) => <Registration />} />
+                                <Route exact path='/' component={StartComponent}/>
+
+                            </Switch>
+                        </BrowserRouter>
+                    </div>
                 <Footer/>
             </div>
         );
