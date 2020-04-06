@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { activate } = require('./handlers');
 const User = require('../model/User');
 
 /* Only for testing */
@@ -13,5 +14,6 @@ router.get('/db_test', function(req, resp, next) {
     })
 });
 
+router.get('/activate', activate);
 
 module.exports = router;

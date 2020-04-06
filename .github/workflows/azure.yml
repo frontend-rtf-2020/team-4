@@ -20,6 +20,8 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: './backend'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x'                # set this to the node version to use
   DB_CONNECTION_URL: ${{ secrets.DB_CONNECTION_URL }}
+  MAIL_ADDRESS: ${{ secrets.MAIL_ADDRESS }}
+  MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
 
 jobs:
   build-and-deploy:

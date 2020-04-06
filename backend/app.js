@@ -8,7 +8,7 @@ const passport = require('passport');
 const session = require("express-session");
 const apiRouter = require('./routes/routes');
 const indexRouter = require('./routes/indexRouter');
-//require('dotenv').config();
+require('dotenv').config();
 const app = express();
 
 
