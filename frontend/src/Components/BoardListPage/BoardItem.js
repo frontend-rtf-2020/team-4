@@ -3,6 +3,7 @@ import React from "react";
 class BoardItem extends React.Component {
     // eslint-disable-next-line no-console
     constructor() {
+    // eslint-disable-next-line no-console
         super();
     }
 
