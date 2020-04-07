@@ -1,9 +1,5 @@
 import React from "react";
-
 class BoardItem extends React.Component {
-    constructor() {
-        super();
-    }
 
     componentDidMount() {
     }
