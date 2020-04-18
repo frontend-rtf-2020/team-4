@@ -12,9 +12,9 @@ class Board extends React.Component {
 
     render() {
         return (
-            <div >
+            <div>
                 <h1>Board</h1>
-                {this.state.columns.map(b => <Column />)}
+                <Column/>
             </div>
         );
     }

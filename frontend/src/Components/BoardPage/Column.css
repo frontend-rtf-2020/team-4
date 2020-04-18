@@ -1,0 +1,11 @@
+.Task {
+    border: solid black 1px;
+    width: 80%;
+    margin: 20px 10%;
+}
+
+.Column {
+    border: solid black 1px;
+    width: 10vw;
+    height: 50vh;
+}

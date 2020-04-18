@@ -10,7 +10,7 @@ class Task extends React.Component {
 
     render() {
         return (
-            <div >
+            <div className='Task'>
                 <p>Task</p>
             </div>
         );
