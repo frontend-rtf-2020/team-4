@@ -35,6 +35,11 @@
   }
 }*/
 
+header h2 {
+  width: 80%;
+  text-align: center;
+}
+
 header {/*
   background-color: #282c34;
   min-height: 100vh;
