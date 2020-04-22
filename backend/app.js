@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, './frontend')));
 
 
 app.use(session({ secret: 'anything',
-    store: new MongoStore({ mongooseConnection: mongoose.connection }) }));
+  /*  store: new MongoStore({ mongooseConnection: mongoose.connection })*/ }));
 app.use(passport.initialize());
 app.use(passport.session());
 
