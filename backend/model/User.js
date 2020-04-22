@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const crypto = require('crypto-js');
+
 
 const User  = mongoose.model('User', new Schema({
     login : {
