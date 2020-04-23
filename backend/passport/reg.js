@@ -1,6 +1,7 @@
-let LocalStrategy = require('passport').Strategy;
-let crypto = require('bcrypt');
-import User from "../model/User"
+const LocalStrategy = require('passport').Strategy;
+const crypto = require('bcrypt');
+const User = require("../model/User");
+//import User from "../model/User"
 const salt = 888;
 
 const signUp = new LocalStrategy((email, username, password, done) => {
@@ -12,7 +13,7 @@ const signUp = new LocalStrategy((email, username, password, done) => {
                     const newUser = new User();
                     newUser.email = email;
                     newUser.hash = crypto.hash(password, salt).toString();
-                    newUser.salt =
+                    //newUser.salt =
                     newUser.login = username;
                     newUser.save(event => {console.log(event)});
                 }
