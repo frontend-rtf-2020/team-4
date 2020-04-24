@@ -9,15 +9,15 @@ export default class Registration extends React.Component{
         console.log('send');
         event.preventDefault();
         console.log('send');
-        fetch('/registration', {
+        fetch('/api/reg', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: $('emailField').value,
-                username: $('usernameField').value,
-                password: $('passwordField').value
+                email: $("#emailField").val(),
+                username: $("#usernameField").val(),
+                password: $("#passwordField").val()
             })
         }).then(res => res.json()).then(res => {
             if(res.err)
@@ -26,7 +26,7 @@ export default class Registration extends React.Component{
         });
 
      };
-	
+
     render (){
         return(
             <>
@@ -34,7 +34,7 @@ export default class Registration extends React.Component{
                     <h1>Registration</h1>
                 </div>
                 <form className="Form">
-                    <Input id="usernameField" label="login"/>
+                    <Input id="usernameField" label="login" />
                     <Input id="emailField" label="email" type='email'/>
                     <Input id="passwordField" label="password" type='password'/>
                     <button

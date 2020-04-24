@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const { activate } = require('./handlers');
-const passport = require("passport");
+const { activate, RegistrationHandler } = require('./handlers');
 const User = require('../model/User');
 
 /* Only for testing */
@@ -16,31 +15,15 @@ router.get('/db_test', function(req, resp, next) {
     })
 });
 
-router.post('/registration', passport.authenticate('signUp', {
-    successRedirect: '/registration/success',
-    failureRedirect : '/registration/error'
-}));
-
-router.get('/registration/success', function (req, res, next) {
-    res.send("You have successfully registered!")
-});
-
-router.get('/registration/error', function (req, res, next) {
-    res.send("Lol. No")
-});
-
+router.post('/reg', RegistrationHandler);
 
 router.get('/activate', activate);
-router.post('/registration', passport.authenticate('signUp', {
-    successRedirect: '/registration/success',
-    failureRedirect : '/registration/error'
-}));
 
-router.get('/registration/success', function (req, res, next) {
+router.get('/reg/success', function (req, res, next) {
     res.send("You have successfully registered!")
 });
 
-router.get('/registration/error', function (req, res, next) {
+router.get('/reg/error', function (req, res, next) {
     res.send("Lol. No")
 });
 
