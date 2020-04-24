@@ -30,8 +30,8 @@ app.use(session({ secret: 'anything',
     store: new MongoStore({ mongooseConnection: mongoose.connection }) }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+/*
 app.use('/api', apiRouter);
 app.use('/', indexRouter);
-
+*/
 module.exports = app;

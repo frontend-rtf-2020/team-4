@@ -3,11 +3,10 @@
 /**
  * Module dependencies.
  */
-
 const app = require('../app');
 const debug = require('debug')('team-4:server');
 const http = require('http');
-const WebSocketsInit = require('../WebSockets');
+const webSocketsInitialization = require('../WebSockets');
 /**
  * Get port from environment and store in Express.
  */
@@ -19,8 +18,12 @@ app.set('port', port);
  * Create HTTP server.
  */
 
+//const server = http.Server(app);
 const server = http.createServer(app);
-WebSocketsInit(server);
+webSocketsInitialization(app, server);
+
+const routerRegistration = require('../routersRegistration');
+routerRegistration(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
