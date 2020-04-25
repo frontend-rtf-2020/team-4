@@ -1,6 +1,13 @@
+
 const LocalStrategy = require('passport-local').Strategy;
 let crypto = require('bcrypt');
 const User = require('../model/User');
+
+const LocalStrategy = require('passport').Strategy;
+const crypto = require('bcrypt');
+const User = require("../model/User");
+//import User from "../model/User"
+
 const salt = 888;
 const signUp = new LocalStrategy((email, username, done, password) => {
     console.log('correct0');
@@ -18,9 +25,14 @@ const signUp = new LocalStrategy((email, username, done, password) => {
                     const newUser = new User();
                     console.log('correct3');
                     newUser.email = email;
+
                     crypto.hash(password, salt, function(err, hash) {
                         newUser.hash = hash;
                     });
+
+                    newUser.hash = crypto.hash(password, salt).toString();
+                    //newUser.salt =
+
                     newUser.login = username;
                     console.log('correct4');
                     newUser.save(event => {console.log(event)});

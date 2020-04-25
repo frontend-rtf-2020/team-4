@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Column = mongoose.model('Board', new Schema({
+const Column = mongoose.model('Column', new Schema({
     creatorId : {
         type : Schema.Types.ObjectId,
         required : true,

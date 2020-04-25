@@ -8,6 +8,7 @@ const passport = require('passport');
 const session = require("express-session");
 const MongoStore = require('connect-mongo')(session);
 const apiRouter = require('./routes/routes');
+
 const indexRouter = require('./routes/indexRouter');
 require('dotenv').config();
 const app = express();
@@ -16,6 +17,7 @@ const app = express();
 mongoose.connect(process.env.DB_CONNECTION_URL);
 
 initialise(passport);
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -28,8 +30,8 @@ app.use(session({ secret: 'anything',
     store: new MongoStore({ mongooseConnection: mongoose.connection }) }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+/*
 app.use('/api', apiRouter);
 app.use('/', indexRouter);
-
+*/
 module.exports = app;

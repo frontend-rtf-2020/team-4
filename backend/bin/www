@@ -3,24 +3,27 @@
 /**
  * Module dependencies.
  */
-
-var app = require('../app');
-var debug = require('debug')('team-4:server');
-var http = require('http');
-
+const app = require('../app');
+const debug = require('debug')('team-4:server');
+const http = require('http');
+const webSocketsInitialization = require('../WebSockets');
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '8000');
+const port = normalizePort(process.env.PORT || '8000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+//const server = http.Server(app);
+const server = http.createServer(app);
+webSocketsInitialization(app, server);
 
+const routerRegistration = require('../routersRegistration');
+routerRegistration(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
