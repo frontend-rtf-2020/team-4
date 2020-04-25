@@ -1,10 +1,10 @@
-let crypto = require('bcrypt');
+const crypto = require('bcrypt');
 const User = require('../model/User');
-
+const sendEmail = require("./activator");
 const size = 10;
 
 function activate (req, resp) {
-    User.findOneAndUpdate({activatorId: req.query.id}, { active: true }, (err, user) => {
+    User.findOneAndUpdate({activatorId: req.query.activate, _id: req.query.id}, { active: true }, (err, user) => {
         resp.send(err);
     });
 }
@@ -17,7 +17,7 @@ function generateActivatorId() {
     return res;
 }
 
-
+/** Это вообще что? Для тренировки? */
 
 const path = require('path');
 const signUp = require('../../backend/passport/reg');
@@ -31,6 +31,9 @@ router.post('/api/db_test', function(req, res) {
     console.log('received');
     res.sendFile(path.resolve("./frontend/index.html"));
 });
+
+/** ???????????????????????????? */
+
 
 // eslint-disable-next-line no-unused-vars
 function RegistrationHandler(req, res, next)
@@ -47,14 +50,19 @@ function RegistrationHandler(req, res, next)
                     newUser.email = email;
                     newUser.hash = crypto.hashSync(password, size);
                     newUser.login = username;
-                    newUser.activatorId = "ljdfgl";   // Need adding activatorGen
-                    newUser.save(event => {console.log(event)});
+                    newUser.activatorId = generateActivatorId();//Alfa version have not been tested
+                    newUser.save(event => {
+                        console.log(event);
+                        sendEmail(newUser.email, newUser.activatorId, '' /** id of a user required here */);//Alfa version have not been tested
+                    });
                     console.log('OLL KORREKT');
                 }
-                else return alert(res.toString());
+                else
+                    return alert(res.toString());//а это что? как и зачем в node работает alert? а response зачем в строку? надо просто res.send(<ошибка>)
             });
         }
-        else return alert(res.toString());
+        else
+            return alert(res.toString());//надо просто res.send(<ошибка>)
     })
 }
 

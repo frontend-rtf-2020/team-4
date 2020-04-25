@@ -8,15 +8,17 @@ const transporter = mail.createTransport({
     }
 });
 
-export default function sendEmail(address, id) {
+function sendEmail(address, activ, id) {
     const mailOptions = {
         from: 'Authorisation service',
         to: address,
         subject: 'Account activation',
-        html: `You've registered at https://mytask-board.azurewebsites.net/<br/>Now you should activate your account before you can use it. To do it please use this link: https://mytask-board.azurewebsites.net/api/activate${id}`
+        html: `You've registered at https://mytask-board.azurewebsites.net/<br/>Now you should activate your account before you can use it. To do it please use this link: https://mytask-board.azurewebsites.net/api/activate?id=${id}&activate=${activ}`
     };
 
     return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, resolve);
     });
 }
+
+module.exports = sendEmail;
