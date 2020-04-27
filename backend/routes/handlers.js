@@ -4,7 +4,7 @@ const sendEmail = require("./activator");
 const size = 10;
 
 function activate (req, resp) {
-    User.findOneAndUpdate({activatorId: req.query.activate, _id: req.query.id}, { active: true }, (err, user) => {
+    User.findOneAndUpdate({activatorId: req.query.activate, email: req.query.email}, { active: true }, (err, user) => {
         resp.send(err);
     });
 }
@@ -53,7 +53,7 @@ function RegistrationHandler(req, res, next)
                     newUser.activatorId = generateActivatorId();//Alfa version have not been tested
                     newUser.save(event => {
                         console.log(event);
-                        sendEmail(newUser.email, newUser.activatorId, '' /** id of a user required here */);//Alfa version have not been tested
+                        sendEmail(newUser.email, newUser.activatorId);//Alfa version have not been tested
                     });
                     console.log('OLL KORREKT');
                 }
