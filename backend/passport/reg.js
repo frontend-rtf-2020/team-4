@@ -2,10 +2,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 let crypto = require('bcrypt');
 const User = require('../model/User');
-
-const LocalStrategy = require('passport').Strategy;
-const crypto = require('bcrypt');
-const User = require("../model/User");
 //import User from "../model/User"
 
 const salt = 888;

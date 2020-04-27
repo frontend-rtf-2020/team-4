@@ -1,16 +1,33 @@
-
-import User from "../model/User"
+const User = require('../model/User');
+const crypto = require('bcrypt');
 let LocalStrategy = require('passport-local').Strategy;
+const size = 10;
 
-const signIn = new LocalStrategy({
-    usernameField: 'identificator',
-    passwordField: 'password'
-}, function (username, password, done) {
-    User.findOne({username : username}, function(err, user){
-err ? done(err) : user
-            ? User.validPassword(password)
-                ? done(null, user) : done(null, false, {message: 'Incorrect password.'})
-            : done(null, false, {message: 'Incorrect email or login'});
 
+
+const signIn = new LocalStrategy((identifier, password, done) => {
+    console.log('correct0');
+    User.findOne({'email': identifier}, user => {
+        if (user)
+            Authentication(user, password, done);
+        else
+            User.findOne({'login': identifier}, user => Authentication(user, password, done));
     });
+
+
+    function Authentication(user, password, done) {
+        if (user) {
+            if (user.active === true) {
+                const currHash = crypto.hashSync(password, size);
+                if (user.hash === currHash)
+                    return done(null, true, user);
+                else return done(null, false, {message: 'Wrong password'});
+            } else return done(null, false, {message: 'Wrong login or email'});
+        }
+        else return done(null, false, {message: 'Activate your account by the link sent to your email'});
+    }
 });
+
+
+
+module.exports = signIn;

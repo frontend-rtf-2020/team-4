@@ -2,15 +2,12 @@ const express = require('express');
 
 const router = express.Router();
 const passport = require('passport');
-const { activate, RegistrationHandler } = require('./handlers');
-
-const { activate } = require('./handlers');
-const passport = require("passport");
-
 const User = require('../model/User');
 const Column = require('../model/Column');
-const router = express.Router();
 const Board = require('../model/Board');
+const { activate, RegistrationHandler } = require('./handlers');
+
+
 /** The following handlers have been made only for testing operations and will removed in future */
 router.get('/test', function(req, res) {
     res.send("OK!");
@@ -72,9 +69,6 @@ router.get('/reg/success', function (req, res, next) {
     res.send("You have successfully registered!")
 });
 
-router.get('/reg/error', function (req, res, next) {
-
-
 router.get('/registration/success', function (req, res) {
     res.send("You have successfully registered!")
 });
@@ -84,5 +78,8 @@ router.get('/registration/error', function (req, res) {
     res.send("Lol. No")
 });
 
-
-module.exports = router;
+router.post('/auth', passport.authenticate('signIn', {
+    successRedirect: '/',
+    failureRedirect: '/auth/',
+}));
+    module.exports = router;

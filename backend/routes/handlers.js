@@ -18,7 +18,7 @@ function generateActivatorId() {
 }
 
 /** Это вообще что? Для тренировки? */
-
+// ??
 const path = require('path');
 const signUp = require('../../backend/passport/reg');
 const express = require('express');
@@ -33,7 +33,7 @@ router.post('/api/db_test', function(req, res) {
 });
 
 /** ???????????????????????????? */
-
+// А это ^ не моё
 
 // eslint-disable-next-line no-unused-vars
 function RegistrationHandler(req, res, next)
@@ -44,6 +44,7 @@ function RegistrationHandler(req, res, next)
     User.findOne({'email' : email}, (err, user) => {
         if(!user)
         {
+            console.log(username, password, email);
             User.findOne({ 'login' : username}, (err, user) => {
                 if(!user) {
                     const newUser = new User();
@@ -58,11 +59,11 @@ function RegistrationHandler(req, res, next)
                     console.log('OLL KORREKT');
                 }
                 else
-                    return alert(res.toString());//а это что? как и зачем в node работает alert? а response зачем в строку? надо просто res.send(<ошибка>)
+                    return res.send(err);//а это что? как и зачем в node работает alert? а response зачем в строку? надо просто res.send(<ошибка>)
             });
         }
         else
-            return alert(res.toString());//надо просто res.send(<ошибка>)
+            return res.send(err);//надо просто res.send(<ошибка>)
     })
 }
 
