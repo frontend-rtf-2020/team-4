@@ -1,13 +1,12 @@
 
 const User = require('../model/User');
 const signUp = require('../passport/reg');
-
+const signIn = require('../passport/auth');
 //здесь регистрируется стратегии(2-ой аргумент)
 function initialize(passport) {
     passport.use('signUp' , signUp);
 
-    passport.use('authorize' , ()=>{
-    });
+    passport.use('signIn' , signIn);
 
     passport.serializeUser((user , done)=>done(null , user._id));
 

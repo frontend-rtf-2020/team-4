@@ -2,20 +2,42 @@ import React from "react";
 import './Forms.css'
 
 import Input from './UI/Input.js'
+import $ from "jquery";
 
 export default class Authorization extends React.Component{
+    constructor() {
+        super();
+        this.identifierField = React.createRef();
+        this.passField = React.createRef();
+    }
+    loginHandler = (event) => {
+        console.log('send');
+        event.preventDefault();
+        console.log('send');
+        fetch('/api/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                identifier: this.identifierField.value,
+                password: this.passField.value
+            })
+        }).then(res => res.json()).then(res => {
+            if(res.err)
+                alert(res.err);
+            else alert(res);
+        });
 
-    loginHandler = event => {
-        //event.preventDefault()
     };
 
     render (){
         return(
             <>
                 <h1>Authorization</h1>
-                <form  className="Form" action='/authorize' method='post'>
-                    <Input label="login/email"/>
-                    <Input label="password" type='password'/>
+                <form  className="Form">
+                    <Input label="login/email" ref={this.identifierField} />
+                    <Input label="password"  ref={this.passField}  type='password'/>
                     <button
                         type="success"
                         onClick={this.loginHandler}>

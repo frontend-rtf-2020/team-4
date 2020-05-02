@@ -4,7 +4,12 @@ import Input from './UI/Input.js'
 import $ from 'jquery'
 
 export default class Registration extends React.Component{
-
+    constructor() {
+        super();
+        this.usernameField = React.createRef();
+        this.emailField = React.createRef();
+        this.passwordField = React.createRef();
+    }
     registerHandler = (event) => {
         console.log('send');
         event.preventDefault();
@@ -15,9 +20,9 @@ export default class Registration extends React.Component{
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: $("#emailField").val(),
-                username: $("#usernameField").val(),
-                password: $("#passwordField").val()
+                email: this.emailField.current.value,
+                username:this.usernameField.current.value,
+                password: this.passwordField.current.value
             })
         }).then(res => res.json()).then(res => {
             if(res.err)
@@ -34,9 +39,9 @@ export default class Registration extends React.Component{
                     <h1>Registration</h1>
                 </div>
                 <form className="Form">
-                    <Input id="usernameField" label="login" />
-                    <Input id="emailField" label="email" type='email'/>
-                    <Input id="passwordField" label="password" type='password'/>
+                    <Input id="usernameField"  ref={this.usernameField} label="login" />
+                    <Input id="emailField" ref={this.emailField} label="email" type='email'/>
+                    <Input id="passwordField" ref={this.passwordField}  label="password" type='password'/>
                     <button
                         type="success"
                         onClick={this.registerHandler}>
