@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,11 +7,11 @@ const mongoose = require('mongoose');
 const initialise = require('./passport/init');
 const passport = require('passport');
 const session = require("express-session");
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo')(session);/*
 const apiRouter = require('./routes/routes');
 
-const indexRouter = require('./routes/indexRouter');
-require('dotenv').config();
+const indexRouter = require('./routes/indexRouter');*/
+
 const app = express();
 
 
