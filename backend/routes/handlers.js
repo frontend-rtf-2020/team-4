@@ -1,4 +1,5 @@
 const crypto = require('bcrypt');
+const emailCheck = require('email-check');
 const User = require('../model/User');
 const sendEmail = require("./activator");
 const size = 10;
@@ -10,7 +11,7 @@ function activate (req, resp) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function generateActivatorId(login) {//TODO: Rewrite
+function generateActivatorId(login) {//TODO: Rewrite?
     let res = login;
     for (let i = 0; i < 15; i++)
         res += String.fromCodePoint(Math.round(48 + Math.random() * 74));
@@ -19,10 +20,16 @@ function generateActivatorId(login) {//TODO: Rewrite
 
 
 // eslint-disable-next-line no-unused-vars
-function RegistrationHandler(req, res, next)
+async function RegistrationHandler(req, res, next)
 {
     const username = req.body.username;//TODO: Change to login
     const email = req.body.email;
+    const isEmailValid = await emailCheck(email);
+    if(!isEmailValid)
+    {
+        await res.json({error: "Email is incorrect, you can use only existing email which can be accessed to allow you activate the account."});
+        return;
+    }
     const password = req.body.password;
     User.findOne({'email' : email}, (err, user) => {
         if(!user)
@@ -42,7 +49,7 @@ function RegistrationHandler(req, res, next)
                                 res.json({res: "OK"});
                                 //if error => delete user
                             })
-                            .catch(i =>//TODO: correct check error (ask)
+                            .catch(i =>
                             {
                                 console.log(i);
                                 res.json(i);
