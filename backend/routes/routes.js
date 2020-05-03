@@ -59,18 +59,23 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
             }
         },
         {$unwind: "$creatorId"},
+        {$project: {"creatorId._id": 0, "creatorId.hash": 0, "creatorId.active": 0, "creatorId.activatorId": 0, "creatorId.registrationData": 0}},
         {$unwind: "$members"},
         {
-        $lookup:{
-            from: 'users',
-            localField: 'members',//
-            foreignField: '_id',
-            as: 'members'
-        }//TODO: add project
-    }, {$group: {
-        _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
-                }//TODO: add project
-    }]).then(r => res.send(r));
+            $lookup:{
+                from: 'users',
+                localField: 'members',//
+                foreignField: '_id',
+                as: 'members'
+            }//TODO: add project
+        },
+        {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
+        {$group: {
+                _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
+            }//TODO: add project
+        },
+        {$project: {_id: 0}}
+        ]).then(r => res.send(r));
 });
 
 /**  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
