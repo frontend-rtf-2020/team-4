@@ -1,5 +1,6 @@
 const express = require('express');
 
+const mongoose = require('mongoose');
 const router = express.Router();
 const { activate, RegistrationHandler } = require('./handlers');
 
@@ -23,7 +24,8 @@ router.post('/reg', RegistrationHandler);
 
 /** The following agr handlers illustrate how to use mongoose aggregation function */
 router.get("/agr_test", function(req, res)  {// retrieve users along with the column they created
-   User.aggregate([{
+   User.aggregate([
+       {
        $lookup:{
            from: 'columns',
            localField: '_id',//
@@ -46,6 +48,8 @@ router.get("/agr_test2", function(req, res)  {//retrieve columns along with thei
 
 router.get("/agr_test3", function(req, res)  {//retrieve boards along with their members
     Board.aggregate([
+            {$match: {$or: [{creatorId: mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047"),
+                        members: mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047")}]}},
         {$unwind: "$members"},
         {
         $lookup:{
