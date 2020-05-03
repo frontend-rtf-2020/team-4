@@ -50,6 +50,15 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
     Board.aggregate([
             {$match: {$or: [{creatorId: mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047"),
                         members: mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047")}]}},
+        {
+            $lookup:{
+                from: 'users',
+                localField: 'creatorId',//
+                foreignField: '_id',
+                as: 'creatorId'
+            }
+        },
+        {$unwind: "$creatorId"},
         {$unwind: "$members"},
         {
         $lookup:{
@@ -57,10 +66,10 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
             localField: 'members',//
             foreignField: '_id',
             as: 'members'
-        }
+        }//TODO: add project
     }, {$group: {
-        _id: "$_id", creatorId: {$first: "$creatorId"}, name: {$first: "$name"}, addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
-                }
+        _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
+                }//TODO: add project
     }]).then(r => res.send(r));
 });
 
