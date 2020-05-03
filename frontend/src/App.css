@@ -1,3 +1,7 @@
+:root {
+  --main-color: #2ba9e4;
+}
+
 .App {
   display: grid;
   grid-template-rows: 50px 1fr 50px;
@@ -43,11 +47,27 @@ header {
 }
 
 header, footer {
-  background-color: #2ba9e4;
+  background-color: var(--main-color);
 }
 
 footer {
 }
+
+button {
+  background-color: var(--main-color);
+  border: none;
+  padding: 4px;
+}
+
+button:hover {
+  background-color: white;
+  border: none;
+  color: var(--main-color);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px;
+}
+
 
 .App-link {
   color: #60ceec;

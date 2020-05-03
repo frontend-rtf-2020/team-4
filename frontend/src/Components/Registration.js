@@ -1,7 +1,6 @@
 import React from "react";
-import './Forms.css'
-import Input from './UI/Input.js'
-import $ from 'jquery'
+import './content.css';
+import Input from './UI/Input.js';
 
 export default class Registration extends React.Component{
     constructor() {
@@ -38,7 +37,7 @@ export default class Registration extends React.Component{
                 <div>
                     <h1>Registration</h1>
                 </div>
-                <form className="Form">
+                <form className="content">
                     <Input id="usernameField"  ref={this.usernameField} label="login" />
                     <Input id="emailField" ref={this.emailField} label="email" type='email'/>
                     <Input id="passwordField" ref={this.passwordField}  label="password" type='password'/>

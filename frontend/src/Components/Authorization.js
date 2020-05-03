@@ -1,8 +1,7 @@
 import React from "react";
-import './Forms.css'
+import './content.css';
 
-import Input from './UI/Input.js'
-import $ from "jquery";
+import Input from './UI/Input.js';
 
 export default class Authorization extends React.Component{
     constructor() {
@@ -35,7 +34,7 @@ export default class Authorization extends React.Component{
         return(
             <>
                 <h1>Authorization</h1>
-                <form  className="Form">
+                <form  className="content">
                     <Input label="login/email" ref={this.identifierField} />
                     <Input label="password"  ref={this.passField}  type='password'/>
                     <button

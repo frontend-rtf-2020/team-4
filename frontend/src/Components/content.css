@@ -1,6 +1,6 @@
 
 
-.Form {
+.content {
     text-align: center;
     background: #eee;/*
     box-sizing: 2px 2px 2px rgb(0,0,0,.5);*/
@@ -10,5 +10,19 @@
     min-height: 150px;
     border-radius: 5px;
     margin: 20px;
+    animation: appear  500ms 1 ease-in-out;
+}
 
+.content h1 {
+    color: black;
+}
+
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

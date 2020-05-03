@@ -10,6 +10,8 @@ import Registration from "./Components/Registration";
 import Board from "./Components/BoardPage/Board";
 
 
+const NotFound = props => (<div className='content'><h1>The page not found</h1></div>);
+
 class App extends React.Component {
     render() {
         return (
@@ -23,7 +25,7 @@ class App extends React.Component {
                                 <Route path="/auth" render={props => <Authorization />} />
                                 <Route path="/reg" render={props => <Registration />} />
                                 <Route exact path='/' component={StartComponent}/>
-
+                                <NotFound/>
                             </Switch>
                         </BrowserRouter>
                     </div>
