@@ -20,7 +20,7 @@ class App extends React.Component {
                     <div className='mainPart'>
                         <BrowserRouter>
                             <Switch>
-                                <Route path="/item" render={props => <Board />}/>
+                                <Route path="/item/:id" component={Board}/>
                                 <Route path="/list" render={props => <BoardList />} />
                                 <Route path="/auth" render={props => <Authorization />} />
                                 <Route path="/reg" render={props => <Registration />} />

@@ -1,0 +1,16 @@
+.boardList {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.board {
+    max-width: 250px;
+    transition: background-color 500ms;
+    box-shadow: inset 1px 1px 1px 1px darkgray, inset -1px -1px 1px 1px darkgray;
+}
+
+.board:hover {
+    box-shadow: inset 2px 2px 2px 2px darkgray, inset -2px -2px 2px 2px darkgray;
+    background-color: white;
+    cursor: pointer;
+}

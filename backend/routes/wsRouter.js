@@ -29,10 +29,11 @@ router.ws('/get_boards', function(ws, req, next) {
         },
         {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
         {$group: {
-                _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
+                _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, addingDate: {$first: "$addingDate"},
+                endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
             }
         },
-        {$project: {_id: 0}}
+        //{$project: {_id: 0}}
         ]).then(r => ws.send(JSON.stringify(r)));
 
     ws.on('message', function(msg) {//TODO: On add board

@@ -1,6 +1,6 @@
 import React from "react";
 import Column from "./Column";
-
+import { useParams } from "react-router-dom";
 class Board extends React.Component {
     constructor() {
         super();
@@ -11,9 +11,11 @@ class Board extends React.Component {
     }
 
     render() {
+        //const { id } = useParams();
         return (
             <div>
                 <h1>Board</h1>
+                ID: {this.props.match.params.id}
                 <Column/>
             </div>
         );

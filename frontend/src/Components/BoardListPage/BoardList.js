@@ -1,5 +1,6 @@
 import React from "react";
 import BoardItem from "./BoardItem";
+import './boards.css';
 
 class BoardList extends React.Component {
     constructor() {
@@ -23,10 +24,12 @@ class BoardList extends React.Component {
     render() {
         console.log(this.state);
         return (
-            <div >
+            <>
                 <h1>Boards</h1>
-                {this.state.boards.map(b => <BoardItem key={b.name} name = {b.name} members={b.members} endDate={b.endDate} addingDate = {b.addingDate} creator = {b.creator} />)}
-            </div>
+                <div className='boardList'>
+                    {this.state.boards.map(b => <BoardItem key={b._id} id={b._id} name = {b.name} members={b.members} endDate={b.endDate} addingDate = {b.addingDate} creator = {b.creator} />)}
+                </div>
+            </>
         );
     }
 }
