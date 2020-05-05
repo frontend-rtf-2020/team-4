@@ -14,3 +14,9 @@
     background-color: white;
     cursor: pointer;
 }
+
+.add {
+    text-align: center;
+    font-size: 9.5em;
+    font-weight: lighter;
+}

@@ -57,6 +57,7 @@ button {
   background-color: var(--main-color);
   border: none;
   padding: 4px;
+  margin: 5px;
 }
 
 button:hover {
