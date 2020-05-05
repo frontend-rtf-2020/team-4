@@ -2,7 +2,7 @@
 
 .content {
     text-align: center;
-    background: #eee;/*
+    background: var(--content-color);/*
     box-sizing: 2px 2px 2px rgb(0,0,0,.5);*/
     padding: 15px;
     width: fit-content;

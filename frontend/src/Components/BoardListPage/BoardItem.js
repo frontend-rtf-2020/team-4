@@ -1,5 +1,6 @@
 import React from "react";
 import './boards.css';
+import Field from "./Field";
 class BoardItem extends React.Component {
 
     componentDidMount() {
@@ -14,10 +15,10 @@ class BoardItem extends React.Component {
         console.log(this.props);
         return (
             <div className='content board' onClick={this.onClick}>
-                <h2>{this.props.name}</h2>
+                <h2><Field description='Title'>{this.props.name}</Field></h2>
                 <b>Creator</b> {this.props.creator.login} ({this.props.creator.email})
                 <br/>
-                {this.props.description}
+                <Field description='Description'>{this.props.description}</Field>
                 <br/>
                 <b>Begin:</b> {this.props.addingDate}
                 <br/>

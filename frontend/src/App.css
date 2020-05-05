@@ -1,5 +1,6 @@
 :root {
   --main-color: #2ba9e4;
+  --content-color: rgba(230,230,230,0.7);
 }
 
 .App {
@@ -62,11 +63,9 @@ button {
 
 button:hover {
   background-color: white;
-  border: none;
   color: var(--main-color);
   font-weight: bold;
   cursor: pointer;
-  padding: 4px;
 }
 
 

@@ -18,7 +18,6 @@ function generateActivatorId(login) {//TODO: Rewrite?
     return res;
 }
 
-
 // eslint-disable-next-line no-unused-vars
 async function RegistrationHandler(req, res, next)
 {
@@ -67,5 +66,5 @@ async function RegistrationHandler(req, res, next)
     })
 }
 
-module.exports = { activate, RegistrationHandler };
+module.exports = { activate, RegistrationHandler};
 

@@ -2,7 +2,7 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 const router = express.Router();
-const { activate, RegistrationHandler } = require('./handlers');
+const { activate, RegistrationHandler } = require('./registration');
 
 
 const User = require('../model/User');
