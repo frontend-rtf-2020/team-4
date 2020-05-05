@@ -17,6 +17,8 @@ class BoardItem extends React.Component {
                 <h2>{this.props.name}</h2>
                 <b>Creator</b> {this.props.creator.login} ({this.props.creator.email})
                 <br/>
+                {this.props.description}
+                <br/>
                 <b>Begin:</b> {this.props.addingDate}
                 <br/>
                 <b>End:</b> {this.props.endDate}

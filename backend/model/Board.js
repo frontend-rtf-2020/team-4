@@ -16,6 +16,10 @@ const Board = mongoose.model('Board', new Schema({
         required : true,
         ref: 'User'
     }],
+    description : {
+        type: String,
+        required: true
+    },
     addingDate : {
         type : Date,
         required : true

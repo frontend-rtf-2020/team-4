@@ -27,7 +27,7 @@ class BoardList extends React.Component {
             <>
                 <h1>Boards</h1>
                 <div className='boardList'>
-                    {this.state.boards.map(b => <BoardItem key={b._id} id={b._id} name = {b.name} members={b.members} endDate={b.endDate} addingDate = {b.addingDate} creator = {b.creator} />)}
+                    {this.state.boards.map(b => <BoardItem key={b._id} description={b.description} id={b._id} name = {b.name} members={b.members} endDate={b.endDate} addingDate = {b.addingDate} creator = {b.creator} />)}
                 </div>
             </>
         );
