@@ -5,10 +5,8 @@ export default function Header(props) {
         <h2>
             Project Template
         </h2>
-        <div>
-            <a href='/auth'>Authorization</a>
-            <a href='/reg'>Registration</a>
-        </div>
+        <a href='/auth'>Authorization</a>
+        <a href='/reg'>Registration</a>
     </header>);
 }
 

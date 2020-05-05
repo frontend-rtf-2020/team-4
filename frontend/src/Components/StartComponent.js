@@ -3,13 +3,6 @@ import React from "react";
 export class StartComponent extends React.Component {
     constructor() {
         super();
-        this.state = {data: ""};
-    }
-
-    componentDidMount() {
-        fetch('/api/db_test')
-            .then(d=>d.text())
-            .then(t=>this.setState({data: t}));
     }
 
     render() {
@@ -20,7 +13,6 @@ export class StartComponent extends React.Component {
                 <li>Лукьянов Андрей</li>
                 <li>Сатункин Владимир</li>
                 <li>Ткачук Денис</li>
-                {this.state.data}
             </ol>
         </div>);
     }

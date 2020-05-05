@@ -5,9 +5,19 @@ class Board extends React.Component {
     constructor() {
         super();
         this.state = {columns: [{name: "vdsvds", tasks: [{endDate: 0, description: "lopoljk;poj"}]}]};
+
     }
 
     componentDidMount() {
+        this.ws = new WebSocket(`ws:localhost:8000/ws/get_detailed_board/${this.props.match.params.id}`);//TODO: change host
+        this.ws.onmessage = msg => {
+            const data = JSON.parse(msg.data);
+            //console.log(msg.data);
+            if(data.error)
+                alert(data.error);
+            else
+                this.setState({board: data });
+        };
     }
 
     render() {

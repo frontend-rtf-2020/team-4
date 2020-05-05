@@ -2,23 +2,14 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 const router = express.Router();
-const { activate, RegistrationHandler } = require('./registration');
+const { activate, RegistrationHandler } = require('../handlers/registration');
 
 
 const User = require('../model/User');
 const Column = require('../model/Column');
 const Board = require('../model/Board');
 
-/** The following handlers have been made only for testing operations and will removed in future */
-router.get('/test', function(req, res) {
-    res.send("OK!");
-});
-
-router.get('/db_test', function(req, resp) {
-    User.find((err, res) => {
-        resp.json(res);
-    })
-});
+/** The following handlers have been made only for testing operations and will be removed in future */
 
 router.post('/reg', RegistrationHandler);
 
@@ -77,6 +68,11 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
         },
         {$project: {_id: 0}}
         ]).then(r => res.send(r));
+});
+
+router.test('/agr_test4', (req, res) => {
+    Board.findById(req.params.id)
+        .then(r => res.send(r));
 });
 
 /**  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */

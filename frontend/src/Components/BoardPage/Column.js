@@ -13,7 +13,7 @@ class Column extends React.Component {
 
     render() {
         return  (
-            <div className='Column'>
+            <div className='Column content'>
                 <h2>{this.state.name}</h2>
                 Begin: {this.state.addingDate.toDateString()}
                 <br />

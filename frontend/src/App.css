@@ -68,6 +68,22 @@ button:hover {
   cursor: pointer;
 }
 
+header a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border-left: 1px solid #1997c1;
+  border-right: 1px solid #1997c1;
+  text-decoration: none;
+  color: lightyellow;
+  background: linear-gradient(#1997c1, var(--main-color));
+  height: 100%;
+}
+
+header a:hover {
+  background: linear-gradient(var(--main-color), #1997c1);
+}
 
 .App-link {
   color: #60ceec;
