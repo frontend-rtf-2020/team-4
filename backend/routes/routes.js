@@ -70,7 +70,7 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
         ]).then(r => res.send(r));
 });
 
-router.test('/agr_test4', (req, res) => {
+router.get('/agr_test4', (req, res) => {
     Board.findById(req.params.id)
         .then(r => res.send(r));
 });

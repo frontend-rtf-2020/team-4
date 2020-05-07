@@ -28,7 +28,8 @@ export default class Field extends React.PureComponent {
                 </> :
                 <>
                     {this.props.children}
-                    <button className='editButton' onClick={e => this.onEdit(e)}>Edit</button>
+                    <button className='editButton' onClick={e => this.onEdit(e)}>
+                    </button>
                 </>
             }
         </div>)
