@@ -12,6 +12,13 @@ const Column = mongoose.model('Column', new Schema({
         required : false,
         ref: 'User'
     } ],
+    tasks: [
+        {
+            type : Schema.Types.ObjectId,
+            required : true,
+            ref: 'Task'
+        }
+    ],
     name : {
         type : String,
         required : true

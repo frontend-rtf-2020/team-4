@@ -3,6 +3,7 @@ const Board = require('../model/Board');
 const mongoose = require('mongoose');
 
 function getBoards(ws, req, next) {
+    //TODO: save the socket
     console.log("sas");
     //TODO: check if user authorized
     const id = mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
@@ -36,7 +37,8 @@ function getBoards(ws, req, next) {
         //{$project: {_id: 0}}
     ]).then(r => ws.send(JSON.stringify(r)));
 
-    ws.on('message', function(msg) {//TODO: On add board
+    ws.on('message', function(msg) {
+        //TODO: add adding board
         ws.send(msg);
     })
 }
@@ -48,4 +50,12 @@ function getDetailedBoard(ws, req) {
         .then(r => ws.send(JSON.stringify(r)));
 }
 
-module.exports = { getBoards, getDetailedBoard };
+function editBoard(ws, req) {
+    //TODO: save the socket
+    ws.on('message', msg => {
+        //TODO: Add message editing of board
+    });
+}
+
+
+module.exports = { getBoards, getDetailedBoard, editBoard };

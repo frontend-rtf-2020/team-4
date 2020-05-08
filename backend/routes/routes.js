@@ -6,6 +6,7 @@ const { activate, RegistrationHandler } = require('../handlers/registration');
 
 
 const User = require('../model/User');
+const Task = require('../model/Task');
 const Column = require('../model/Column');
 const Board = require('../model/Board');
 
@@ -73,6 +74,26 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
 router.get('/agr_test4', (req, res) => {
     Board.findById(req.params.id)
         .then(r => res.send(r));
+});
+
+
+router.get('/agr_col', (req, res) => {
+    Column.aggregate([
+        {$unwind: "$tasks"},
+        {
+            $lookup:{
+                from: 'tasks',
+                localField: 'tasks',//
+                foreignField: '_id',
+                as: 'tasks'
+            }
+        },
+        {$group: {
+                _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, description: {$first: "$description"},
+                addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, editorsId: {$first: "$editorsId"}, board: {$first: "$board"}, tasks: { $addToSet: "$tasks" }
+            }
+        }
+    ]).then(r => res.send(r));
 });
 
 /**  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
