@@ -24,7 +24,7 @@ class BoardItem extends React.Component {
                 <br/>
                 <b>End:</b> {this.props.endDate}
                 <br/>
-                <b>Members:</b> {this.props.members.map(m => <div key={m[0].login}>{m[0].login} ({m[0].email})</div>)}
+                <b>Members:</b> {this.props.members.map(m => <div key={m.login}>{m.login} ({m.email})</div>)}
             </div>
         );
     }

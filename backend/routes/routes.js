@@ -40,8 +40,8 @@ router.get("/agr_test2", function(req, res)  {//retrieve columns along with thei
 
 router.get("/agr_test3", function(req, res)  {//retrieve boards along with their members
     Board.aggregate([
-            {$match: {$or: [{creatorId: mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047"),
-                        members: mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047")}]}},
+            {$match: {$or: [{creatorId: mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047")},
+                        {members: mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047")}]}},
         {
             $lookup:{
                 from: 'users',
@@ -61,6 +61,7 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
                 as: 'members'
             }
         },
+        {$unwind: "$members"},
         {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
         {$group: {
                 _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, description: {$first: "$description"},
@@ -71,14 +72,11 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
         ]).then(r => res.send(r));
 });
 
-router.get('/agr_test4', (req, res) => {
-    Board.findById(req.params.id)
-        .then(r => res.send(r));
-});
-
 
 router.get('/agr_col', (req, res) => {
+    const id = "5eafafc5d07fde1f84b44873";
     Column.aggregate([
+        {$match: { board: mongoose.Types.ObjectId(id)}},
         {$unwind: "$tasks"},
         {
             $lookup:{
@@ -88,12 +86,29 @@ router.get('/agr_col', (req, res) => {
                 as: 'tasks'
             }
         },
+        {$unwind: "$tasks"},
+        {
+            $lookup:{
+                from: 'users',
+                localField: 'tasks.workerId',//
+                foreignField: '_id',
+                as: 'tasks.worker'
+            }
+        },
+        {$unwind: "$tasks.worker"},
         {$group: {
-                _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, description: {$first: "$description"},
-                addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, editorsId: {$first: "$editorsId"}, board: {$first: "$board"}, tasks: { $addToSet: "$tasks" }
+                _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"},
+                addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, board: {$first: "$board"}, tasks: { $addToSet: "$tasks" }
             }
         }
-    ]).then(r => res.send(r));
+    ]).then(columns => {
+        Board.findById(id)
+            .then(b => res.json({
+                board: b,
+                columns: columns
+            }));
+        //res.send(r)
+    });
 });
 
 /**  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Task = mongoose.model('Task', new Schema({
-    creatorId : {
+    workerId : {
         type : Schema.Types.ObjectId,
         required : true,
         ref: 'User'
