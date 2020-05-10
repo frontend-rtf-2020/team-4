@@ -41,7 +41,7 @@ async function RegistrationHandler(req, res, next)
                     newUser.login = username;
                     newUser.activatorId = generateActivatorId(username);//Alfa version have not been tested
                     newUser.save(event => {
-                        console.log(event);
+                        //console.log(event);
                         sendEmail(newUser.email, newUser.activatorId)
                             .then(i => {
                                 console.log(i);
@@ -50,9 +50,9 @@ async function RegistrationHandler(req, res, next)
                             })
                             .catch(i =>
                             {
-                                console.log(i);
+                                //console.log(i);
                                 res.json(i);
-                            });//Alfa version have ot been tested
+                            });//Alfa version have not been tested
 
                     });
                     console.log('OLL KORREKT');

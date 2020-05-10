@@ -115,26 +115,29 @@ router.get('/agr_col', (req, res) => {
 
 
 router.get('/activate', activate);
-
+/*
 router.get('/reg/success', function (req, res) {
     res.send("You have successfully registered!")
-});
+});*/
 
 router.post('/auth', passport.authenticate('signIn', {
     successRedirect: '/api/auth/success',
     failureRedirect: '/api/auth/error',
+    failureFlash : true
 }));
 
 router.get('/auth/error', function (req, res) {
-    res.send("Oops!")
+
+    console.log('Flash' + JSON.stringify(req.flash()));
+    res.send({ err: "Oops!" })
 });
 
 router.get('/auth/success', function (req, res) {
-    res.send("You have successfully authorized!")
+    res.send({ err: "You have successfully authorized!" })
 });
-
+/*
 router.get('/reg/error', function (req, res) {
-    res.send("Oops!")
+    res.send({ err: "Oops!" })
 });
 
 router.get('/registration/success', function (req, res) {
@@ -145,7 +148,7 @@ router.get('/registration/error', function (req, res) {
 
     res.send("Lol. No")
 });
-
+*/
 module.exports = router;
 
 
