@@ -19,13 +19,13 @@ export default class Registration extends React.Component{
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: this.emailField.current.value,
-                username:this.usernameField.current.value,
-                password: this.passwordField.current.value
+                email: this.emailField.current.getValue(),
+                username:this.usernameField.current.getValue(),
+                password: this.passwordField.current.getValue()
             })
         }).then(res => res.json()).then(res => {
             if(res.err)
-                alert(res.err);
+                alert(res.err.message);
             else alert(res);
         });
 
@@ -38,9 +38,9 @@ export default class Registration extends React.Component{
                     <h1>Registration</h1>
                 </div>
                 <form className="content">
-                    <Input id="usernameField"  ref={this.usernameField} label="login" />
-                    <Input id="emailField" ref={this.emailField} label="email" type='email'/>
-                    <Input id="passwordField" ref={this.passwordField}  label="password" type='password'/>
+                    <Input ref={this.usernameField} label="login" />
+                    <Input ref={this.emailField} label="email" type='email'/>
+                    <Input ref={this.passwordField}  label="password" type='password'/>
                     <button
                         type="success"
                         onClick={this.registerHandler}>

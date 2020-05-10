@@ -56,6 +56,7 @@ async function RegistrationHandler(req, res, next)
 
                     });
                     console.log('OLL KORREKT');
+
                 }
                 else
                     res.json({error: "Such user already exists"});

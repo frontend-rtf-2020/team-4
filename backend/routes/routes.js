@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const { activate, RegistrationHandler } = require('../handlers/registration');
-
+const passport = require('passport');
 
 const User = require('../model/User');
 const Task = require('../model/Task');
@@ -120,8 +120,21 @@ router.get('/reg/success', function (req, res) {
     res.send("You have successfully registered!")
 });
 
+router.post('/auth', passport.authenticate('signIn', {
+    successRedirect: '/api/auth/success',
+    failureRedirect: '/api/auth/error',
+}));
+
+router.get('/auth/error', function (req, res) {
+    res.send("Oops!")
+});
+
+router.get('/auth/success', function (req, res) {
+    res.send("You have successfully authorized!")
+});
+
 router.get('/reg/error', function (req, res) {
-    res.send("You have successfully registered!")
+    res.send("Oops!")
 });
 
 router.get('/registration/success', function (req, res) {

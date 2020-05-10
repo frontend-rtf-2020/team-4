@@ -1,22 +1,34 @@
-import React from 'react'
+import React, {createRef} from 'react'
 import './Input.css'
 
-const Input = (props) => {
-    const inputType = props.type || 'text';
-    //const cls = [classes.Input];
-    ///const htmlFor= `${inputType}-${Math.random()}`;
-    return(
-        <div /*className={cls.join(' ')}*/ className='Input'>
-            <label htmlFor={props.id}>{props.label}</label>
-            <input
-                placeholder={props.label}
-                type={inputType}
-                id={props.id}
-                value={props.value}
-                onChange={props.onChange}/>
-            <span>{props.errorMessage}</span>
-        </div>
-    )
-};
+class Input extends React.Component {
+    constructor() {
+        super();
+        this.Field = createRef();
+    }
+    getValue()
+    {
+        return this.Field.current.value;
+    }
+
+    render() {
+        const inputType = this.props.type || 'text';
+        //const cls = [classes.Input];
+        ///const htmlFor= `${inputType}-${Math.random()}`;
+        return (
+            <div /*className={cls.join(' ')}*/ className='Input'>
+                <label htmlFor={this.props.id}>{this.props.label}</label>
+                <input
+                    ref={this.Field}
+                    placeholder={this.props.label}
+                    type={inputType}
+                    id={this.props.id}
+                    value={this.props.value}
+                    onChange={this.props.onChange}/>
+                <span>{this.props.errorMessage}</span>
+            </div>
+        )
+    }
+}
 
 export default Input
