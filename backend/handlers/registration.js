@@ -11,7 +11,7 @@ function activate (req, resp) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function generateActivatorId(login) {//TODO: Rewrite?
+function generateActivatorId (login) {//TODO: Rewrite?
     let res = login;
     for (let i = 0; i < 15; i++)
         res += String.fromCodePoint(Math.round(48 + Math.random() * 74));

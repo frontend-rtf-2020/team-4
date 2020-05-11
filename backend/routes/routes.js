@@ -6,9 +6,10 @@ const { activate, RegistrationHandler } = require('../handlers/registration');
 const passport = require('passport');
 
 const User = require('../model/User');
-const Task = require('../model/Task');
+//const Task = require('../model/Task');
 const Column = require('../model/Column');
 const Board = require('../model/Board');
+const { getUserData, checkAuthenticated, checkNotAuthenticated, logout } = require('../handlers/handlers');
 
 /** The following handlers have been made only for testing operations and will be removed in future */
 
@@ -113,14 +114,14 @@ router.get('/agr_col', (req, res) => {
 
 /**  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
 
+router.get('/logout', checkAuthenticated, logout);
 
-router.get('/activate', activate);
-/*
-router.get('/reg/success', function (req, res) {
-    res.send("You have successfully registered!")
-});*/
+router.get('/get_user_data',  checkAuthenticated, getUserData);
 
-router.post('/auth', passport.authenticate('signIn', {
+router.get('/activate', checkNotAuthenticated, activate);
+
+
+router.post('/auth', checkNotAuthenticated, passport.authenticate('signIn', {
     successRedirect: '/api/auth/success',
     failureRedirect: '/api/auth/error',
     failureFlash : true
@@ -135,20 +136,7 @@ router.get('/auth/error', function (req, res) {
 router.get('/auth/success', function (req, res) {
     res.send({ err: "You have successfully authorized!" })
 });
-/*
-router.get('/reg/error', function (req, res) {
-    res.send({ err: "Oops!" })
-});
 
-router.get('/registration/success', function (req, res) {
-    res.send("You have successfully registered!")
-});
-
-router.get('/registration/error', function (req, res) {
-
-    res.send("Lol. No")
-});
-*/
 module.exports = router;
 
 
