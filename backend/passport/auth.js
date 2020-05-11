@@ -5,13 +5,19 @@ const size = 10;
 
 
 
-const signIn = new LocalStrategy((identifier, password, done) => {
+const signIn = new LocalStrategy((username, password, done) => {
     console.log('correct0');
-    User.findOne({'email': identifier}, user => {
-        if (user)
+    User.findOne({'email': username}, function (error, user) {
+
+        if(user){
+            console.log(username, user, password);
             Authentication(user, password, done);
-        else
-            User.findOne({'login': identifier}, user => Authentication(user, password, done));
+        }
+
+        else {
+            console.log(username, user, password);
+            User.findOne({'login': username}, Authentication(user, password, done));
+}
     });
 
 
@@ -24,9 +30,9 @@ const signIn = new LocalStrategy((identifier, password, done) => {
                 if (user.hash === currHash)
                     return done(null, true, user);
                 else return done(null, false, {message: 'Wrong password'});
-            } else return done(null, false, {message: 'Wrong login or email'});
+            } else return done(null, false, {message: 'Activate your account by the link sent to your email'});
         }
-        else return done(null, false, {message: 'Activate your account by the link sent to your email'});
+        else return done(null, false, {message: 'Wrong login or email'});
     }
 });
 

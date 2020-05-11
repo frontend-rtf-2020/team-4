@@ -19,7 +19,7 @@ export default class Authorization extends React.Component{
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                identifier: this.identifierField.current.getValue(),
+                username: this.identifierField.current.getValue(),
                 password: this.passField.current.getValue()
             })
         }).then(res => res.json()).then(res => {
