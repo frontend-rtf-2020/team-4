@@ -40,7 +40,7 @@ export default class Header extends React.Component {
                 if(r.error)
                     console.log(r.error);
                 else
-                    this.setState({user: r});
+                    this.setState({user: r});//TODO:save to context
             })
             .catch(e => console.log(e))
     }

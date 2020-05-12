@@ -49,10 +49,10 @@ function getBoards(ws, req, next) {
 }
 
 function getDetailedBoard(ws, req) {
-    const id = req.params.id;//"5eafafc5d07fde1f84b44873";//TODO: get from params
+    const id = req.params.id;//"5eafafc5d07fde1f84b44873";
     //TODO: save the socket
     Column.aggregate([
-        {$match: { board: mongoose.Types.ObjectId(id)}},//TODO: check id
+        {$match: {$and: [{board: mongoose.Types.ObjectId(id)},{$or: [{creatorId: id}, {members: id}]}]}},//TODO: check id
         {$unwind: "$tasks"},
         {
             $lookup:{
