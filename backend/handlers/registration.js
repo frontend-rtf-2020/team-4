@@ -5,6 +5,7 @@ const sendEmail = require("./activator");
 const size = 10;
 
 function activate (req, resp) {
+    // eslint-disable-next-line no-unused-vars
     User.findOneAndUpdate({activatorId: req.query.activate}, { active: true }, (err, user) => {
         resp.send(err || "Successful activate");
     });
@@ -40,6 +41,7 @@ async function RegistrationHandler(req, res, next)
                     newUser.hash = crypto.hashSync(password, size);
                     newUser.login = username;
                     newUser.activatorId = generateActivatorId(username);//Alfa version have not been tested
+                    // eslint-disable-next-line no-unused-vars
                     newUser.save(event => {
                         //console.log(event);
                         sendEmail(newUser.email, newUser.activatorId)

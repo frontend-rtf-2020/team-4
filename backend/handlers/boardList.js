@@ -3,7 +3,7 @@ const Board = require('../model/Board');
 const Column = require('../model/Column');
 const mongoose = require('mongoose');
 
-function getBoards(ws, req, next) {
+function getBoards(ws, req) {
     //TODO: save the socket
     console.log('user: ' + req.user);
     const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
@@ -94,8 +94,11 @@ function getDetailedBoard(ws, req) {
     });
 }
 
+// eslint-disable-next-line no-unused-vars
 function editBoard(ws, req) {
     //TODO: save the socket
+
+    // eslint-disable-next-line no-unused-vars
     ws.on('message', msg => {
         //TODO: Add message editing of board
     });

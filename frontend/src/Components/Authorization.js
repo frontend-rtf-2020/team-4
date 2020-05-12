@@ -3,12 +3,8 @@ import './content.css';
 
 import Input from './UI/Input.js';
 
-export default class Authorization extends React.Component{
-    constructor() {
-        super();
-        this.identifierField = React.createRef();
-        this.passField = React.createRef();
-    }
+export default class Authorization extends React.Component {
+
     loginHandler = (event) => {
         console.log('send');
         event.preventDefault();
@@ -33,7 +29,13 @@ export default class Authorization extends React.Component{
 
     };
 
-    render (){
+    constructor() {
+        super();
+        this.identifierField = React.createRef();
+        this.passField = React.createRef();
+    }
+
+    render () {
         return(
             <>
                 <h1>Authorization</h1>

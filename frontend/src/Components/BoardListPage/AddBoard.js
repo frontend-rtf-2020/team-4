@@ -6,9 +6,9 @@ export default class AddBoard extends React.PureComponent {
         super();
         this.state = { adding: false }
     }
+
     onAdd = () =>
         this.setState({ adding: true });
-
     cancel = event => {
         event.preventDefault();
         event.stopPropagation();
