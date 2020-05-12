@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 
 function getBoards(ws, req, next) {
     //TODO: save the socket
-    //TODO: check if user authorized
-    const id = mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
+    console.log('user: ' + req.user);
+    const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
     Board.aggregate([
-        {$match: {$or: [{creatorId: id, members: id}]}},
+        {$match: {$or: [{creatorId: id}, {members: id}]}},
         {
             $lookup:{
                 from: 'users',
@@ -49,11 +49,10 @@ function getBoards(ws, req, next) {
 }
 
 function getDetailedBoard(ws, req) {
-    const id = "5eafafc5d07fde1f84b44873";//TODO: get from params
+    const id = req.params.id;//"5eafafc5d07fde1f84b44873";//TODO: get from params
     //TODO: save the socket
-    //TODO: check if user authorized
     Column.aggregate([
-        {$match: { board: mongoose.Types.ObjectId(id)}},
+        {$match: { board: mongoose.Types.ObjectId(id)}},//TODO: check id
         {$unwind: "$tasks"},
         {
             $lookup:{
