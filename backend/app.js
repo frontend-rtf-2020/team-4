@@ -17,7 +17,7 @@ const indexRouter = require('./routes/indexRouter');*/
 const app = express();
 
 
-mongoose.connect(process.env.DB_CONNECTION_URL);
+mongoose.connect(process.env.DB_CONNECTION_URL, {useNewUrlParser: true});
 
 initialise(passport);
 

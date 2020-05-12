@@ -3,14 +3,14 @@ function getUserData(req, res) {
     res.send({username: req.user.login, email: req.user.email});
 }
 
-function checkAuthenticated(res, req, next) {
+function checkAuthenticated(req, res, next) {
     if(req.user)
         next();
     else
         res.send({error: "Not authenticated"});
 }
 
-function checkNotAuthenticated(res, req, next) {
+function checkNotAuthenticated(req, res, next) {
     if(!req.user)
         next();
     else

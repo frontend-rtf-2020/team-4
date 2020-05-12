@@ -130,7 +130,7 @@ router.post('/auth', checkNotAuthenticated, passport.authenticate('signIn', {
 router.get('/auth/error', function (req, res) {
 
     console.log('Flash' + JSON.stringify(req.flash()));
-    res.send({ err: "Oops!" })
+    res.send(req.flash())
 });
 
 router.get('/auth/success', function (req, res) {
