@@ -68,6 +68,11 @@ button:hover {
   cursor: pointer;
 }
 
+button:focus {
+  outline: none;
+  box-shadow: inset 1px 1px 1px 1px black, inset -1px -1px 1px 1px black;
+}
+
 header a {
   text-decoration: none;
   color: black;

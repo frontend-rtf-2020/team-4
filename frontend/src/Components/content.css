@@ -13,6 +13,11 @@
     animation: appear  500ms 1 ease-in-out;
 }
 
+.errorMessage {
+    color: red;
+    text-align: center;
+}
+
 div.start {
     max-width: 70%;
 }

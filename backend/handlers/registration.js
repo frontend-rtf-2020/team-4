@@ -19,10 +19,9 @@ function generateActivatorId (login) {//TODO: Rewrite?
     return res;
 }
 
-// eslint-disable-next-line no-unused-vars
-async function RegistrationHandler(req, res, next)
+async function RegistrationHandler(req, res)
 {
-    const username = req.body.username;//TODO: Change to login
+    const username = req.body.username;
     const email = req.body.email;
     const isEmailValid = await emailCheck(email);
     if(!isEmailValid)
