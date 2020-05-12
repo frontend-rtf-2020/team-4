@@ -21,8 +21,8 @@ class AuthorizedLinks extends React.Component {
     }
     render() {
         return (<>
-            <a>{this.props.login}</a>
-            <a onClick={this.logout} className='link-button'>Logout</a>
+            <span>{this.props.login}({this.props.email})</span>
+            <span onClick={this.logout} className='link-button'>Logout</span>
         </>);
     }
 }
@@ -45,12 +45,13 @@ export default class Header extends React.Component {
             .catch(e => console.log(e))
     }
 
+
     render() {
         return (<header>
             <h2>
                 <a href='/'>Project Template</a>
             </h2>
-            {this.state.user ? <AuthorizedLinks login={this.state.user.login}/> : <NotAuthorizedLinks/>}
+            {this.state.user ? <AuthorizedLinks login={this.state.user.login} email={this.state.user.email}/> : <NotAuthorizedLinks/>}
         </header>);
     }
 }

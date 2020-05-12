@@ -1,9 +1,6 @@
 import React from "react";
 
 export class StartComponent extends React.Component {
-    constructor() {
-        super();
-    }
 
     render() {
         return (
