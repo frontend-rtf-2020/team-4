@@ -24,9 +24,12 @@ export default class Registration extends React.Component{
                 password: this.passwordField.current.getValue()
             })
         }).then(res => res.json()).then(res => {
-            if(res.err)
-                alert(res.err.message);
-            else alert(res);
+            if(res.error)
+                alert(res.error.message);
+            else {
+                alert(res.result);
+                window.location.href = '/';
+            }
         });
 
      };

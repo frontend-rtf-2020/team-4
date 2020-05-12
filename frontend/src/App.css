@@ -69,6 +69,12 @@ button:hover {
 }
 
 header a {
+  text-decoration: none;
+  color: black;
+  margin: 5px
+}
+
+.link-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,11 +83,13 @@ header a {
   border-right: 1px solid #1997c1;
   text-decoration: none;
   color: lightyellow;
+  margin: 0;
   background: linear-gradient(#1997c1, var(--main-color));
   height: 100%;
 }
 
-header a:hover {
+.link-button:hover {
+  cursor: pointer;
   background: linear-gradient(var(--main-color), #1997c1);
 }
 

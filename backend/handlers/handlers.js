@@ -31,7 +31,7 @@ function checkNotAuthenticated(req, res, next) {
 
 function logout(req, res) {
     req.logOut();
-    res.send('logout');
+    res.send({ result: 'Successful logout' });
 }
 
 module.exports = { getUserData, checkAuthenticated, checkNotAuthenticated, logout, checkWsAuthenticated };

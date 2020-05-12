@@ -128,13 +128,12 @@ router.post('/auth', checkNotAuthenticated, passport.authenticate('signIn', {
 }));
 
 router.get('/auth/error', function (req, res) {
-
     console.log('Flash' + JSON.stringify(req.flash()));
     res.send(req.flash())
 });
 
 router.get('/auth/success', function (req, res) {
-    res.send({ err: "You have successfully authorized!" })
+    res.send({ result: "You have successfully authorized!" })
 });
 
 module.exports = router;

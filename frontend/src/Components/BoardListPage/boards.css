@@ -24,14 +24,23 @@ div .board {
 
 .editButton {
     border-radius: 5px;
-    color: black;
-    border: none;
+    color: black;/*
+    box-shadow: 1px 1px 1px 1px darkgray, -1px -1px 1px 1px darkgray;*/
     min-width: 25px;
     min-height: 25px;
-    background: linear-gradient(rgba(170, 170, 170, 0.3), rgba(190, 190, 190, 0.1)), url('./edit-icon.png') center no-repeat;
+    border: 1px solid lightgray;
+    background: linear-gradient(gray, lightgray/*rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4)*/);
 }
 
 .editButton:hover {
     color: black;
-    background: linear-gradient(rgba(190,190,190,0.1), rgba(170,170,170, 0.3)), url('./edit-icon.png') center no-repeat;
+    background: linear-gradient(gray, lightgray/*rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4)*/);
 }
+
+button.edit-ico {
+    background:  url('./edit-icon.png') center no-repeat,  linear-gradient(gray, lightgray/*rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4)*/);
+}
+
+button.edit-ico:hover {
+     background: url('./edit-icon.png') center no-repeat, linear-gradient(/*rgba(150, 150, 150, 0.4), rgba(120, 120, 120, 0.7)*/lightgray, grey);
+ }

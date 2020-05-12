@@ -23,9 +23,12 @@ export default class Authorization extends React.Component{
                 password: this.passField.current.getValue()
             })
         }).then(res => res.json()).then(res => {
-            if(res.err)
-                alert(res.err);
-            else alert(res);
+            if(res.error)
+                alert(res.error);
+            else {
+                alert(res.result);
+                window.location.href = '/';
+            }
         });
 
     };

@@ -45,7 +45,7 @@ async function RegistrationHandler(req, res, next)
                         sendEmail(newUser.email, newUser.activatorId)
                             .then(i => {
                                 console.log(i);
-                                res.json({res: "OK"});
+                                res.json({result: "OK"});
                                 //if error => delete user
                             })
                             .catch(i =>

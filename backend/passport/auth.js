@@ -7,17 +7,7 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const signIn = new LocalStrategy((username, password, done) => {
     console.log('correct0');
-    User.findOne({$or: [{'email': username}, {'login': username}]}, function (error, user) {
-        Authentication(user, password, done);
-        /*
-        if(user)
-            //console.log(username, user, password);
-            Authentication(user, password, done);
-        else
-            //console.log(username, user, password);
-            User.findOne({'login': username}, Authentication(user, password, done));*/
-    });
-
+    User.findOne({$or: [{'email': username}, {'login': username}]}, (error, user) => Authentication(user, password, done));
 
     function Authentication(user, password, done) {
         if (user) {
