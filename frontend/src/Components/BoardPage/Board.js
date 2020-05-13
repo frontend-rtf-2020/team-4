@@ -1,11 +1,10 @@
 import React from "react";
 import Column from "./Column";
-import { useParams } from "react-router-dom";
+//import { useParams } from "react-router-dom";
 class Board extends React.Component {
     constructor() {
         super();
         this.state = {board: {name: "", description: ""}, columns: []};
-
     }
 
     componentDidMount() {

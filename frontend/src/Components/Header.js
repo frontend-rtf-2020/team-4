@@ -27,31 +27,17 @@ class AuthorizedLinks extends React.Component {
     }
 }
 
-export default class Header extends React.Component {
-    constructor() {
+export default class Header extends React.PureComponent {
+   /* constructor() {
         super();
         this.state = {user: null};
-    }
-
-    componentDidMount() {
-        fetch('/api/get_user_data')
-            .then(r => r.json())
-            .then(r => {
-                if(r.error)
-                    console.log(r.error);
-                else
-                    this.setState({user: r});//TODO:save to context
-            })
-            .catch(e => console.log(e))
-    }
-
-
+    }*/
     render() {
         return (<header>
             <h2>
                 <a href='/'>Project Template</a>
             </h2>
-            {this.state.user ? <AuthorizedLinks login={this.state.user.login} email={this.state.user.email}/> : <NotAuthorizedLinks/>}
+            {this.props.user ? <AuthorizedLinks login={this.props.user.login} email={this.props.user.email}/> : <NotAuthorizedLinks/>}
         </header>);
     }
 }

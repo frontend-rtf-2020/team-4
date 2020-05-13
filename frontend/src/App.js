@@ -9,21 +9,43 @@ import Authorization from "./Components/Authorization";
 import Registration from "./Components/Registration";
 import Board from "./Components/BoardPage/Board";
 
+//const LoginContext = React.createContext({logged: false});
 
 const NotFound = props => (<div className='content'><h1>The page not found</h1></div>);
 
+const UnAuthorizedAccess = props => (<div className='content'><h1>This page is for authorized users only.
+    <br/> Please use buttons at the right top corner to authorize</h1></div>);
+
 class App extends React.Component {
+
+    constructor() {
+        super();
+        this.state = {user: null};
+    }
+
+    componentDidMount() {
+        fetch('/api/get_user_data')
+            .then(r => r.json())
+            .then(r => {
+                if(r.error)
+                    console.log(r.error);
+                else
+                    this.setState({user: r});
+            })
+            .catch(e => console.log(e))
+    }
+
     render() {
         return (
             <div className="App">
-                <Header/>
+                <Header user={this.state.user}/>
                     <div className='mainPart'>
                         <BrowserRouter>
                             <Switch>
-                                <Route path="/item/:id" component={Board}/>
-                                <Route path="/list" render={props => <BoardList />} />
-                                <Route path="/auth" render={props => <Authorization />} />
-                                <Route path="/reg" render={props => <Registration />} />
+                                <Route path="/item/:id" component={this.state.user ? Board : UnAuthorizedAccess}/>
+                                <Route path="/list" component={this.state.user ? BoardList : UnAuthorizedAccess}  />
+                                <Route path="/auth" component={Authorization}  />
+                                <Route path="/reg"  component={Registration}  />
                                 <Route exact path='/' component={StartComponent}/>
                                 <NotFound/>
                             </Switch>
