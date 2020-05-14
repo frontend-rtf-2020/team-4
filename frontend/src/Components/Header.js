@@ -17,6 +17,7 @@ class AuthorizedLinks extends React.Component {
                     alert(r.result);
                     window.location.href = '/';
                 }
+                sessionStorage.setItem('user', null);
             })
     }
     render() {

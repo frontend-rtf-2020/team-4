@@ -18,6 +18,26 @@
     text-align: center;
 }
 
+div.loading {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    border-right: 2px solid var(--dark-main-color);
+    border-bottom: 2px solid var(--dark-main-color);
+    animation: rotate 1s infinite;
+    transform-origin: 25px 25px;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+
+        transform: rotate(360deg);
+    }
+}
+
 div.start {
     max-width: 70%;
 }

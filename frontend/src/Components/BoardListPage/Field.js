@@ -2,6 +2,10 @@ import React from "react";
 import Input from "../UI/Input";
 
 export default class Field extends React.PureComponent {
+    click = event => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
     constructor() {
         super();
         this.state = {editing: false}
@@ -23,7 +27,7 @@ export default class Field extends React.PureComponent {
                 this.state.editing ?
                 <>
                     <Input value={this.props.children} label={this.props.description} />
-                    <button className='editButton'>Submit</button>
+                    <button className='editButton' onClick={this.click}>Submit</button>
                     <button className='editButton' onClick={this.cancel}>Cancel</button>
                 </> :
                 <>

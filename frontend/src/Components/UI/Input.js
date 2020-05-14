@@ -10,7 +10,10 @@ class Input extends React.Component {
     {
         return this.Field.current.value;
     }
-
+    clickField = event => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
     render() {
         const inputType = this.props.type || 'text';
         //const cls = [classes.Input];
@@ -19,6 +22,7 @@ class Input extends React.Component {
             <div /*className={cls.join(' ')}*/ className='Input'>
                 <label htmlFor={this.props.id}>{this.props.label}</label>
                 <input
+                    onClick={this.clickField}
                     ref={this.Field}
                     placeholder={this.props.label}
                     type={inputType}

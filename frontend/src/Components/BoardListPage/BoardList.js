@@ -4,10 +4,12 @@ import './boards.css';
 import AddBoard from "./AddBoard";
 import getWSURL from "../getWSURL";
 
+const LoadingWheel = props => (<div className='loading'></div>)
+
 class BoardList extends React.Component {
     constructor() {
         super();
-        this.state = {boards: []};
+        this.state = {boards: null};
         this.ws = new WebSocket(getWSURL('ws/get_boards'));
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
@@ -33,11 +35,16 @@ class BoardList extends React.Component {
         return (
             <>
                 <h1>Boards</h1>
-                <div className='boardList'>
-                    {this.state.boards.map(b => <BoardItem key={b._id} description={b.description} id={b._id} name = {b.name}
-                                                           members={b.members} endDate={b.endDate} addingDate = {b.addingDate} creator = {b.creator} />)}
-                    <AddBoard addBoard={this.addBoard}/>
-                </div>
+                {
+                    this.state.boards ?
+                    <div className='boardList'>
+                        {this.state.boards.map(b=><BoardItem key={b._id} description={b.description} id={b._id}
+                                                             name={b.name}
+                                                             members={b.members} endDate={b.endDate}
+                                                             addingDate={b.addingDate} creator={b.creator}/>)}
+                        <AddBoard addBoard={this.addBoard}/>
+                    </div> : <LoadingWheel/>
+                }
             </>
         );
     }

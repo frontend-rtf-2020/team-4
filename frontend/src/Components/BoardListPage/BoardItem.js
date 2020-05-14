@@ -10,11 +10,14 @@ class BoardItem extends React.Component {
         document.location.href = `/item/${this.props.id}`
         //window.
     };
-
+    click = event => {
+        //event.preventDefault();
+        event.stopPropagation();
+    };
     render() {
         console.log(this.props);
         return (
-            <div className='content board'>
+            <div onClick={this.onClick} className='content board'>
                 <h2><Field description='Title'>{this.props.name}</Field></h2>
                 <b>Creator</b> {this.props.creator.login} ({this.props.creator.email})
                 <br/>
@@ -23,9 +26,7 @@ class BoardItem extends React.Component {
                 <b>Begin:</b> {this.props.addingDate}
                 <br/>
                 <b>End:</b> {this.props.endDate}
-                <br/>
-                <button onClick={this.onClick}>Open</button>
-                <details>
+                <details onClick={this.click}>
                     <summary>
                         <b>Members:</b>
                     </summary>

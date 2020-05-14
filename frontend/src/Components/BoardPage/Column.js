@@ -5,7 +5,7 @@ import "./Column.css";
 class Column extends React.Component {
     constructor() {
         super();
-        this.state = { name: "Title", addingDate: new Date(), endDate: new Date(), tasks: [ {name: "sdcvsds" } ]};
+        this.state = { name: "Title", addingDate: "", endDate: "", tasks: [ {name: "sdcvsds" } ]};
     }
 
     componentDidMount() {
@@ -16,14 +16,14 @@ class Column extends React.Component {
         return  (
             <div className='Column content'>
                 <h2>{this.props.column.name}</h2>
-                {/*}
-                Begin: {this.props.column.addingDate.toDateString()}
+
+                <b>Begin:</b> {this.props.column.addingDate}
                 <br />
-                End: {this.props.column.endDate.toDateString()}
-                */}
+                <b>End:</b> {this.props.column.endDate}
+                <br/>
                 Tasks:
                 <br/>
-                {this.props.column.tasks.map(b => <Task {...b} key={ b.name } />)}
+                {this.props.column.tasks.map(b => <Task key={b._id} task={b} />)}
             </div>
         );
     }

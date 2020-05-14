@@ -20,17 +20,22 @@ class App extends React.Component {
 
     constructor() {
         super();
-        this.state = {user: null};
+        this.state = {user: JSON.parse(sessionStorage.getItem('user'))};
     }
 
     componentDidMount() {
         fetch('/api/get_user_data')
             .then(r => r.json())
             .then(r => {
-                if(r.error)
+                if(r.error) {
                     console.log(r.error);
-                else
+                    sessionStorage.setItem('user', null);
+                    this.setState({user: null});
+                }
+                else {/**/
                     this.setState({user: r});
+                    sessionStorage.setItem('user', JSON.stringify(r));
+                }
             })
             .catch(e => console.log(e))
     }

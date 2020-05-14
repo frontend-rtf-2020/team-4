@@ -71,7 +71,8 @@ button:hover {
 
 button:focus {
   outline: none;
-  box-shadow: inset 2px 2px 2px 2px var(--dark-main-color), inset -2px -2px 2px 2px var(--dark-main-color);
+  font-weight: bold;
+  box-shadow: inset 1px 1px 1px 1px var(--dark-main-color), inset -1px -1px 1px 1px var(--dark-main-color);
 }
 
 header a {
