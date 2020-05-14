@@ -12,15 +12,18 @@ class Column extends React.Component {
     }
 
     render() {
+        console.log('props' + this.props);
         return  (
             <div className='Column content'>
-                <h2>{this.state.name}</h2>
-                Begin: {this.state.addingDate.toDateString()}
+                <h2>{this.props.column.name}</h2>
+                {/*}
+                Begin: {this.props.column.addingDate.toDateString()}
                 <br />
-                End: {this.state.endDate.toDateString()}
+                End: {this.props.column.endDate.toDateString()}
+                */}
                 Tasks:
                 <br/>
-                {this.state.tasks.map(b => <Task {...b} key={ b.name } />)}
+                {this.props.column.tasks.map(b => <Task {...b} key={ b.name } />)}
             </div>
         );
     }

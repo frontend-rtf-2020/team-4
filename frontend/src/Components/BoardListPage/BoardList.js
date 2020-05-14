@@ -2,12 +2,13 @@ import React from "react";
 import BoardItem from "./BoardItem";
 import './boards.css';
 import AddBoard from "./AddBoard";
+import getWSURL from "../getWSURL";
 
 class BoardList extends React.Component {
     constructor() {
         super();
         this.state = {boards: []};
-        this.ws = new WebSocket(`ws:localhost:8000/ws/get_boards`);//TODO: change host
+        this.ws = new WebSocket(getWSURL('ws/get_boards'));
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
             //console.log(msg.data);

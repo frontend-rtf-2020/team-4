@@ -1,6 +1,7 @@
 :root {
   --main-color: #2ba9e4;
   --content-color: rgba(230,230,230,0.7);
+  --dark-main-color: #1997c1;
 }
 
 .App {
@@ -70,7 +71,7 @@ button:hover {
 
 button:focus {
   outline: none;
-  box-shadow: inset 1px 1px 1px 1px black, inset -1px -1px 1px 1px black;
+  box-shadow: inset 2px 2px 2px 2px var(--dark-main-color), inset -2px -2px 2px 2px var(--dark-main-color);
 }
 
 header a {
@@ -89,13 +90,13 @@ header a {
   text-decoration: none;
   color: lightyellow;
   margin: 0;
-  background: linear-gradient(#1997c1, var(--main-color));
+  background: linear-gradient(var(--dark-main-color), var(--main-color));
   height: 100%;
 }
 
 .link-button:hover {
   cursor: pointer;
-  background: linear-gradient(var(--main-color), #1997c1);
+  background: linear-gradient(var(--main-color), var(--dark-main-color));
 }
 
 .App-link {

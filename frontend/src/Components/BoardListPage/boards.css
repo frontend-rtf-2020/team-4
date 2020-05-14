@@ -12,6 +12,7 @@ div .board {
 
 .board:hover {
     box-shadow: inset 2px 2px 2px 2px darkgray, inset -2px -2px 2px 2px darkgray;
+    background-color: rgba(250, 250, 250, 0.7);
     /*background-color: var(--content-color);*/
     cursor: pointer;
 }
@@ -34,7 +35,7 @@ div .board {
 
 .editButton:hover {
     color: black;
-    background: linear-gradient(/*gray, lightgray*/rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4));
+    background: linear-gradient(/*gray, lightgray*/rgba(150, 150, 150, 0.4), rgba(120, 120, 120, 0.7));
 }
 
 button.edit-ico {

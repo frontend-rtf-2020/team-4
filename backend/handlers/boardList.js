@@ -50,41 +50,50 @@ function getBoards(ws, req) {
 
 function getDetailedBoard(ws, req) {
     const id = req.params.id;//"5eafafc5d07fde1f84b44873";
-    //TODO: save the socket
-    Column.aggregate([
-        {$match: {$and: [{board: mongoose.Types.ObjectId(id)},{$or: [{creatorId: id}, {members: id}]}]}},//TODO: check id
-        {$unwind: "$tasks"},
-        {
-            $lookup:{
-                from: 'tasks',
-                localField: 'tasks',//
-                foreignField: '_id',
-                as: 'tasks'
+    //TODO: save the socketc
+    //console.log(req.user._id.toString());
+    Board.findById(id)
+        .then(b => {
+            if(b.creatorId.toString() !== req.user._id.toString() && b.members.indexOf(req.user._id) === -1)
+            {
+                ws.send('{"error": "Wrong id"}');
+                return;
             }
-        },
-        {$unwind: "$tasks"},
-        {
-            $lookup:{
-                from: 'users',
-                localField: 'tasks.workerId',//
-                foreignField: '_id',
-                as: 'tasks.worker'
-            }
-        },
-        {$unwind: "$tasks.worker"},
-        {$group: {
-                _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"},
-                addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, board: {$first: "$board"}, tasks: { $addToSet: "$tasks" }
-            }
-        }
-    ]).then(columns => {
-        Board.findById(id)
-            .then(b => ws.send(JSON.stringify({
-                board: b,
-                columns: columns
-            })));
-        //res.send(r)
-    });
+            Column.aggregate([
+                {$match: {board: mongoose.Types.ObjectId(id)} /*{$and: [{board: mongoose.Types.ObjectId(id)},{$or: [{creatorId: id}, {editorsId: id}]}]}*/},
+                {$unwind: "$tasks"},
+                {
+                    $lookup:{
+                        from: 'tasks',
+                        localField: 'tasks',//
+                        foreignField: '_id',
+                        as: 'tasks'
+                    }
+                },
+                {$unwind: "$tasks"},
+                {
+                    $lookup:{
+                        from: 'users',
+                        localField: 'tasks.workerId',//
+                        foreignField: '_id',
+                        as: 'tasks.worker'
+                    }
+                },
+                {$unwind: "$tasks.worker"},
+                {$group: {
+                        _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"},
+                        addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, board: {$first: "$board"}, tasks: { $addToSet: "$tasks" }
+                    }
+                }
+            ]).then(columns => {
+                ws.send(JSON.stringify({
+                    board: b ,
+                    columns: columns
+                }));
+                //res.send(r)
+            });
+        });
+
     ws.on('message', function(msg) {
         //TODO:
         ws.send(msg);

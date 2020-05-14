@@ -1,5 +1,6 @@
 import React from "react";
 import Column from "./Column";
+import getWSURL from "../getWSURL";
 //import { useParams } from "react-router-dom";
 class Board extends React.Component {
     constructor() {
@@ -8,7 +9,9 @@ class Board extends React.Component {
     }
 
     componentDidMount() {
-        this.ws = new WebSocket(`ws:localhost:8000/ws/get_detailed_board/${this.props.match.params.id}`);//TODO: change host
+
+        this.ws = new WebSocket(getWSURL(`ws/get_detailed_board/${this.props.match.params.id}`));
+        //this.ws = new WebSocket(`ws:localhost:8000/ws/get_detailed_board/${this.props.match.params.id}`);
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
             if(data.error)
@@ -22,11 +25,15 @@ class Board extends React.Component {
         //const { id } = useParams();
         console.log(this.state);
         return (
-            <div>
+            <div >
                 <h1>Board: {this.state.board.name}</h1>
                 {this.state.board.description}
+                <br/>
                 ID: {this.props.match.params.id}
-                {this.state.columns.map(c => <Column key={c._id}/>)}
+
+                <div className='columns'>
+                    {this.state.columns.map(c => <Column key={c._id} column={c}/>)}
+                </div>
             </div>
         );
     }
