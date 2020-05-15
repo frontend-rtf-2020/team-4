@@ -8,7 +8,11 @@ function webSocketsInitialization(app, server) {/* wss = new WebSocket.Server({ 
     wss.on('connection', ws => {
         ws.on('')
     });*/
-    expressWs(app, server);
+    expressWs(app, server, {
+        wsOptions: {
+            perMessageDeflate: false
+        }
+    });
 
 }
 

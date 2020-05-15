@@ -31,7 +31,7 @@ app.use(cookieParser('anything'));
 app.use(express.static(path.join(__dirname, './frontend')));
 
 
-app.use(session({ secret: 'anything', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false,//cookie: { maxAge: 60000 },
+app.use(session({ secret: 'anything', //cookie: { maxAge: 100000 }, resave: true, saveUninitialized: false,//cookie: { maxAge: 60000 },
     store: new MongoStore({ mongooseConnection: mongoose.connection }) }));
 app.use(flash());
 app.use(passport.initialize());
