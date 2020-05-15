@@ -30,16 +30,7 @@ const Column = mongoose.model('Column', new Schema({
         type : Schema.Types.ObjectId,
         required : true,
         ref: 'Board'
-    },
-    addingDate : {
-        type : Date,
-        default : Date.now(),
-        required : true
-    },
-    endDate : {
-        type : Date,
-        required : false
-    },
+    }
 }));
 
 //Requires adding an update hook for editorsId field

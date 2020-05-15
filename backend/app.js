@@ -9,10 +9,7 @@ const passport = require('passport');
 const flash = require('connect-flash'),
     bodyParser = require('body-parser');
 const session = require("express-session");
-const MongoStore = require('connect-mongo')(session);/*
-const apiRouter = require('./routes/routes');
-
-const indexRouter = require('./routes/indexRouter');*/
+const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 
@@ -31,13 +28,10 @@ app.use(cookieParser('anything'));
 app.use(express.static(path.join(__dirname, './frontend')));
 
 
-app.use(session({ secret: 'anything', //cookie: { maxAge: 100000 }, resave: true, saveUninitialized: false,//cookie: { maxAge: 60000 },
+app.use(session({ secret: 'anything',
     store: new MongoStore({ mongooseConnection: mongoose.connection }) }));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-/*
-app.use('/api', apiRouter);
-app.use('/', indexRouter);
-*/
+
 module.exports = app;

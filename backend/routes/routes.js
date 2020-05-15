@@ -2,7 +2,7 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 const router = express.Router();
-const { activate, RegistrationHandler } = require('../handlers/registration');
+const { activate, RegistrationHandler, reactivate } = require('../handlers/registration');
 const passport = require('passport');
 
 const User = require('../model/User');
@@ -121,6 +121,8 @@ router.get('/get_user_data',  checkAuthenticated, getUserData);
 router.get('/activate', checkNotAuthenticated, activate);
 
 
+router.get('/reactivate', reactivate);
+
 router.post('/auth', checkNotAuthenticated, passport.authenticate('signIn', {
     successRedirect: '/api/auth/success',
     failureRedirect: '/api/auth/error',
@@ -128,8 +130,9 @@ router.post('/auth', checkNotAuthenticated, passport.authenticate('signIn', {
 }));
 
 router.get('/auth/error', function (req, res) {
-    console.log('Flash' + JSON.stringify(req.flash()));
-    res.send(req.flash())
+    const mes = JSON.stringify(req.flash());
+    console.log('Flash' + mes);
+    res.send(mes);
 });
 
 router.get('/auth/success', function (req, res) {

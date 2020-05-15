@@ -12,7 +12,7 @@ const signIn = new LocalStrategy((username, password, done) => {
     function Authentication(user, password, done) {
         if (user) {
             console.log('correct1');
-            if (user.active === true) {
+            if (user.active) {
                 console.log('correct2');
                 //const currHash = crypto.hashSync(password, size);
                 if (crypto.compareSync(password, user.hash))

@@ -10,7 +10,8 @@ const transporter = mail.createTransport({
 
 function sendEmail(address, activ) {
     const mailOptions = {
-        from: 'Authorisation service',
+        from: `Authorisation service <${process.env.MAIL_ADDRESS}>`,
+        sender: process.env.MAIL_ADDRESS,
         to: address,
         subject: 'Account activation',
         html: `You've registered at https://mytask-board.azurewebsites.net/<br/>Now you should activate your account before you can use it. To do it please use this link: https://mytask-board.azurewebsites.net/api/activate?activate=${activ}`

@@ -21,11 +21,6 @@ const Task = mongoose.model('Task', new Schema({
         type : String,
         required : false
     },
-    addingDate : {
-        type : Date,
-        default : Date.now,
-        required : true,
-    },
     endDate : {
         type : Date,
         required : false

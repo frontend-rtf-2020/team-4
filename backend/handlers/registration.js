@@ -1,17 +1,58 @@
 const crypto = require('bcrypt');
 const emailCheck = require('email-check');
 const User = require('../model/User');
-const sendEmail = require("./activator");
+const sendEmail = require("./sendActivatorMail");
 const size = 10;
 
 function activate (req, resp) {
     // eslint-disable-next-line no-unused-vars
-    User.findOneAndUpdate({activatorId: req.query.activate}, { active: true }, (err, user) => {
+    /*User.findOneAndUpdate({activatorId: req.query.activate}, { active: true }, (err, user) => {
         resp.send(err || "Successful activate");
+    }); */
+    User.findOne({activatorId: decodeURI(req.query.activate)}, (e, u) => {
+        if(e)
+        {
+            console.log(e);
+            resp.send(e);
+            return;
+        }
+        else if (!u)
+            resp.redirect('/activation?error=notfinded');
+        else if(Math.abs(u.registrationData.valueOf() - Date.now().valueOf()) > 24*60*60*1000)
+            //resp.send({error: "Activator link expired"});
+            resp.redirect('/activation?error=expired&activate=' + req.query.activate);
+        else
+            // eslint-disable-next-line no-unused-vars
+            User.findOneAndUpdate({activatorId: req.query.activate}, { active: true }, (err, user) => {
+                resp.redirect(err ? '/activation?error=' + err : '/activation?result=success')
+                //resp.send(err || "Successful activate");
+            });
     });
+
 }
 
-// eslint-disable-next-line no-unused-vars
+function reactivate (req, resp) {
+    console.log('reactivate' + req.query.activate);
+    User.findOne({activatorId: decodeURI(req.query.activate)}, (err, u) => {
+        if(!u)
+        {
+            resp.redirect('/activation?error=notfinded');
+            return;
+        }
+        console.log(u.login);
+        const activator = generateActivatorId(u.login);
+        User.findByIdAndUpdate(u.id, {activatorId: activator, registrationData: Date.now()}, (err, u) => {
+            sendEmail(u.email, activator)
+                .then(i => {
+                    console.log("sent");
+                    console.log(i);
+                    resp.redirect('/activation?result=reactivated')
+                })
+                .catch(i => resp.json(i))
+        })
+    })
+}
+
 function generateActivatorId (login) {//TODO: Rewrite?
     let res = login;
     for (let i = 0; i < 15; i++)
@@ -47,14 +88,11 @@ async function RegistrationHandler(req, res)
                             .then(i => {
                                 console.log(i);
                                 res.json({result: "OK"});
-                                //if error => delete user
                             })
                             .catch(i =>
                             {
-                                //console.log(i);
                                 res.json(i);
-                            });//Alfa version have not been tested
-
+                            });
                     });
                     console.log('OLL KORREKT');
 
@@ -68,5 +106,5 @@ async function RegistrationHandler(req, res)
     })
 }
 
-module.exports = { activate, RegistrationHandler};
+module.exports = { activate, RegistrationHandler, reactivate};
 

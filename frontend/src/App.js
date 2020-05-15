@@ -8,6 +8,7 @@ import {StartComponent} from "./Components/StartComponent";
 import Authorization from "./Components/Authorization";
 import Registration from "./Components/Registration";
 import Board from "./Components/BoardPage/Board";
+import Activation from "./Components/Activation";
 
 //const LoginContext = React.createContext({logged: false});
 
@@ -51,6 +52,7 @@ class App extends React.Component {
                                 <Route path="/list" component={this.state.user ? BoardList : UnAuthorizedAccess}  />
                                 <Route path="/auth" component={Authorization}  />
                                 <Route path="/reg"  component={Registration}  />
+                                <Route path='/activation' component={Activation} />
                                 <Route exact path='/' component={StartComponent}/>
                                 <NotFound/>
                             </Switch>
