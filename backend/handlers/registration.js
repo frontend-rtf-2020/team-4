@@ -20,11 +20,11 @@ function activate (req, resp) {
             resp.redirect('/activation?error=notfinded');
         else if(Math.abs(u.registrationData.valueOf() - Date.now().valueOf()) > 24*60*60*1000)
             //resp.send({error: "Activator link expired"});
-            resp.redirect('/activation?error=expired&activate=' + req.query.activate);
+            resp.redirect(`/activation?error=${encodeURI('The link has expired. Please press reactivate button to obtain new link.')}&activate=` + req.query.activate);
         else
             // eslint-disable-next-line no-unused-vars
             User.findOneAndUpdate({activatorId: req.query.activate}, { active: true }, (err, user) => {
-                resp.redirect(err ? '/activation?error=' + err : '/activation?result=success')
+                resp.redirect(err ? '/activation?error=' + encodeURI(err) : '/activation?result=' + encodeURI('Successful activation'))
                 //resp.send(err || "Successful activate");
             });
     });
@@ -36,7 +36,7 @@ function reactivate (req, resp) {
     User.findOne({activatorId: decodeURI(req.query.activate)}, (err, u) => {
         if(!u)
         {
-            resp.redirect('/activation?error=notfinded');
+            resp.redirect('/activation?error=' + encodeURI('Such user has not been found/'));
             return;
         }
         console.log(u.login);
@@ -46,7 +46,7 @@ function reactivate (req, resp) {
                 .then(i => {
                     console.log("sent");
                     console.log(i);
-                    resp.redirect('/activation?result=reactivated')
+                    resp.redirect('/activation?result=' + encodeURI('New link has been sent.'))
                 })
                 .catch(i => resp.json(i))
         })
@@ -80,7 +80,7 @@ async function RegistrationHandler(req, res)
                     newUser.email = email;
                     newUser.hash = crypto.hashSync(password, size);
                     newUser.login = username;
-                    newUser.activatorId = generateActivatorId(username);//Alfa version have not been tested
+                    newUser.activatorId = generateActivatorId(username);
                     // eslint-disable-next-line no-unused-vars
                     newUser.save(event => {
                         //console.log(event);
