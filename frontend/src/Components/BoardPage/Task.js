@@ -1,18 +1,37 @@
 import React from "react";
 
 class Task extends React.Component {
-    constructor() {
-        super();
-        this.state = {};
+    constructor(props) {
+        super(props);
+
+        //new Date().toDateString()
+        //this.state = { endDate: Date.parse(this.props.task.endDate.toDateString()) };
     }
 
     componentDidMount() {
     }
 
+    sendDone = event => {
+        //TODO:send
+        console.log(event.target.checked)
+    };
+
+    getClass = () => {
+        const date = new Date(this.props.task.endDate).valueOf(), now = Date.now().valueOf();
+        if( !this.props.task.done && date < now)
+            return 'Task overdue-task';
+        else if(!this.props.task.done && date - now <= 24*60*60*1000)
+            return 'Task urgent-task';
+        else return 'Task';
+    };
+
     render() {
         return (
-            <div className='Task'>
-                <p>{this.props.task.name}</p>
+            <div className={this.getClass()}>
+                <h4>{this.props.task.name}</h4>
+                {new Date(this.props.task.endDate).toDateString()}
+                <br/>
+                Done: <input type='checkbox' onChange={this.sendDone} value={this.props.task.done} />
             </div>
         );
     }

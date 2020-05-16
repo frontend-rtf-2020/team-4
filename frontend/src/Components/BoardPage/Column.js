@@ -16,13 +16,6 @@ class Column extends React.Component {
         return  (
             <div className='Column content'>
                 <h2>{this.props.column.name}</h2>
-
-                <b>Begin:</b> {this.props.column.addingDate}
-                <br />
-                <b>End:</b> {this.props.column.endDate}
-                <br/>
-                Tasks:
-                <br/>
                 {this.props.column.tasks.map(b => <Task key={b._id} task={b} />)}
             </div>
         );

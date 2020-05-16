@@ -1,12 +1,27 @@
 .Task {
-    border: solid black 1px;
-    width: 80%;
-    margin: 20px 10%;
+    border: solid black 2px;
+    /*width: 80%;*/
+    margin: 10px 5%;
+    border-radius: 5px;/*
+    box-shadow: 1px 1px 1px 1px grey, -1px -1px 1px 1px grey*/;
+    background: rgba(230,230,230, 0.9);/*linear-gradient(rgba(230,230,230, 0.9), #c9c9c9);*/
+}
+
+.overdue-task {
+    border: solid red 2px;
+}
+
+.urgent-task {
+    border: solid yellow 2px;
+}
+
+.Task h4 {
+    margin: 2px;
 }
 
 .Column {
     border: solid black 1px;
-    width: 10vw;
+    /*width: 15vw;*/
     height: 50vh;
 }
 
@@ -14,4 +29,8 @@
 .columns {
     display: flex;
     flex-wrap: wrap;
+}
+
+.description {
+    font-size: 20px;
 }

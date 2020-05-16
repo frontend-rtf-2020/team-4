@@ -27,10 +27,9 @@ class Board extends React.Component {
         return (
             <div >
                 <h1>Board: {this.state.board.name}</h1>
-                {this.state.board.description}
-                <br/>
-                ID: {this.props.match.params.id}
-
+                <div align='center' className='description'>
+                    {this.state.board.description}
+                </div>
                 <div className='columns'>
                     {this.state.columns.map(c => <Column key={c._id} column={c}/>)}
                 </div>
