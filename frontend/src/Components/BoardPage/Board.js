@@ -1,11 +1,12 @@
 import React from "react";
 import Column from "./Column";
 import getWSURL from "../getWSURL";
+import {LoadingWheel} from "../LoadingWheel";
 //import { useParams } from "react-router-dom";
 class Board extends React.Component {
     constructor() {
         super();
-        this.state = {board: {name: "", description: ""}, columns: []};
+        this.state = {board: {name: "", description: ""}, columns: null};
     }
 
     componentDidMount() {
@@ -14,6 +15,7 @@ class Board extends React.Component {
         //this.ws = new WebSocket(`ws:localhost:8000/ws/get_detailed_board/${this.props.match.params.id}`);
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
+            console.log(data);
             if(data.error)
                 alert(data.error);
             else
@@ -30,8 +32,12 @@ class Board extends React.Component {
                 <div align='center' className='description'>
                     {this.state.board.description}
                 </div>
-                <div className='columns'>
-                    {this.state.columns.map(c => <Column key={c._id} column={c}/>)}
+                <div className='columns' >
+                    {
+                        this.state.columns ?
+                        this.state.columns.map(c => <Column key={c._id} column={c}/>) :
+                        <LoadingWheel/>
+                    }
                 </div>
             </div>
         );

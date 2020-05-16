@@ -3,8 +3,7 @@ import BoardItem from "./BoardItem";
 import './boards.css';
 import AddBoard from "./AddBoard";
 import getWSURL from "../getWSURL";
-
-const LoadingWheel = props => (<div className='loading'></div>)
+import {LoadingWheel} from "../LoadingWheel";
 
 class BoardList extends React.Component {
     constructor() {

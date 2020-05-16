@@ -3,11 +3,8 @@ const Board = require('../model/Board');
 const Column = require('../model/Column');
 const mongoose = require('mongoose');
 
-function getBoards(ws, req) {
-    //TODO: save the socket
-    console.log('user: ' + req.user);
-    const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
-    Board.aggregate([
+function findBoards(id) {//TODO: extract general part
+    return Board.aggregate([
         {$match: {$or: [{creatorId: id}, {members: id}]}},
         {
             $lookup:{
@@ -36,7 +33,52 @@ function getBoards(ws, req) {
             }
         },
         //{$project: {_id: 0}}
-    ]).then(r => ws.send(JSON.stringify(r)));
+    ])
+}
+
+function getBoard(id) {//TODO: extract general part
+    return Board.aggregate([
+        {$match: { _id: mongoose.Types.ObjectId(id) }},
+        {
+            $lookup:{
+                from: 'users',
+                localField: 'creatorId',
+                foreignField: '_id',
+                as: 'creatorId'
+            }
+        },
+        {$unwind: "$creatorId"},
+        {$project: {"creatorId.hash": 0, "creatorId.active": 0, "creatorId.activatorId": 0, "creatorId.registrationData": 0}},
+        {$unwind: "$members"},
+        {
+            $lookup:{
+                from: 'users',
+                localField: 'members',//
+                foreignField: '_id',
+                as: 'members'
+            }
+        },
+        {$unwind: "$members"},
+        {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
+        {$group: {
+                _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, description: {$first: "$description"},
+                addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
+            }
+        },
+        //{$project: {_id: 0}}
+    ])
+}
+
+
+function getBoards(ws, req) {
+    //TODO: save the socket
+    console.log('user: ' + req.user);
+    const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
+
+
+    findBoards(id)
+        .then(r => ws.send(JSON.stringify(r)))
+        .catch(e => console.log(e));
 
     ws.on('message', function(msg) {
         //TODO: add adding board
@@ -50,11 +92,13 @@ function getBoards(ws, req) {
 
 function getDetailedBoard(ws, req) {
     const id = req.params.id;//"5eafafc5d07fde1f84b44873";
-    //TODO: save the socketc
+    //TODO: save the sockets
+    console.log(id);
     //console.log(req.user._id.toString());
-    Board.findById(id)
+    getBoard(id)
         .then(b => {
-            if(b.creatorId.toString() !== req.user._id.toString() && b.members.indexOf(req.user._id) === -1)
+            console.log(b);
+            if(b[0].creator._id.toString() !== req.user._id.toString() && b[0].members.find(m => m._id === req.user._id) === -1)
             {
                 ws.send('{"error": "Wrong id"}');
                 return;
@@ -87,7 +131,7 @@ function getDetailedBoard(ws, req) {
                 }
             ]).then(columns => {
                 ws.send(JSON.stringify({
-                    board: b ,
+                    board: b[0],
                     columns: columns
                 }));
                 //res.send(r)
