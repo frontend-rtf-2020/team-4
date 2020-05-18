@@ -1,12 +1,6 @@
 import React from "react";
 
 class Task extends React.Component {
-    constructor(props) {
-        super(props);
-
-        //new Date().toDateString()
-        //this.state = { endDate: Date.parse(this.props.task.endDate.toDateString()) };
-    }
 
     componentDidMount() {
     }
