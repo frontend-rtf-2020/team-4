@@ -31,6 +31,8 @@ class Task extends React.Component {
                 <h4>{this.props.task.name}</h4>
                 {new Date(this.props.task.endDate).toDateString()}
                 <br/>
+                Worker: {this.props.task.worker.login}
+                <br/>
                 Done: <input type='checkbox' onChange={this.sendDone} value={this.props.task.done} />
             </div>
         );

@@ -3,42 +3,10 @@ const Board = require('../model/Board');
 const Column = require('../model/Column');
 const mongoose = require('mongoose');
 
-function findBoards(id) {//TODO: extract general part
+function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}}) {
     return Board.aggregate([
-        {$match: {$or: [{creatorId: id}, {members: id}]}},
-        {
-            $lookup:{
-                from: 'users',
-                localField: 'creatorId',
-                foreignField: '_id',
-                as: 'creatorId'
-            }
-        },
-        {$unwind: "$creatorId"},
-        {$project: {"creatorId._id": 0, "creatorId.hash": 0, "creatorId.active": 0, "creatorId.activatorId": 0, "creatorId.registrationData": 0}},
-        {$unwind: "$members"},
-        {
-            $lookup:{
-                from: 'users',
-                localField: 'members',//
-                foreignField: '_id',
-                as: 'members'
-            }
-        },
-        {$unwind: "$members"},
-        {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
-        {$group: {
-                _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, description: {$first: "$description"},
-                addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
-            }
-        },
-        //{$project: {_id: 0}}
-    ])
-}
-
-function getBoard(id) {//TODO: extract general part
-    return Board.aggregate([
-        {$match: { _id: mongoose.Types.ObjectId(id) }},
+        match,
+        //{$match: { _id: mongoose.Types.ObjectId(id) }},
         {
             $lookup:{
                 from: 'users',
@@ -76,7 +44,7 @@ function getBoards(ws, req) {
     const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
 
 
-    findBoards(id)
+    getBoard(id)
         .then(r => ws.send(JSON.stringify(r)))
         .catch(e => console.log(e));
 
@@ -95,7 +63,7 @@ function getDetailedBoard(ws, req) {
     //TODO: save the sockets
     console.log(id);
     //console.log(req.user._id.toString());
-    getBoard(id)
+    getBoard(id, {$match: { _id: mongoose.Types.ObjectId(id) }})
         .then(b => {
             console.log(b);
             if(b[0].creator._id.toString() !== req.user._id.toString() && b[0].members.find(m => m._id === req.user._id) === -1)
@@ -124,8 +92,9 @@ function getDetailedBoard(ws, req) {
                     }
                 },
                 {$unwind: "$tasks.worker"},
+                {$project:{"tasks.worker.login": 1}},
                 {$group: {
-                        _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"},
+                        _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"}, orderNumber: {$first: "$orderNumber"},
                         addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, board: {$first: "$board"}, tasks: { $addToSet: "$tasks" }
                     }
                 }
