@@ -84,7 +84,7 @@ class Board extends React.Component {
                         {
                             this.state.columns ? (
                                     <>
-                                        {this.state.columns.map(c=><Column moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
+                                        {this.state.columns.map(c=> <Column members={this.state.board.members} moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
                                         <AddColumn/>
                                     </>) :
                                 <LoadingWheel/>

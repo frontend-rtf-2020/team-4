@@ -7,7 +7,7 @@
     background: linear-gradient(rgba(230,230,230, 0.9),rgba(210,210,210, 0.8));
 }
 
-.Task input {
+.Task input, .Task select {
     width: fit-content;
     display: inline;
     margin: 3px;
@@ -39,9 +39,10 @@
 
 .members-cont {
     display: flex;
-    justify-content: center;
-    width:  85%;
+    /*justify-content: center;*/
     align-items: center;
+    flex-shrink: 0;
+    flex-grow: 1;
 }
 
 .members {

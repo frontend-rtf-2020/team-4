@@ -7,7 +7,10 @@ export default class AddTask extends React.Component {
         super();
         this.state = { adding: false }
     }
-
+    onSubmit = e => {
+        alert(/*document.getElementById('s').value)*/e.target.parentElement.getElementsByTagName('select')[0].value);
+        this.props.onSubmit();
+    };
     add = () =>
         this.setState({ adding: true });
     cancel = event => {
@@ -19,13 +22,16 @@ export default class AddTask extends React.Component {
         <>
             <h4>Add task</h4>
             <input placeholder='Name'/>
-            <input placeholder='Participant'/>
+            <select>
+                {this.props.members.map(m => <option key={m.login}>{m.login}</option>)}
+            </select>
+            <input placeholder='Description'/>
             <br/>
             <b>Do before:</b>
             <br/>
             <input type='date' />
             <br/>
-            <button onClick={e => this.props.addBoard("")}>Add</button>
+            <button onClick={this.onSubmit}>Submit</button>
             <button onClick={this.cancel}>Cancel</button>
         </>
     );

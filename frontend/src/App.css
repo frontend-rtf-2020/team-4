@@ -10,7 +10,7 @@
   height: 100%;
 }
 
-input {
+input, select {
   display: block;
   justify-self: end;
   box-sizing: border-box;
@@ -21,7 +21,7 @@ input {
   outline: none;
 }
 
-input:focus {
+input:focus, select:focus {
   outline: 2px solid var(--main-color);
 }
 
@@ -51,7 +51,7 @@ input:focus {
 
 
 header h2 {
-  width: 80%;
+  flex-grow: 1;
   text-align: center;
 }
 
@@ -104,6 +104,10 @@ button:hover {
   color: var(--main-color);
   font-weight: bold;
   cursor: pointer;
+}
+
+.field {
+  display: inline-block;
 }
 
 button:focus {

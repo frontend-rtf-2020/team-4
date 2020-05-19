@@ -1,5 +1,5 @@
 import React from "react";
-import Input from "../UI/Input";
+import Input from "./UI/Input";
 
 export default class Field extends React.PureComponent {
     click = event => {
@@ -26,7 +26,7 @@ export default class Field extends React.PureComponent {
             {
                 this.state.editing ?
                 <>
-                    <Input value={this.props.children} label={this.props.description} />
+                    <input value={this.props.children} placeholder={this.props.description} />
                     <button className='editButton' onClick={this.click}>Submit</button>
                     <button className='editButton' onClick={this.cancel}>Cancel</button>
                 </> :

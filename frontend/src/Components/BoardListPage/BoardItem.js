@@ -1,6 +1,6 @@
 import React from "react";
 import './boards.css';
-import Field from "./Field";
+import Field from "../Field";
 class BoardItem extends React.Component {
 
     componentDidMount() {
@@ -20,7 +20,6 @@ class BoardItem extends React.Component {
             <div onClick={this.onClick} className='content board'>
                 <h2><Field description='Title'>{this.props.name}</Field></h2>
                 <b>Creator</b> {this.props.creator.login} ({this.props.creator.email})
-                <br/>
                 <Field description='Description'>{this.props.description}</Field>
                 <br/>
                 <b>Begin:</b> {this.props.addingDate}
