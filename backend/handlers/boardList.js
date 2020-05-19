@@ -92,13 +92,14 @@ function getDetailedBoard(ws, req) {
                     }
                 },
                 {$unwind: "$tasks.worker"},
-                {$project:{"tasks.worker.login": 1, "tasks.name": 1, "tasks.endDate": 1, "tasks.done": 1, "orderNumber": 1, "_id": 1, "name": 1, "description": 1}},
+                {$project:{"tasks.worker.login": 1, "tasks.name": 1, "tasks.endDate": 1, "tasks.done": 1, "orderNumber": 1, "_id": 1, "name": 1, "tasks.description": 1}},
                 {$group: {
                         _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"}, orderNumber: {$first: "$orderNumber"},/*
                         addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, board: {$first: "$board"},*/ tasks: { $addToSet: "$tasks" }
                     }
                 }
             ]).then(columns => {
+                //console.log(columns);
                 ws.send(JSON.stringify({
                     board: b[0],
                     columns: columns

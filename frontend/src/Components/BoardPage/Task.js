@@ -59,6 +59,7 @@ class Task extends React.Component {
                             {this.props.task.name}
                             <span className='arrow edit' onClick={this.edit}>&#10000;</span>
                         </h4>
+                        {this.props.task.description}
                         {new Date(this.props.task.endDate).toDateString()}
                         <br/>
                         Worker: {this.props.task.worker.login}

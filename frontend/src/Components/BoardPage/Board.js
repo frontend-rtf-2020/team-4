@@ -5,9 +5,26 @@ import {LoadingWheel} from "../LoadingWheel";
 import AddColumn from "./AddColumn";
 //import { useParams } from "react-router-dom";
 class Board extends React.Component {
+    clearFilter = event => {
+        this.setState({...this.state, filter: t => true})
+    };
+    applyFilter = event => {
+
+        const text = this.filterText.current.value;
+
+        const members = [this.memsFilter.current.value];
+
+        function filter(task) {
+            return (task.description.indexOf(text) !== -1 || task.name.indexOf(text) !== -1) && members.indexOf(task.worker.login) !== -1;
+        }
+
+        this.setState({...this.state, filter: filter})
+    };
     constructor() {
         super();
-        this.state = {board: {name: "", description: "", members: [], creator: {login: ""}}, columns: null};
+        this.filterText = React.createRef();
+        this.memsFilter = React.createRef();
+        this.state = {board: {name: "", description: "", members: [], creator: {login: ""}}, columns: null, filter: t => true};
     }
 
     componentDidMount() {
@@ -18,7 +35,7 @@ class Board extends React.Component {
             if(data.error)
                 alert(data.error);
             else
-                this.setState(data);
+                this.setState({...data,  filter: t => true});
         };
     }
 
@@ -76,6 +93,15 @@ class Board extends React.Component {
                     </div>
                     <a className='link-button back' href='/list'>&lt;</a>
                 </header>
+                <header className='filter'>
+                    <h5>Filter:</h5>
+                    <input ref={this.filterText} placeholder='Text'/>
+                    <select ref={this.memsFilter}>
+                        {this.state.board.members.map(m => <option key={m.login}>{m.login}</option>)}
+                    </select>
+                    <button onClick={this.applyFilter} >Apply</button>
+                    <button onClick={this.clearFilter}>Clear</button>
+                </header>
                 <div>
                     <div align='center' className='description'>
                         {this.state.board.description}
@@ -84,7 +110,7 @@ class Board extends React.Component {
                         {
                             this.state.columns ? (
                                     <>
-                                        {this.state.columns.map(c=> <Column members={this.state.board.members} moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
+                                        {this.state.columns.map(c=> <Column filter={this.state.filter} members={this.state.board.members} moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
                                         <AddColumn/>
                                     </>) :
                                 <LoadingWheel/>

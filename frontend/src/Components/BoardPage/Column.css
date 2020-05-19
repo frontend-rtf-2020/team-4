@@ -13,6 +13,25 @@
     margin: 3px;
 }
 
+.filter {
+    justify-content: flex-start;
+}
+.filter h5 {
+    margin: 7px;
+}
+
+.filter button {
+    background-color: var(--dark-main-color);
+}
+
+.filter button:hover {
+    background-color: white;
+}
+
+.filter input, select {
+    max-width: 200px;
+}
+
 .overdue-task {
     border: solid red 2px;
 }
