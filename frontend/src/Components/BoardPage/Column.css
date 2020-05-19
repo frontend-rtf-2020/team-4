@@ -19,6 +19,17 @@
     margin: 2px;
 }
 
+.arrow {
+    font-weight: bold;
+    font-size: 1.25em;
+    color: rgba(110,110,110, 0.7);
+}
+
+.arrow:hover {
+    color: rgba(60,60,60, 0.7);
+    cursor: pointer;
+}
+
 .Column {
     border: solid black 1px;
     /*width: 15vw;*/

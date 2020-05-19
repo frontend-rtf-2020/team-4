@@ -22,6 +22,40 @@ class Board extends React.Component {
         };
     }
 
+    moveLeft = id => {
+        const ind = this.state.columns.findIndex(c => c._id === id);
+        if(ind === 0) return;
+        const columns = [...this.state.columns];
+        const c = columns[ind];
+        columns[ind] = columns[ind - 1];
+        columns[ind - 1] = c;
+        const queryData = {};
+        columns.forEach((e, i) => {
+            e.orderNumber = i;
+            queryData[e._id] = i;
+        });
+        //TODO: Send queryData
+        alert(JSON.stringify(queryData));
+        this.setState({board: this.state.board, columns: columns});
+    };
+
+    moveRight = id => {
+        const ind = this.state.columns.findIndex(c => c._id === id);
+        if(ind === this.state.columns.length - 1) return;
+        const columns = [...this.state.columns];
+        const c = columns[ind];
+        columns[ind] = columns[ind + 1];
+        columns[ind + 1] = c;
+        const queryData = {};
+        columns.forEach((e, i) => {
+            e.orderNumber = i;
+            queryData[e._id] = i;
+        });
+        //TODO: Send queryData
+        alert(JSON.stringify(queryData));
+        this.setState({board: this.state.board, columns: columns});
+    };
+
     render() {
         //const { id } = useParams();
         console.log(this.state);
@@ -44,7 +78,7 @@ class Board extends React.Component {
                     {
                         this.state.columns ? (
                             <>
-                            {this.state.columns.map(c => <Column key={c._id} column={c}/>) }
+                            {this.state.columns.map(c => <Column moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>) }
                             <AddColumn/>
                             </>):
                         <LoadingWheel/>
