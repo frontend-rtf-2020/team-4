@@ -32,8 +32,7 @@ export default class Field extends React.PureComponent {
                 </> :
                 <>
                     {this.props.children}
-                    <button className='editButton edit-ico' onClick={e => this.onEdit(e)}>
-                    </button>
+                    <span className='edit arrow' onClick={e => this.onEdit(e)}>&#10000;</span>
                 </>
             }
         </div>)

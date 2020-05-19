@@ -62,29 +62,36 @@ class Board extends React.Component {
         if(this.state.columns)
             this.state.columns.sort((a, b) => a.orderNumber - b.orderNumber);
         return (
-            <div >
-                <h1>Board: {this.state.board.name}</h1>
-                Creator:
-                <Member>{this.state.board.creator.login}</Member>
-                Participants:
-                <div className='members'>
-                    {this.state.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
-                    <AddMember/>
+            <>
+                <header>
+                    <h4>{this.state.board.name}</h4>
+                    <div className='members-cont'>
+                        <b>Creator:</b>
+                        <Member>{this.state.board.creator.login}</Member>
+                        <b>Participants:</b>
+                        <div className='members'>
+                            {this.state.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
+                            <AddMember/>
+                        </div>
+                    </div>
+                    <a className='link-button back' href='/list'>&lt;</a>
+                </header>
+                <div>
+                    <div align='center' className='description'>
+                        {this.state.board.description}
+                    </div>
+                    <div className='columns'>
+                        {
+                            this.state.columns ? (
+                                    <>
+                                        {this.state.columns.map(c=><Column moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
+                                        <AddColumn/>
+                                    </>) :
+                                <LoadingWheel/>
+                        }
+                    </div>
                 </div>
-                <div align='center' className='description'>
-                    {this.state.board.description}
-                </div>
-                <div className='columns' >
-                    {
-                        this.state.columns ? (
-                            <>
-                            {this.state.columns.map(c => <Column moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>) }
-                            <AddColumn/>
-                            </>):
-                        <LoadingWheel/>
-                    }
-                </div>
-            </div>
+            </>
         );
     }
 }

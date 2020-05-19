@@ -1,10 +1,16 @@
 .Task {
-    border: solid black 2px;
+    /*border: solid black 2px;*/
     /*width: 80%;*/
     margin: 10px 5%;
     border-radius: 5px;/*
     box-shadow: 1px 1px 1px 1px grey, -1px -1px 1px 1px grey*/;
-    background: rgba(230,230,230, 0.9);/*linear-gradient(rgba(230,230,230, 0.9), #c9c9c9);*/
+    background: linear-gradient(rgba(230,230,230, 0.9),rgba(210,210,210, 0.8));
+}
+
+.Task input {
+    width: fit-content;
+    display: inline;
+    margin: 3px;
 }
 
 .overdue-task {
@@ -19,34 +25,42 @@
     margin: 2px;
 }
 
-.arrow {
-    font-weight: bold;
-    font-size: 1.25em;
-    color: rgba(110,110,110, 0.7);
-}
-
-.arrow:hover {
-    color: rgba(60,60,60, 0.7);
-    cursor: pointer;
-}
 
 .Column {
     border: solid black 1px;
     /*width: 15vw;*/
-    min-height: 50vh;
+    max-width: 225px;
+}
+
+
+.back {
+    font-size: 1.5em;
+}
+
+.members-cont {
+    display: flex;
+    justify-content: center;
+    width:  85%;
+    align-items: center;
 }
 
 .members {
     display: flex;
-    flex-wrap: wrap;
-    margin: 15px;
+    flex-wrap: wrap;/*
+    margin: 15px;*/
+}
+
+header h4 {
+    color: white;
+    font-size: 1.35em;
+    margin: 7px;
 }
 
 .member {
     background-color: #1fa5d7;
     border-radius: 5px;
     padding: 2px;
-    margin: 5px 7px;
+    margin: 7px;
     box-shadow: 1px 1px 1px 1px grey, -1px -1px 1px 1px grey;
     width: fit-content;
 }
@@ -88,5 +102,6 @@
 }
 
 .description {
+    margin: 20px;
     font-size: 20px;
 }

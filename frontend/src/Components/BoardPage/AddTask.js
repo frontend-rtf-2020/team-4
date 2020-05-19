@@ -17,10 +17,14 @@ export default class AddTask extends React.Component {
     };
     getAddingForm = () => (
         <>
-            <h3>Add task</h3>
-            <Input label='Name'/>
-            <Input label='Participant'/>
-            <Input type='date' label='Date'/>
+            <h4>Add task</h4>
+            <input placeholder='Name'/>
+            <input placeholder='Participant'/>
+            <br/>
+            <b>Do before:</b>
+            <br/>
+            <input type='date' />
+            <br/>
             <button onClick={e => this.props.addBoard("")}>Add</button>
             <button onClick={this.cancel}>Cancel</button>
         </>

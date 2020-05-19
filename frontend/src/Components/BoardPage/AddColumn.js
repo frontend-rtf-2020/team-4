@@ -18,8 +18,7 @@ export default class AddColumn extends React.Component {
     getAddingForm = () => (
         <div className='content Column my-add'>
             <h3>Add column</h3>
-            <Input label='Name'/>
-            <Input label='Description'/>
+            <input placeholder='Name'/>
             <button onClick={e => this.props.addBoard("")}>Add</button>
             <button onClick={this.cancel}>Cancel</button>
         </div>

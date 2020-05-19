@@ -10,20 +10,7 @@
     width: 150px;
 }
 
-.Input input {
-    display: block;
-    justify-self: end;
-    box-sizing: border-box;
-    border: 1px solid #bebebe;
-    padding: 7px;
-    margin: 0 5px;
-    width: 100%;
-    outline: none;
-}
 
-.Input input:focus {
-    outline: 2px solid var(--main-color);
-}
 
 .Input span {
     color: #f01f30;
