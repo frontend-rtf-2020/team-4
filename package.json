@@ -1,0 +1,8 @@
+{
+  "name": "students",
+  "version": "0.1.0",
+  "scripts": {
+    "postinstall": "npm install --prefix front && npm install --prefix back",
+    "build": "npm run build --prefix front"
+  }
+}

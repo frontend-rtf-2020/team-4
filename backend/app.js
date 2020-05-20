@@ -11,6 +11,7 @@ const flash = require('connect-flash'),
 const session = require("express-session");
 const MongoStore = require('connect-mongo')(session);
 
+const staticLocation = require('../staticLocation');
 const app = express();
 
 
@@ -25,7 +26,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('anything'));
-app.use(express.static(path.join(__dirname, './frontend')));
+app.use(express.static(staticLocation));
 
 
 app.use(session({ secret: 'anything',
