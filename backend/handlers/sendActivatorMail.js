@@ -10,7 +10,7 @@ const transporter = mail.createTransport({
     }
 });
 
-const link = process.env.LINK || ' https://mytask-board.azurewebsites.net/';
+const link = process.env.DEPLOY_LINK || ' https://mytask-board.azurewebsites.net/';
 
 function sendEmail(address, activ) {
     const mailOptions = {
