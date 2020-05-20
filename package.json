@@ -1,8 +1,8 @@
 {
-  "name": "students",
+  "name": "my-task-board",
   "version": "0.1.0",
   "scripts": {
-    "postinstall": "npm install --prefix front && npm install --prefix back",
-    "build": "npm run build --prefix front"
+    "postinstall": "npm install --prefix frontend && npm install --prefix backend",
+    "build": "npm run build --prefix frontend"
   }
 }
