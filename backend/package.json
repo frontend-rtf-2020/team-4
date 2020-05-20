@@ -23,10 +23,10 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "ws": "latest"
+    "ws": "latest",
+    "connect-flash": "^0.1.1"
   },
   "devDependencies": {
-    "connect-flash": "^0.1.1",
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.19.0"
   }

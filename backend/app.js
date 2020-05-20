@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
@@ -11,7 +10,7 @@ const flash = require('connect-flash'),
 const session = require("express-session");
 const MongoStore = require('connect-mongo')(session);
 
-const staticLocation = require('../staticLocation');
+const staticLocation = require('./staticLocation');
 const app = express();
 
 
