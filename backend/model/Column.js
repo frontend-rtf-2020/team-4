@@ -1,17 +1,27 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Column = mongoose.model('Board', new Schema({
-    creatorId : {
+const Column = mongoose.model('Column', new Schema({
+    /*creatorId : {
         type : Schema.Types.ObjectId,
         required : true,
         ref: 'User'
     },
     editorsId : [ {
-        type : String,
+        type : Schema.Types.ObjectId,
         required : false,
         ref: 'User'
-    } ],
+    } ],*/
+    tasks: [
+        {
+            type : Schema.Types.ObjectId,
+            required : true,
+            ref: 'Task'
+        }
+    ],
+    orderNumber: {
+        type: Number
+    },
     name : {
         type : String,
         required : true
@@ -20,16 +30,7 @@ const Column = mongoose.model('Board', new Schema({
         type : Schema.Types.ObjectId,
         required : true,
         ref: 'Board'
-    },
-    addingDate : {
-        type : Date,
-        default : Date.now(),
-        required : true
-    },
-    endDate : {
-        type : Date,
-        required : false
-    },
+    }
 }));
 
 //Requires adding an update hook for editorsId field

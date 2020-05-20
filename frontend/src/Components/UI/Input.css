@@ -3,26 +3,18 @@
     display: flex;
 }
 
-.Input label{
+.Input label {
     margin-bottom: 3px;
     display: block;
     font-weight: bold;
     width: 150px;
 }
 
-.Input input{
-    display: block;
-    justify-self: end;
-    box-sizing: border-box;
-    border: 1px solid #bebebe;
-    padding: 7px;
-    margin: 0 5px;
-    width: 100%;
-    outline: none;
-}
 
-.Input span{
+
+.Input span {
     color: #f01f30;
     font-size: 12px;
     font-weight: bold;
 }
+

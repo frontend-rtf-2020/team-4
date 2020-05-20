@@ -1,22 +1,142 @@
 import React from "react";
 import Column from "./Column";
-
+import getWSURL from "../getWSURL";
+import {LoadingWheel} from "../LoadingWheel";
+import AddColumn from "./AddColumn";
+//import { useParams } from "react-router-dom";
 class Board extends React.Component {
+    clearFilter = event => {
+        this.setState({...this.state, filter: t => true})
+    };
+    applyFilter = event => {
+
+        const text = this.filterText.current.value;
+
+        const members = [this.memsFilter.current.value];
+
+        function filter(task) {
+            return (task.description.indexOf(text) !== -1 || task.name.indexOf(text) !== -1) && members.indexOf(task.worker.login) !== -1;
+        }
+
+        this.setState({...this.state, filter: filter})
+    };
     constructor() {
         super();
-        this.state = {columns: [{name: "vdsvds", tasks: [{endDate: 0, description: "lopoljk;poj"}]}]};
+        this.filterText = React.createRef();
+        this.memsFilter = React.createRef();
+        this.state = {board: {name: "", description: "", members: [], creator: {login: ""}}, columns: null, filter: t => true};
     }
 
     componentDidMount() {
+        this.ws = new WebSocket(getWSURL(`ws/get_detailed_board/${this.props.match.params.id}`));
+        this.ws.onmessage = msg => {
+            const data = JSON.parse(msg.data);
+            console.log(data);
+            if(data.error)
+                alert(data.error);
+            else
+                this.setState({...data,  filter: t => true});
+        };
+    }
+
+    moveLeft = id => {
+        const ind = this.state.columns.findIndex(c => c._id === id);
+        if(ind === 0) return;
+        const columns = [...this.state.columns];
+        const c = columns[ind];
+        columns[ind] = columns[ind - 1];
+        columns[ind - 1] = c;
+        const queryData = {};
+        columns.forEach((e, i) => {
+            e.orderNumber = i;
+            queryData[e._id] = i;
+        });
+        //TODO: Send queryData
+        alert(JSON.stringify(queryData));
+        this.setState({board: this.state.board, columns: columns});
+    };
+
+    moveRight = id => {
+        const ind = this.state.columns.findIndex(c => c._id === id);
+        if(ind === this.state.columns.length - 1) return;
+        const columns = [...this.state.columns];
+        const c = columns[ind];
+        columns[ind] = columns[ind + 1];
+        columns[ind + 1] = c;
+        const queryData = {};
+        columns.forEach((e, i) => {
+            e.orderNumber = i;
+            queryData[e._id] = i;
+        });
+        //TODO: Send queryData
+        alert(JSON.stringify(queryData));
+        this.setState({board: this.state.board, columns: columns});
+    };
+
+    render() {
+        //const { id } = useParams();
+        console.log(this.state);
+        if(this.state.columns)
+            this.state.columns.sort((a, b) => a.orderNumber - b.orderNumber);
+        return (
+            <>
+                <header>
+                    <h4>{this.state.board.name}</h4>
+                    <div className='members-cont'>
+                        <b>Creator:</b>
+                        <Member>{this.state.board.creator.login}</Member>
+                        <b>Participants:</b>
+                        <div className='members'>
+                            {this.state.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
+                            <AddMember/>
+                        </div>
+                    </div>
+                    <a className='link-button back' href='/list'>&lt;</a>
+                </header>
+                <header className='filter'>
+                    <h5>Filter:</h5>
+                    <input ref={this.filterText} placeholder='Text'/>
+                    <select ref={this.memsFilter}>
+                        {this.state.board.members.map(m => <option key={m.login}>{m.login}</option>)}
+                    </select>
+                    <button onClick={this.applyFilter} >Apply</button>
+                    <button onClick={this.clearFilter}>Clear</button>
+                </header>
+                <div>
+                    <div align='center' className='description'>
+                        {this.state.board.description}
+                    </div>
+                    <div className='columns'>
+                        {
+                            this.state.columns ? (
+                                    <>
+                                        {this.state.columns.map(c=> <Column filter={this.state.filter} members={this.state.board.members} moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
+                                        <AddColumn/>
+                                    </>) :
+                                <LoadingWheel/>
+                        }
+                    </div>
+                </div>
+            </>
+        );
+    }
+}
+
+const Member = props => (<div className='member'>
+    {props.children}
+</div>);
+
+class AddMember extends React.Component {
+    add() {
+        const identifier = prompt("Enter user id/login/email");
+        alert(identifier)
+        //TODO: send adding
     }
 
     render() {
-        return (
-            <div >
-                <h1>Board</h1>
-                {this.state.columns.map(b => <Column />)}
-            </div>
-        );
+        return (<div className='member add-member' onClick={this.add}>
+            +
+        </div>);
     }
 }
 

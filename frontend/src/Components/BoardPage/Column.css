@@ -1,0 +1,127 @@
+.Task {
+    /*border: solid black 2px;*/
+    /*width: 80%;*/
+    margin: 10px 5%;
+    border-radius: 5px;/*
+    box-shadow: 1px 1px 1px 1px grey, -1px -1px 1px 1px grey*/;
+    background: linear-gradient(rgba(230,230,230, 0.9),rgba(210,210,210, 0.8));
+}
+
+.Task input, .Task select {
+    width: fit-content;
+    display: inline;
+    margin: 3px;
+}
+
+.filter {
+    justify-content: flex-start;
+}
+.filter h5 {
+    margin: 7px;
+}
+
+.filter button {
+    background-color: var(--dark-main-color);
+}
+
+.filter button:hover {
+    background-color: white;
+}
+
+.filter input, select {
+    max-width: 200px;
+}
+
+.overdue-task {
+    border: solid red 2px;
+}
+
+.urgent-task {
+    border: solid yellow 2px;
+}
+
+.Task h4 {
+    margin: 2px;
+}
+
+
+.Column {
+    border: solid black 1px;
+    /*width: 15vw;*/
+    max-width: 225px;
+}
+
+
+.back {
+    font-size: 1.5em;
+}
+
+.members-cont {
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+.members {
+    display: flex;
+    flex-wrap: wrap;/*
+    margin: 15px;*/
+}
+
+header h4 {
+    color: white;
+    font-size: 1.35em;
+    margin: 7px;
+}
+
+.member {
+    background-color: #1fa5d7;
+    border-radius: 5px;
+    padding: 2px;
+    margin: 7px;
+    box-shadow: 1px 1px 1px 1px grey, -1px -1px 1px 1px grey;
+    width: fit-content;
+}
+
+.add-member {
+    font-size: 18px;
+    font-weight: bold;
+    width: 60px;
+    text-align: center;
+}
+
+.add-column {
+    font-size: 10em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.my-add {
+
+}
+
+.my-add:hover {
+    cursor: pointer;
+    background: rgba(250, 250, 250, 0.7);
+}
+
+.add-member:hover {
+    background-color: var(--dark-main-color);
+    cursor: pointer;
+}
+/*
+.member:hover {
+    background-color: var(--main-color);
+}
+*/
+.columns {
+    display: flex;
+    justify-content: center;
+}
+
+.description {
+    margin: 20px;
+    font-size: 20px;
+}

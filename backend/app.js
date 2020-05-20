@@ -1,40 +1,37 @@
+require('dotenv').config();
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const initialise = require('./passport/init');
 const passport = require('passport');
+const flash = require('connect-flash'),
+    bodyParser = require('body-parser');
 const session = require("express-session");
-const User = require('./model/User');
-const apiRouter = require('./routes/routes');
-const indexRouter = require('./routes/indexRouter');
-//require('dotenv').config();
+const MongoStore = require('connect-mongo')(session);
+
+const staticLocation = require('./staticLocation');
 const app = express();
 
 
-mongoose.connect(process.env.DB_CONNECTION_URL);
+mongoose.connect(process.env.DB_CONNECTION_URL, {useNewUrlParser: true});
 
-//здесь регистрируется стратегии(2-ой аргумент)
-passport.use('register', () => {});
+initialise(passport);
 
-passport.use('authorize', () => {});
-
-passport.serializeUser((user, done) => done(null, user._id));
-
-passport.deserializeUser((id, done) => User.findById(id, (err, user) => done(err, user)));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, './frontend')));
+app.use(cookieParser('anything'));
+app.use(express.static(staticLocation));
 
 
-app.use(session({ secret: 'anything' }));
+app.use(session({ secret: 'anything',
+    store: new MongoStore({ mongooseConnection: mongoose.connection }) }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use('/api', apiRouter);
-app.use('/', indexRouter);
 
 module.exports = app;

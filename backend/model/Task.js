@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Task = mongoose.model('Task', new Schema({
-    creatorId : {
+    workerId : {
         type : Schema.Types.ObjectId,
         required : true,
         ref: 'User'
@@ -15,16 +15,11 @@ const Task = mongoose.model('Task', new Schema({
     },
     name : {
         type : String,
-        required : true
+        required : true,
     },
     description : {
         type : String,
         required : false
-    },
-    addingDate : {
-        type : Date,
-        default : Date.now(),
-        required : true
     },
     endDate : {
         type : Date,

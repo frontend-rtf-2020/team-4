@@ -1,0 +1,48 @@
+.boardList {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div .board {
+    max-width: 250px;
+    transition: background-color 500ms;
+    background-color: white;
+    box-shadow: inset 1px 1px 1px 1px darkgray, inset -1px -1px 1px 1px darkgray;
+}
+
+.board:hover {
+    box-shadow: inset 2px 2px 2px 2px darkgray, inset -2px -2px 2px 2px darkgray;
+    background-color: rgba(250, 250, 250, 0.7);
+    /*background-color: var(--content-color);*/
+    cursor: pointer;
+}
+
+.add {
+    text-align: center;
+    font-size: 9.5em;
+    font-weight: lighter;
+}
+
+.editButton {
+    border-radius: 5px;
+    color: black;/*
+    box-shadow: 1px 1px 1px 1px darkgray, -1px -1px 1px 1px darkgray;*/
+    min-width: 25px;
+    min-height: 25px;
+    border: 1px solid lightgray;
+    background: linear-gradient(rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4));
+}
+
+.editButton:hover {
+    color: black;
+    background: linear-gradient(/*gray, lightgray*/rgba(150, 150, 150, 0.4), rgba(120, 120, 120, 0.7));
+}/*
+
+button.edit-ico {
+    background:  url('./edit-icon.png') center no-repeat,  linear-gradient(rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4));
+}
+
+button.edit-ico:hover {
+     background: url('./edit-icon.png') center no-repeat, linear-gradient(rgba(150, 150, 150, 0.4), rgba(120, 120, 120, 0.7));
+ }
+*/
