@@ -34,6 +34,11 @@ class Task extends React.Component {
         event.stopPropagation();
         this.setState({...this.state, editing: false});
     };
+    
+    delete = event => {
+        //TODO: Make deletion
+        alert("deletion")
+    };
 
     render() {
         return (
@@ -58,6 +63,7 @@ class Task extends React.Component {
                         <h4>
                             {this.props.task.name}
                             <span className='arrow edit' onClick={this.edit}>&#10000;</span>
+                            <span className='arrow' onClick={this.delete}>&#10006;</span>
                         </h4>
                         {this.props.task.description}
                         {new Date(this.props.task.endDate).toDateString()}

@@ -32,6 +32,10 @@
     max-width: 200px;
 }
 
+select {
+
+}
+
 .overdue-task {
     border: solid red 2px;
 }
@@ -90,16 +94,18 @@ header h4 {
     font-weight: bold;
     width: 60px;
     text-align: center;
+    transition: background-color 0.4s;
 }
 
 .add-column {
     font-size: 10em;
     display: flex;
     justify-content: center;
+    transition: background-color 0.4s;
     align-items: center;
 }
 .my-add {
-
+    transition: background 0.4s;
 }
 
 .my-add:hover {
@@ -124,4 +130,8 @@ header h4 {
 .description {
     margin: 20px;
     font-size: 20px;
+}
+
+@media  {
+
 }

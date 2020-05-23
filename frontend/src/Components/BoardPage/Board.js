@@ -3,6 +3,8 @@ import Column from "./Column";
 import getWSURL from "../getWSURL";
 import {LoadingWheel} from "../LoadingWheel";
 import AddColumn from "./AddColumn";
+//import SlimSelect from 'slim-select';
+
 //import { useParams } from "react-router-dom";
 class Board extends React.Component {
     clearFilter = event => {
@@ -12,19 +14,24 @@ class Board extends React.Component {
 
         const text = this.filterText.current.value;
 
-        const members = [this.memsFilter.current.value];
+        const members = this.state.filterMembers;//[this.memsFilter.current.value];
 
         function filter(task) {
-            return (task.description.indexOf(text) !== -1 || task.name.indexOf(text) !== -1) && members.indexOf(task.worker.login) !== -1;
+            return (task.description.indexOf(text) !== -1 || task.name.indexOf(text) !== -1) && members.has(task.worker.login);
         }
 
         this.setState({...this.state, filter: filter})
+    };
+    addFilterMem = event => {
+        const state = {...this.state};
+        state.filterMembers.add(this.memsFilter.current.value);
+        this.setState(state)
     };
     constructor() {
         super();
         this.filterText = React.createRef();
         this.memsFilter = React.createRef();
-        this.state = {board: {name: "", description: "", members: [], creator: {login: ""}}, columns: null, filter: t => true};
+        this.state = {board: {name: "", description: "", members: [], creator: {login: ""}}, columns: null, filterMembers: new Set(), filter: t => true};
     }
 
     componentDidMount() {
@@ -38,6 +45,7 @@ class Board extends React.Component {
                 this.setState({...data,  filter: t => true});
         };
     }
+
 
     moveLeft = id => {
         const ind = this.state.columns.findIndex(c => c._id === id);
@@ -54,6 +62,12 @@ class Board extends React.Component {
         //TODO: Send queryData
         alert(JSON.stringify(queryData));
         this.setState({board: this.state.board, columns: columns});
+    };
+
+    deleteMember = m => {
+        const state = {...this.state};
+        state.filterMembers.delete(m);
+        this.setState(state)
     };
 
     moveRight = id => {
@@ -80,25 +94,16 @@ class Board extends React.Component {
             this.state.columns.sort((a, b) => a.orderNumber - b.orderNumber);
         return (
             <>
-                <header>
-                    <h4>{this.state.board.name}</h4>
-                    <div className='members-cont'>
-                        <b>Creator:</b>
-                        <Member>{this.state.board.creator.login}</Member>
-                        <b>Participants:</b>
-                        <div className='members'>
-                            {this.state.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
-                            <AddMember/>
-                        </div>
-                    </div>
-                    <a className='link-button back' href='/list'>&lt;</a>
-                </header>
+                <Members board={this.state.board}/>
                 <header className='filter'>
                     <h5>Filter:</h5>
                     <input ref={this.filterText} placeholder='Text'/>
                     <select ref={this.memsFilter}>
                         {this.state.board.members.map(m => <option key={m.login}>{m.login}</option>)}
                     </select>
+                    {[...this.state.filterMembers].map(m => <Member onDelete={l => this.deleteMember(m)} key={m.login}>{m}</Member>)}
+                    <button onClick={this.addFilterMem}>Add</button>
+                    {/*<input ref={this.memsFilter} onClick={this.show} readOnly/>*/}
                     <button onClick={this.applyFilter} >Apply</button>
                     <button onClick={this.clearFilter}>Clear</button>
                 </header>
@@ -124,7 +129,26 @@ class Board extends React.Component {
 
 const Member = props => (<div className='member'>
     {props.children}
+    {props.onDelete ?
+        <span className='arrow' style={{fontSize: "0.8em"}} onClick={props.onDelete}>&#10006;</span>
+        : ""}
 </div>);
+
+const Members = props => (
+    <header>
+        <h4>{props.board.name}</h4>
+        <div className='members-cont'>
+            <b>Creator:</b>
+            <Member>{props.board.creator.login}</Member>
+            <b>Participants:</b>
+            <div className='members'>
+                {props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
+                <AddMember/>
+            </div>
+        </div>
+        <a className='link-button back' href='/list'>&lt;</a>
+    </header>
+);
 
 class AddMember extends React.Component {
     add() {
