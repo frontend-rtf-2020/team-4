@@ -31,6 +31,8 @@ class BoardList extends React.Component {
 
     render() {
         console.log(this.state);
+        if(this.state.boards)
+            this.state.boards.sort((a, b) => a.name.localeCompare(b.name));
         return (
             <>
                 <h1>Boards</h1>

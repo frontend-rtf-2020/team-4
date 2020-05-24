@@ -8,10 +8,11 @@
 }
 
 .Task input, .Task select {
-    width: fit-content;
+    width: 85%;
     display: inline;
     margin: 3px;
 }
+
 
 .filter {
     justify-content: flex-start;
@@ -147,6 +148,11 @@ header h4 {
 
     #memsHeader{
         flex-direction: column;
+    }
+
+    .Task input, .Task select {
+        width: 85%;
+        max-width: none;
     }
 
     .filter input, select {

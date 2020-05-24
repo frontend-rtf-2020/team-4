@@ -29,10 +29,7 @@ class BoardItem extends React.Component {
                 </h2>
                 <b>Creator</b> {this.props.creator.login} ({this.props.creator.email})
                 <Field description='Description'>{this.props.description}</Field>
-                <br/>
-                <b>Begin:</b> {this.props.addingDate}
-                <br/>
-                <b>End:</b> {this.props.endDate}
+
                 <details onClick={this.click}>
                     <summary>
                         <b>Members:</b>

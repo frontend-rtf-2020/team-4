@@ -17,7 +17,7 @@ class Board extends React.Component {
         const members = this.state.filterMembers;//[this.memsFilter.current.value];
 
         function filter(task) {
-            return (task.description.indexOf(text) !== -1 || task.name.indexOf(text) !== -1) && members.has(task.worker.login);
+            return (task.description.includes(text)  || task.name.includes(text)) && members.has(task.worker.login);
         }
 
         this.setState({...this.state, filter: filter})
