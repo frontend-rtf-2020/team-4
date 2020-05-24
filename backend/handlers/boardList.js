@@ -3,6 +3,8 @@ const Board = require('../model/Board');
 const Column = require('../model/Column');
 const mongoose = require('mongoose');
 
+const getBoardSockets = {};
+
 function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}}) {
     return Board.aggregate([
         match,
@@ -39,7 +41,10 @@ function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}})
 
 
 function getBoards(ws, req) {
+
     //TODO: save the socket
+    getBoardSockets[req.user._id.toString()] = ws;
+
     console.log('user: ' + req.user);
     const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
 
@@ -50,16 +55,34 @@ function getBoards(ws, req) {
 
     ws.on('message', function(msg) {
         //TODO: add adding board
-        ws.send(msg);
+        //ws.send(msg);
+        console.log(msg);
+        const board = JSON.parse(msg);
+         if (board._id) {
+              //TODO:
+         } else {
+                const newBoard = new Board();
+                newBoard.creatorId = req.user._id;
+                console.log(req.user._id);
+                newBoard.name = board.name;
+                console.log(board.name);
+                newBoard.description = board.description;
+                console.log(board.description);
+                newBoard.members[0] = req.user._id;
+                newBoard.save();
+               // getBoardSockets[req.user._id.toString()].send(Что же мне здесь отправить?);
+         }
+
     });
 
     ws.on('close', function() {
         //TODO: remove ws
+        delete getBoardSockets[req.user._id];
     });
 }
 
 function getDetailedBoard(ws, req) {
-    const id = req.params.id;//"5eafafc5d07fde1f84b44873";
+    const id = req.params.id;  //"5eafafc5d07fde1f84b44873";
     //TODO: save the sockets
     console.log(id);
     //console.log(req.user._id.toString());

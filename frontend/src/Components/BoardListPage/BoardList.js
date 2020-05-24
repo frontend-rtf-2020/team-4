@@ -12,7 +12,7 @@ class BoardList extends React.Component {
         this.ws = new WebSocket(getWSURL('ws/get_boards'));
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
-            //console.log(msg.data);
+            console.log(msg.data);
             if(data.error)
                 alert(data.error);
             else
@@ -24,8 +24,14 @@ class BoardList extends React.Component {
 
     }
 
-    addBoard = data => {
+    addBoard = (newBname, newBdescr) => {
+        const date = new Date();
         alert('sent');
+        const data = JSON.stringify({
+            _id: '',
+            name: newBname,
+            description: newBdescr,
+        });
         this.ws.send(data);
     };
 

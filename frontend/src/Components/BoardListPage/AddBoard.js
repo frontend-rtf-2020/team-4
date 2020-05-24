@@ -4,7 +4,9 @@ import Input from "../UI/Input";
 export default class AddBoard extends React.PureComponent {
     constructor() {
         super();
-        this.state = { adding: false }
+        this.state = { adding: false };
+        this.name = React.createRef();
+        this.descr = React.createRef();
     }
 
     onAdd = () =>
@@ -17,9 +19,9 @@ export default class AddBoard extends React.PureComponent {
     getAddingForm = () => (
         <>
             <h3>Add new board</h3>
-            <Input label='Board name'/>
-            <Input label='Board description'/>
-            <button onClick={e => this.props.addBoard("")}>Add</button>
+            <Input ref={this.name} label='Board name'/>
+            <Input ref={this.descr} label='Board description'/>
+            <button onClick={e => this.props.addBoard(this.name.current.getValue(), this.descr.current.getValue())}>Add</button>
             <button onClick={this.cancel}>Cancel</button>
         </>
     );
