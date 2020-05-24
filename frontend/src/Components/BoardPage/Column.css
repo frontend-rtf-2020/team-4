@@ -132,6 +132,28 @@ header h4 {
     font-size: 20px;
 }
 
-@media  {
+@media (max-width: 1020px) {
+    .members-cont {
+        flex-wrap: wrap;
+        /* flex-direction: column; */
+        justify-content: center;
+    }
 
+    .columns {
+        overflow: scroll;
+        width: 100vw;
+        justify-content: normal;
+    }
+
+    #memsHeader{
+        flex-direction: column;
+    }
+
+    .filter input, select {
+         max-width: 80px;
+    }
+
+    .filter {
+        flex-wrap: wrap;
+    }
 }

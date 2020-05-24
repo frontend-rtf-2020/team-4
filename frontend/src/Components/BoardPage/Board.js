@@ -87,6 +87,7 @@ class Board extends React.Component {
         this.setState({board: this.state.board, columns: columns});
     };
 
+
     render() {
         //const { id } = useParams();
         console.log(this.state);
@@ -115,7 +116,9 @@ class Board extends React.Component {
                         {
                             this.state.columns ? (
                                     <>
-                                        {this.state.columns.map(c=> <Column filter={this.state.filter} members={this.state.board.members} moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
+                                        {this.state.columns.map(c=>
+                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns}
+                                                    moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
                                         <AddColumn/>
                                     </>) :
                                 <LoadingWheel/>
@@ -135,7 +138,7 @@ const Member = props => (<div className='member'>
 </div>);
 
 const Members = props => (
-    <header>
+    <header id='memsHeader'>
         <h4>{props.board.name}</h4>
         <div className='members-cont'>
             <b>Creator:</b>

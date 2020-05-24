@@ -6,6 +6,7 @@ class Task extends React.Component {
     constructor() {
         super();
         this.state = {editing: false};
+
     }
 
     componentDidMount() {
@@ -34,10 +35,15 @@ class Task extends React.Component {
         event.stopPropagation();
         this.setState({...this.state, editing: false});
     };
-    
+
     delete = event => {
         //TODO: Make deletion
         alert("deletion")
+    };
+
+    onSubmit = event => {
+        alert("send!");
+        //To obtain selected column id use: columnSelect.selectedOptions[0].id
     };
 
     render() {
@@ -45,9 +51,9 @@ class Task extends React.Component {
             <div className={this.getClass()}>
                 {this.state.editing ?
                     <>
-                        <h4>Add task</h4>
+                        <h4>Edit task</h4>
                         <input placeholder='Name' value={this.props.task.name}/>
-                        <select>
+                        <select value={this.props.task.worker.login}>
                             {this.props.members.map(m => <option key={m.login}>{m.login}</option>)}
                         </select>
                         <input placeholder='Description' value={this.props.task.description}/>
@@ -55,6 +61,10 @@ class Task extends React.Component {
                         <b>Do before:</b>
                         <br/>
                         <input type='date'/>
+                        <br/>
+                        <select id='columnSelect'>
+                            {this.props.columns.map(m => <option id={m._id} key={m._id}>{m.name}</option>)}
+                        </select>
                         <br/>
                         <button onClick={this.onSubmit}>Submit</button>
                         <button onClick={this.cancel}>Cancel</button>
@@ -76,5 +86,7 @@ class Task extends React.Component {
         );
     }
 }
+
+const ColumnOption = props => (<option>{props.children}</option>);
 
 export default Task;
