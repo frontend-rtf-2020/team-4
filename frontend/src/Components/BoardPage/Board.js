@@ -3,6 +3,7 @@ import Column from "./Column";
 import getWSURL from "../getWSURL";
 import {LoadingWheel} from "../LoadingWheel";
 import AddColumn from "./AddColumn";
+import $ from 'jquery';
 //import SlimSelect from 'slim-select';
 
 //import { useParams } from "react-router-dom";
@@ -137,21 +138,34 @@ const Member = props => (<div className='member'>
         : ""}
 </div>);
 
-const Members = props => (
-    <header id='memsHeader'>
-        <h4>{props.board.name}</h4>
-        <div className='members-cont'>
-            <b>Creator:</b>
-            <Member>{props.board.creator.login}</Member>
-            <b>Participants:</b>
-            <div className='members'>
-                {props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
-                <AddMember/>
-            </div>
-        </div>
-        <a className='link-button back' href='/list'>&lt;</a>
-    </header>
-);
+class Members extends React.Component {
+    show = () => {
+        $('#members-cont').fadeIn(400);
+    };
+    hide =() => {
+        $('#members-cont').fadeOut(400);
+    };
+    render() {
+        return (
+            <header id='memsHeader'>
+                <h4>{this.props.board.name}
+                    <button className='arrow' id='showMems' onClick={this.show}>v</button>
+                </h4>
+                <div id='members-cont' className='members-cont'>
+                    <b>Creator:</b>
+                    <Member>{this.props.board.creator.login}</Member>
+                    <b>Participants:</b>
+                    <div className='members'>
+                        {this.props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
+                        <AddMember/>
+                    </div>
+                    <button className='link-button' id='hideMems' onClick={this.hide}>&#8679;</button>
+                </div>
+                <a className='link-button back' href='/list'>&lt;</a>
+            </header>
+        );
+    }
+}
 
 class AddMember extends React.Component {
     add() {
