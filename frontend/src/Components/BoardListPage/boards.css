@@ -17,6 +17,17 @@ div .board {
     cursor: pointer;
 }
 
+.board h2 {
+    margin: 0;
+}
+
+.board-delete {
+    display: block;
+    text-align: end;
+    margin: 0;
+}
+
+
 .add {
     text-align: center;
     font-size: 9.5em;

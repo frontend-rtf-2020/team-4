@@ -36,7 +36,7 @@ export default class Header extends React.PureComponent {
     render() {
         return (<header>
             <h2>
-                <a href='/'>Project Template</a>
+                <a href='/'>My task board</a>
             </h2>
             {this.props.user ? <AuthorizedLinks login={this.props.user.login} email={this.props.user.email}/> : <NotAuthorizedLinks/>}
         </header>);

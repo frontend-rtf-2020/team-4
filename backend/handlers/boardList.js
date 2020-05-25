@@ -6,18 +6,17 @@ const mongoose = require('mongoose');
 function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}}) {
     return Board.aggregate([
         match,
-        //{$match: { _id: mongoose.Types.ObjectId(id) }},
         {
             $lookup:{
                 from: 'users',
                 localField: 'creatorId',
                 foreignField: '_id',
-                as: 'creatorId'
+                as: 'creator'
             }
         },
-        {$unwind: "$creatorId"},
+        {$unwind: "$creator"},
         {$project: {"creatorId.hash": 0, "creatorId.active": 0, "creatorId.activatorId": 0, "creatorId.registrationData": 0}},
-        {$unwind: "$members"},
+        //{$unwind: "$members"},
         {
             $lookup:{
                 from: 'users',
@@ -26,14 +25,9 @@ function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}})
                 as: 'members'
             }
         },
-        {$unwind: "$members"},
+        //{$unwind: "$members"},
         {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
-        {$group: {
-                _id: "$_id", creator: {$first: "$creatorId"}, name: {$first: "$name"}, description: {$first: "$description"},
-                addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, members: { $addToSet: "$members" }
-            }
-        },
-        //{$project: {_id: 0}}
+        
     ])
 }
 
@@ -72,8 +66,8 @@ function getDetailedBoard(ws, req) {
                 return;
             }
             Column.aggregate([
-                {$match: {board: mongoose.Types.ObjectId(id)} /*{$and: [{board: mongoose.Types.ObjectId(id)},{$or: [{creatorId: id}, {editorsId: id}]}]}*/},
-                {$unwind: "$tasks"},
+                {$match: {board: mongoose.Types.ObjectId(id)}},
+                //{$unwind: "$tasks"},
                 {
                     $lookup:{
                         from: 'tasks',
@@ -86,7 +80,7 @@ function getDetailedBoard(ws, req) {
                 {
                     $lookup:{
                         from: 'users',
-                        localField: 'tasks.workerId',//
+                        localField: 'tasks.workerId',
                         foreignField: '_id',
                         as: 'tasks.worker'
                     }
@@ -94,8 +88,7 @@ function getDetailedBoard(ws, req) {
                 {$unwind: "$tasks.worker"},
                 {$project:{"tasks.worker.login": 1, "tasks.name": 1, "tasks.endDate": 1, "tasks.done": 1, "orderNumber": 1, "_id": 1, "name": 1, "tasks.description": 1}},
                 {$group: {
-                        _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"}, orderNumber: {$first: "$orderNumber"},/*
-                        addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, board: {$first: "$board"},*/ tasks: { $addToSet: "$tasks" }
+                        _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"}, orderNumber: {$first: "$orderNumber"}, tasks: { $addToSet: "$tasks" }
                     }
                 }
             ]).then(columns => {

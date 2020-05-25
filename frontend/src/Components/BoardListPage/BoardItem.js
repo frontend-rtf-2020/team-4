@@ -10,6 +10,11 @@ class BoardItem extends React.Component {
         document.location.href = `/item/${this.props.id}`
         //window.
     };
+    delete = event => {
+        event.stopPropagation();
+        //TODO: Make deletion
+        alert("deletion")
+    };
     click = event => {
         //event.preventDefault();
         event.stopPropagation();
@@ -18,13 +23,13 @@ class BoardItem extends React.Component {
         console.log(this.props);
         return (
             <div onClick={this.onClick} className='content board'>
-                <h2><Field description='Title'>{this.props.name}</Field></h2>
+                <span className='arrow board-delete' onClick={this.delete}>&#10006;</span>
+                <h2>
+                    <Field description='Title'>{this.props.name}</Field>
+                </h2>
                 <b>Creator</b> {this.props.creator.login} ({this.props.creator.email})
                 <Field description='Description'>{this.props.description}</Field>
-                <br/>
-                <b>Begin:</b> {this.props.addingDate}
-                <br/>
-                <b>End:</b> {this.props.endDate}
+
                 <details onClick={this.click}>
                     <summary>
                         <b>Members:</b>
