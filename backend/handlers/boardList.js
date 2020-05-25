@@ -70,7 +70,7 @@ function getBoards(ws, req) {
                 console.log(board.description);
                 newBoard.members[0] = req.user._id;
                 newBoard.save();
-               // getBoardSockets[req.user._id.toString()].send(Что же мне здесь отправить?);
+                newBoard.members.forEach(m => getBoardSockets[m._id.toString()].send(getBoard(newBoard._id)))
          }
 
     });
