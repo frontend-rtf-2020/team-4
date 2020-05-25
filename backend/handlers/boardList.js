@@ -3,7 +3,7 @@ const Board = require('../model/Board');
 const Column = require('../model/Column');
 const mongoose = require('mongoose');
 
-const getBoardSockets = {};
+const getBoardSockets = {}; // It is all sockets for getBoard
 
 function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}}) {
     return Board.aggregate([
@@ -29,7 +29,7 @@ function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}})
         },
         //{$unwind: "$members"},
         {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
-        
+
     ])
 }
 
@@ -52,10 +52,10 @@ function getBoards(ws, req) {
         //ws.send(msg);
         console.log(msg);
         const board = JSON.parse(msg);
-         if (board._id) {
-              //TODO:
-         } else {
-                const newBoard = new Board();
+         if (board._id) { // Checking, does it new or changed board?
+              //TODO: //If '_id' exist, therefore it is a changed board
+         } else {   //If '_id' does not exist, therefore it is a new board
+                const newBoard = new Board(); //Adding new board in DB
                 newBoard.creatorId = req.user._id;
                 console.log(req.user._id);
                 newBoard.name = board.name;
@@ -63,8 +63,13 @@ function getBoards(ws, req) {
                 newBoard.description = board.description;
                 console.log(board.description);
                 newBoard.members[0] = req.user._id;
-                newBoard.save();
-                newBoard.members.forEach(m => getBoardSockets[m._id.toString()].send(getBoard(newBoard._id)))
+                newBoard.save();  //Saving new board in DB
+                console.log(newBoard._id);
+                console.log(newBoard._id.toString());
+                newBoard.members.forEach(m => console.log(m._id.toString()));
+                getBoard(newBoard._id)   //Trying send new board to all her members (in developing);
+                    .then(r => newBoard.members.forEach(m => getBoardSockets[m._id.toString()].send(JSON.stringify(r))))
+                    .catch(e => console.log(e));
          }
 
     });

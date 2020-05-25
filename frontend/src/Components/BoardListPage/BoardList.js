@@ -28,7 +28,7 @@ class BoardList extends React.Component {
         this.ws.close();
     }
 
-    addBoard = (newBname, newBdescr) => {
+    addBoard = (newBname, newBdescr) => { //Sending data from create board dialog
         alert('sent');
         const data = JSON.stringify({
             _id: '',
