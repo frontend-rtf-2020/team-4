@@ -28,8 +28,13 @@ class BoardList extends React.Component {
         this.ws.close();
     }
 
-    addBoard = data => {
+    addBoard = (newBname, newBdescr) => {
         alert('sent');
+        const data = JSON.stringify({
+            _id: '',
+            name: newBname,
+            description: newBdescr,
+        });
         this.ws.send(data);
     };
 
