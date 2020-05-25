@@ -18,13 +18,15 @@ mongoose.connect(process.env.DB_CONNECTION_URL, {useNewUrlParser: true});
 
 initialise(passport);
 
+app.use(logger('dev'));
+/** For passport correct work */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('anything'));
+/** */
 app.use(express.static(staticLocation));
 
 

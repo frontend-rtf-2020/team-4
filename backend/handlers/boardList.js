@@ -25,8 +25,9 @@ function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}})
                 as: 'members'
             }
         },
+        //{$unwind: "$members"},
         {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
-
+        
     ])
 }
 
@@ -66,6 +67,7 @@ function getDetailedBoard(ws, req) {
             }
             Column.aggregate([
                 {$match: {board: mongoose.Types.ObjectId(id)}},
+                //{$unwind: "$tasks"},
                 {
                     $lookup:{
                         from: 'tasks',

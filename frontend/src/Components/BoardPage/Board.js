@@ -11,6 +11,7 @@ class Board extends React.Component {
     clearFilter = event => {
         this.setState({...this.state, filter: t => true})
     };
+
     applyFilter = event => {
 
         const text = this.filterText.current.value;
@@ -23,11 +24,13 @@ class Board extends React.Component {
 
         this.setState({...this.state, filter: filter})
     };
+
     addFilterMem = event => {
         const state = {...this.state};
         state.filterMembers.add(this.memsFilter.current.value);
         this.setState(state)
     };
+
     constructor() {
         super();
         this.filterText = React.createRef();
@@ -47,6 +50,9 @@ class Board extends React.Component {
         };
     }
 
+    componentWillUnmount() {
+        this.ws.close();
+    }
 
     moveLeft = id => {
         const ind = this.state.columns.findIndex(c => c._id === id);

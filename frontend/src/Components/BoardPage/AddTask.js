@@ -8,7 +8,7 @@ export default class AddTask extends React.Component {
         this.state = { adding: false }
     }
     onSubmit = e => {
-        alert(/*document.getElementById('s').value)*/e.target.parentElement.getElementsByTagName('select')[0].value);
+        alert(e.target.parentElement.getElementsByTagName('select')[0].value);
         this.props.onSubmit();
     };
     add = () =>

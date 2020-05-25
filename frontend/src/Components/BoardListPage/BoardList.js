@@ -24,6 +24,10 @@ class BoardList extends React.Component {
 
     }
 
+    componentWillUnmount() {
+        this.ws.close();
+    }
+
     addBoard = data => {
         alert('sent');
         this.ws.send(data);
@@ -39,9 +43,9 @@ class BoardList extends React.Component {
                 {
                     this.state.boards ?
                     <div className='boardList'>
-                        {this.state.boards.map(b=><BoardItem key={b._id} description={b.description} id={b._id}
-                                                             name={b.name}
-                                                             members={b.members} endDate={b.endDate}
+                        {this.state.boards.map(b=>
+                            <BoardItem key={b._id} description={b.description} id={b._id}
+                                                             name={b.name} members={b.members} endDate={b.endDate}
                                                              addingDate={b.addingDate} creator={b.creator}/>)}
                         <AddBoard addBoard={this.addBoard}/>
                     </div> : <LoadingWheel/>
