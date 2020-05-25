@@ -1,5 +1,5 @@
 import React from "react";
-
+/*
 function parseQueryString(strQuery = window.location.search) {
     let strSearch   = strQuery.substr(1),
         strPattern  = /([^=]+)=([^&]+)&?/ig,
@@ -12,14 +12,14 @@ function parseQueryString(strQuery = window.location.search) {
     return objRes;
 }
 
-
+*/
 export default class Activation extends React.Component {
 
     constructor() {
         super();
-        const params = parseQueryString();
-        this.state = { error: params.error ? decodeURI(params.error) : null,
-            result: params.result ? decodeURI(params.result) : null, activate: params.activate }
+        const params = new URLSearchParams(window.location.search);
+        this.state = { error: params.get('error') ? decodeURI(params.error) : null,
+            result: params.get("result") ? decodeURI(params.get("result")) : null, activate: params.get("activate") }
     }
 
     render() {

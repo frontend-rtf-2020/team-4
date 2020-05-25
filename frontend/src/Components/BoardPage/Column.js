@@ -40,7 +40,8 @@ class Column extends React.Component {
                     <span className='arrow' onClick={this.delete}>&#10006;</span>
                     <span onClick={this.moveRight} className='arrow' style={{float: "right"}}>&gt;</span>
                     <h3><Field>{this.props.column.name}</Field></h3>
-                    {this.props.column.tasks.filter(this.props.filter).map(b => <Task members={this.props.members} key={b._id} task={b} />)}
+                    {this.props.column.tasks.filter(this.props.filter).map(b =>
+                        <Task columns={this.props.columns} members={this.props.members} key={b._id} task={b} />)}
                     <AddTask onSubmit={this.addTask} members={this.props.members}/>
                 </div>
         );

@@ -12,7 +12,7 @@ class BoardList extends React.Component {
         this.ws = new WebSocket(getWSURL('ws/get_boards'));
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
-            console.log(msg.data);
+            //console.log(msg.data);
             if(data.error)
                 alert(data.error);
             else
@@ -24,28 +24,28 @@ class BoardList extends React.Component {
 
     }
 
-    addBoard = (newBname, newBdescr) => {
-        const date = new Date();
+    componentWillUnmount() {
+        this.ws.close();
+    }
+
+    addBoard = data => {
         alert('sent');
-        const data = JSON.stringify({
-            _id: '',
-            name: newBname,
-            description: newBdescr,
-        });
         this.ws.send(data);
     };
 
     render() {
         console.log(this.state);
+        if(this.state.boards)
+            this.state.boards.sort((a, b) => a.name.localeCompare(b.name));
         return (
             <>
                 <h1>Boards</h1>
                 {
                     this.state.boards ?
                     <div className='boardList'>
-                        {this.state.boards.map(b=><BoardItem key={b._id} description={b.description} id={b._id}
-                                                             name={b.name}
-                                                             members={b.members} endDate={b.endDate}
+                        {this.state.boards.map(b=>
+                            <BoardItem key={b._id} description={b.description} id={b._id}
+                                                             name={b.name} members={b.members} endDate={b.endDate}
                                                              addingDate={b.addingDate} creator={b.creator}/>)}
                         <AddBoard addBoard={this.addBoard}/>
                     </div> : <LoadingWheel/>

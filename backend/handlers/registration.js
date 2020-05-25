@@ -14,10 +14,9 @@ function activate (req, resp) {
         {
             console.log(e);
             resp.send(e);
-            return;
         }
         else if (!u)
-            resp.redirect('/activation?error=notfinded');
+            resp.redirect('/activation?error=' +  encodeURI('Such user has not been found/'));
         else if(Math.abs(u.registrationData.valueOf() - Date.now().valueOf()) > 24*60*60*1000)
             //resp.send({error: "Activator link expired"});
             resp.redirect(`/activation?error=${encodeURI('The link has expired. Please press reactivate button to obtain new link.')}&activate=` + req.query.activate);
