@@ -27,13 +27,13 @@ class Task extends React.Component {
     };
 
     edit = () => {
-        this.setState({...this.state, editing: true});
+        this.setState({/*...this.state, */editing: true});
     };
 
     cancel = event => {
         event.preventDefault();
         event.stopPropagation();
-        this.setState({...this.state, editing: false});
+        this.setState({/*...this.state, */editing: false});
     };
 
     delete = event => {

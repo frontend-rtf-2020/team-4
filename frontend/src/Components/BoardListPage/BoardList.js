@@ -16,7 +16,7 @@ class BoardList extends React.Component {
             if(data.error)
                 alert(data.error);
             else
-                this.setState({boards: data, adding: this.state.adding });
+                this.setState({boards: data/*, adding: this.state.adding*/ });
         };
     }
 

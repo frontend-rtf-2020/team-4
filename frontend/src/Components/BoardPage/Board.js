@@ -9,7 +9,7 @@ import $ from 'jquery';
 //import { useParams } from "react-router-dom";
 class Board extends React.Component {
     clearFilter = event => {
-        this.setState({...this.state, filter: t => true})
+        this.setState({/*...this.state,*/ filter: t => true})
     };
 
     applyFilter = event => {
@@ -22,7 +22,7 @@ class Board extends React.Component {
             return (task.description.includes(text)  || task.name.includes(text)) && members.has(task.worker.login);
         }
 
-        this.setState({...this.state, filter: filter})
+        this.setState({/*...this.state,*/ filter: filter})
     };
 
     addFilterMem = event => {
@@ -68,11 +68,11 @@ class Board extends React.Component {
         });
         //TODO: Send queryData
         alert(JSON.stringify(queryData));
-        this.setState({board: this.state.board, columns: columns});
+        this.setState({/*board: this.state.board, */columns: columns});
     };
 
     deleteMember = m => {
-        const state = {...this.state};
+        const state = {...this.state};//TODO: maybe rewrite without ...state
         state.filterMembers.delete(m);
         this.setState(state)
     };
@@ -91,7 +91,7 @@ class Board extends React.Component {
         });
         //TODO: Send queryData
         alert(JSON.stringify(queryData));
-        this.setState({board: this.state.board, columns: columns});
+        this.setState({/*board: this.state.board,*/ columns: columns});
     };
 
 

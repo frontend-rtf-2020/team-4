@@ -109,7 +109,7 @@ router.get('/auth/error', function (req, res) {
     res.send(mes);
 });
 
-router.get('/auth/success', checkNotAuthenticated, function (req, res) {
+router.get('/auth/success', checkAuthenticated, function (req, res) {
     res.send({ result: "You have successfully authorized!" })
 });
 
