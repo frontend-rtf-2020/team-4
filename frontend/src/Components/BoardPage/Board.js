@@ -45,8 +45,10 @@ class Board extends React.Component {
             console.log(data);
             if(data.error)
                 alert(data.error);
-            else
+            else {
                 this.setState({...data,  filter: t => true});
+                this.state.columns.sort((a, b) => a.orderNumber - b.orderNumber);
+            }
         };
     }
 
@@ -54,43 +56,49 @@ class Board extends React.Component {
         this.ws.close();
     }
 
+    removeMemberFromFilter = m => {
+        const state = {...this.state};//TODO: maybe rewrite without ...state
+        state.filterMembers.delete(m);
+        this.setState(state)
+    };
+
     moveLeft = id => {
         const ind = this.state.columns.findIndex(c => c._id === id);
         if(ind === 0) return;
         const columns = [...this.state.columns];
-        const c = columns[ind];
-        columns[ind] = columns[ind - 1];
-        columns[ind - 1] = c;
-        const queryData = {};
+        const c = columns[ind].orderNumber;
+        columns[ind].orderNumber = columns[ind - 1].orderNumber;
+        columns[ind - 1].orderNumber = c;
+        const queryData = {[columns[ind]._id]: columns[ind].orderNumber,
+            [columns[ind - 1]._id]: columns[ind - 1].orderNumber};/*
         columns.forEach((e, i) => {
             e.orderNumber = i;
             queryData[e._id] = i;
-        });
+        });*/
         //TODO: Send queryData
-        alert(JSON.stringify(queryData));
-        this.setState({/*board: this.state.board, */columns: columns});
-    };
 
-    deleteMember = m => {
-        const state = {...this.state};//TODO: maybe rewrite without ...state
-        state.filterMembers.delete(m);
-        this.setState(state)
+        alert(JSON.stringify(queryData));
+        columns.sort((a, b) => a.orderNumber - b.orderNumber);
+        this.setState({/*board: this.state.board,*/ columns: columns});
     };
 
     moveRight = id => {
         const ind = this.state.columns.findIndex(c => c._id === id);
         if(ind === this.state.columns.length - 1) return;
         const columns = [...this.state.columns];
-        const c = columns[ind];
-        columns[ind] = columns[ind + 1];
-        columns[ind + 1] = c;
-        const queryData = {};
+        const c = columns[ind].orderNumber;
+        columns[ind].orderNumber = columns[ind + 1].orderNumber;
+        columns[ind + 1].orderNumber = c;
+        const queryData = {[columns[ind]._id]: columns[ind].orderNumber,
+            [columns[ind + 1]._id]: columns[ind + 1].orderNumber};/*
         columns.forEach((e, i) => {
             e.orderNumber = i;
             queryData[e._id] = i;
-        });
+        });*/
         //TODO: Send queryData
+
         alert(JSON.stringify(queryData));
+        columns.sort((a, b) => a.orderNumber - b.orderNumber);
         this.setState({/*board: this.state.board,*/ columns: columns});
     };
 
@@ -98,8 +106,6 @@ class Board extends React.Component {
     render() {
         //const { id } = useParams();
         console.log(this.state);
-        if(this.state.columns)
-            this.state.columns.sort((a, b) => a.orderNumber - b.orderNumber);
         return (
             <>
                 <Members board={this.state.board}/>
@@ -109,7 +115,7 @@ class Board extends React.Component {
                     <select ref={this.memsFilter}>
                         {this.state.board.members.map(m => <option key={m.login}>{m.login}</option>)}
                     </select>
-                    {[...this.state.filterMembers].map(m => <Member onDelete={l => this.deleteMember(m)} key={m.login}>{m}</Member>)}
+                    {[...this.state.filterMembers].map(m => <Member onDelete={l => this.removeMemberFromFilter(m)} key={m.login}>{m}</Member>)}
                     <button onClick={this.addFilterMem}>Add</button>
                     {/*<input ref={this.memsFilter} onClick={this.show} readOnly/>*/}
                     <button onClick={this.applyFilter} >Apply</button>

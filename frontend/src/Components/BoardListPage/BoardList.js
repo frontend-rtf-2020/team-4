@@ -15,8 +15,10 @@ class BoardList extends React.Component {
             //console.log(msg.data);
             if(data.error)
                 alert(data.error);
-            else
+            else {
+                data.sort((a, b) => a.name.localeCompare(b.name));
                 this.setState({boards: data/*, adding: this.state.adding*/ });
+            }
         };
     }
 
@@ -40,8 +42,6 @@ class BoardList extends React.Component {
 
     render() {
         console.log(this.state);
-        if(this.state.boards)
-            this.state.boards.sort((a, b) => a.name.localeCompare(b.name));
         return (
             <>
                 <h1>Boards</h1>

@@ -21,9 +21,10 @@ div .board {
     margin: 0;
 }
 
-.board-delete {
+.board-delete {/*
     display: block;
-    text-align: end;
+    text-align: end;*/
+    float: right;
     margin: 0;
 }
 
