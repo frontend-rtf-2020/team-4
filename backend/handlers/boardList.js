@@ -18,16 +18,14 @@ function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}})
         },
         {$unwind: "$creator"},
         {$project: {"creatorId.hash": 0, "creatorId.active": 0, "creatorId.activatorId": 0, "creatorId.registrationData": 0}},
-        //{$unwind: "$members"},
         {
             $lookup:{
                 from: 'users',
-                localField: 'members',//
+                localField: 'members',
                 foreignField: '_id',
                 as: 'members'
             }
         },
-        //{$unwind: "$members"},
         {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
 
     ])
@@ -40,7 +38,7 @@ function getBoards(ws, req) {
     getBoardSockets[req.user._id.toString()] = ws;
 
     console.log('user: ' + req.user);
-    const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
+    const id = req.user._id;
 
 
     getBoard(id)
@@ -49,7 +47,6 @@ function getBoards(ws, req) {
 
     ws.on('message', function(msg) {
         //TODO: add adding board
-        //ws.send(msg);
         console.log(msg);
         const board = JSON.parse(msg);
          if (board._id) { // Checking, does it new or changed board?
@@ -81,10 +78,9 @@ function getBoards(ws, req) {
 }
 
 function getDetailedBoard(ws, req) {
-    const id = req.params.id;  //"5eafafc5d07fde1f84b44873";
+    const id = req.params.id;
     //TODO: save the sockets
     console.log(id);
-    //console.log(req.user._id.toString());
     getBoard(id, {$match: { _id: mongoose.Types.ObjectId(id) }})
         .then(b => {
             console.log(b);
@@ -95,11 +91,10 @@ function getDetailedBoard(ws, req) {
             }
             Column.aggregate([
                 {$match: {board: mongoose.Types.ObjectId(id)}},
-                //{$unwind: "$tasks"},
                 {
                     $lookup:{
                         from: 'tasks',
-                        localField: 'tasks',//
+                        localField: 'tasks',
                         foreignField: '_id',
                         as: 'tasks'
                     }
@@ -120,12 +115,11 @@ function getDetailedBoard(ws, req) {
                     }
                 }
             ]).then(columns => {
-                //console.log(columns);
                 ws.send(JSON.stringify({
                     board: b[0],
                     columns: columns
                 }));
-                //res.send(r)
+                
             });
         });
 
