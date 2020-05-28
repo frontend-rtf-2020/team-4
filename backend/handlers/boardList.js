@@ -63,13 +63,15 @@ function getBoards(ws, req) {
                 newBoard.description = board.description;
                 console.log(board.description);
                 newBoard.members[0] = req.user._id;
-                newBoard.save();  //Saving new board in DB
+                newBoard.save(function (err, newBoard) {
+                    if (err) return console.error(err);
+                    else newBoard.members.forEach(m => getBoard(m._id)
+                        .then(r => getBoardSockets[m._id.toString()].send(JSON.stringify(r)))
+                        .catch(e => console.log(e)));
+                });  //Saving new board in DB
                 console.log(newBoard._id);
-                console.log(newBoard._id.toString());
-                newBoard.members.forEach(m => console.log(m._id.toString()));
-                getBoard(newBoard._id)   //Trying send new board to all her members (in developing);
-                    .then(r => newBoard.members.forEach(m => getBoardSockets[m._id.toString()].send(JSON.stringify(r))))
-                    .catch(e => console.log(e));
+                console.log(newBoard._id.toString());//Trying send new board to all her members (in developing);
+               // newBoard.members.forEach(m => getBoard(m._id).then(r => getBoardSockets[m._id.toString()].send(JSON.stringify(r))).catch(e => console.log(e)));
          }
 
     });
