@@ -47,6 +47,7 @@ class Task extends React.Component {
     };
 
     render() {
+        const date = new Date(this.props.task.endDate);
         return (
             <div className={this.getClass()}>
                 {this.state.editing ?
@@ -76,7 +77,8 @@ class Task extends React.Component {
                             <span className='arrow' onClick={this.delete}>&#10006;</span>
                         </h4>
                         {this.props.task.description}
-                        {new Date(this.props.task.endDate).toDateString()}
+                        <br/>
+                        {date.getDay()}.{date.getMonth()}.{date.getFullYear()}
                         <br/>
                         Worker: {this.props.task.worker.login}
                         <br/>

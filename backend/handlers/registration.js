@@ -2,8 +2,13 @@ const crypto = require('bcrypt');
 const emailCheck = require('email-check');
 const User = require('../model/User');
 const sendEmail = require("./sendActivatorMail");
+const { v5: uuidv5} = require('uuid');
+
 const size = 10;
 const day = 24*60*60*1000;
+//import { v5 as uuidv5, v4 as uuidv4 } from 'uuid';
+const namespase = "232db7a9-94ae-5a90-80e1-93ccee46fcde";
+
 function activate (req, resp) {
     // eslint-disable-next-line no-unused-vars
     User.findOne({activatorId: decodeURI(req.query.activate)}, (err, user) => {
@@ -47,11 +52,12 @@ function reactivate (req, resp) {
     })
 }
 
-function generateActivatorId (login) {//TODO: Rewrite?
-    let res = login;
+function generateActivatorId (login) {
+    /*let res = login;
     for (let i = 0; i < 15; i++)
         res += String.fromCodePoint(Math.round(48 + Math.random() * 74));
-    return res;
+    return res;*/
+    return uuidv5(login, namespase);
 }
 
 async function RegistrationHandler(req, res)

@@ -46,8 +46,8 @@ class Board extends React.Component {
             if(data.error)
                 alert(data.error);
             else {
+                data.columns.sort((a, b) => a.orderNumber - b.orderNumber);
                 this.setState({...data,  filter: t => true});
-                this.state.columns.sort((a, b) => a.orderNumber - b.orderNumber);
             }
         };
     }

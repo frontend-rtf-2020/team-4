@@ -24,6 +24,7 @@ header h2 a {
 
 .errorMessage {
     color: red;
+    max-width: 350px;
     text-align: center;
 }
 
