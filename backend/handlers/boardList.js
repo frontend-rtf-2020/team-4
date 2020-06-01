@@ -3,7 +3,7 @@ const Board = require('../model/Board');
 const Column = require('../model/Column');
 const mongoose = require('mongoose');
 
-const getBoardSockets = {}; // It is all sockets for getBoard
+const boardListSockets = {}; // It is all sockets for getBoard
 
 function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}}) {
     return Board.aggregate([
@@ -34,10 +34,16 @@ function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}})
 }
 
 
+function sentData(members) {
+    members.forEach(m => getBoard(m._id)
+        .then(r => boardListSockets[m._id.toString()].send(JSON.stringify(r)))
+        .catch(e => console.log(e)));
+}
+
 function getBoards(ws, req) {
 
-    //TODO: save the socket
-    getBoardSockets[req.user._id.toString()] = ws;
+    //save the socket
+    boardListSockets[req.user._id.toString()] = ws;
 
     console.log('user: ' + req.user);
     const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
@@ -48,12 +54,16 @@ function getBoards(ws, req) {
         .catch(e => console.log(e));
 
     ws.on('message', function(msg) {
-        //TODO: add adding board
+        //adding board
         //ws.send(msg);
         console.log(msg);
         const board = JSON.parse(msg);
          if (board._id) { // Checking, does it new or changed board?
               //TODO: //If '_id' exist, therefore it is a changed board
+             if(Object.keys(board).length === 1)//deletion
+                 Board.findByIdAndRemove(board._id,{useFindAndModify: false}, (err, board) =>
+                 sentData(board.members) );
+
          } else {   //If '_id' does not exist, therefore it is a new board
                 const newBoard = new Board(); //Adding new board in DB
                 newBoard.creatorId = req.user._id;
@@ -64,27 +74,32 @@ function getBoards(ws, req) {
                 console.log(board.description);
                 newBoard.members[0] = req.user._id;
                 newBoard.save(function (err, newBoard) {
-                    if (err) return console.error(err);
-                    else newBoard.members.forEach(m => getBoard(m._id)
-                        .then(r => getBoardSockets[m._id.toString()].send(JSON.stringify(r)))
-                        .catch(e => console.log(e)));
+                    if (err) console.error(err);
+                    else sentData(newBoard.members);
                 });  //Saving new board in DB
                 console.log(newBoard._id);
                 console.log(newBoard._id.toString());//Trying send new board to all her members (in developing);
-               // newBoard.members.forEach(m => getBoard(m._id).then(r => getBoardSockets[m._id.toString()].send(JSON.stringify(r))).catch(e => console.log(e)));
+               // newBoard.members.forEach(m => getBoard(m._id).then(r => boardListSockets[m._id.toString()].send(JSON.stringify(r))).catch(e => console.log(e)));
          }
 
     });
 
     ws.on('close', function() {
-        //TODO: remove ws
-        delete getBoardSockets[req.user._id];
+        //remove ws
+        delete boardListSockets[req.user._id];
     });
 }
 
+const boardSockets = {};//All sockets for detailed board page
+
 function getDetailedBoard(ws, req) {
     const id = req.params.id;  //"5eafafc5d07fde1f84b44873";
-    //TODO: save the sockets
+    //save the sockets
+    if(boardSockets[id])
+        //Due to each user has multiple boards we have to store for each board id own dictionary similar to boardListSockets
+        boardSockets[id][req.user._id.toString()] = ws;
+    else
+        boardSockets[id] = {[req.user._id.toString()]: ws};
     console.log(id);
     //console.log(req.user._id.toString());
     getBoard(id, {$match: { _id: mongoose.Types.ObjectId(id) }})
@@ -139,7 +154,7 @@ function getDetailedBoard(ws, req) {
         //TODO: remove ws
     });
 }
-
+/*
 // eslint-disable-next-line no-unused-vars
 function editBoard(ws, req) {
     //TODO: save the socket
@@ -149,6 +164,6 @@ function editBoard(ws, req) {
         //TODO: Add message editing of board
     });
 }
+*/
 
-
-module.exports = { getBoards, getDetailedBoard, editBoard };
+module.exports = { getBoards, getDetailedBoard };

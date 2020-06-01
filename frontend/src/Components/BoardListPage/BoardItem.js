@@ -13,7 +13,8 @@ class BoardItem extends React.Component {
     delete = event => {
         event.stopPropagation();
         //TODO: Make deletion
-        alert("deletion")
+        //alert("deletion")
+        this.props.delete(this.props.id)
     };
     click = event => {
         //event.preventDefault();
@@ -28,6 +29,7 @@ class BoardItem extends React.Component {
                     <Field description='Title'>{this.props.name}</Field>
                 </h2>
                 <b>Creator</b> {this.props.creator.login} ({this.props.creator.email})
+                <br/>
                 <Field description='Description'>{this.props.description}</Field>
 
                 <details onClick={this.click}>

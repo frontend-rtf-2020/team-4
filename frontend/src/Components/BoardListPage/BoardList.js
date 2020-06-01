@@ -40,6 +40,9 @@ class BoardList extends React.Component {
         this.ws.send(data);
     };
 
+    deleteBoard = id =>
+        this.ws.send(`{"_id": "${id}"}`);
+
     render() {
         console.log(this.state);
         return (
@@ -49,7 +52,7 @@ class BoardList extends React.Component {
                     this.state.boards ?
                     <div className='boardList'>
                         {this.state.boards.map(b=>
-                            <BoardItem key={b._id} description={b.description} id={b._id}
+                            <BoardItem key={b._id} description={b.description} id={b._id} delete={this.deleteBoard}
                                                              name={b.name} members={b.members} endDate={b.endDate}
                                                              addingDate={b.addingDate} creator={b.creator}/>)}
                         <AddBoard addBoard={this.addBoard}/>
