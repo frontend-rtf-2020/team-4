@@ -35,8 +35,13 @@ function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}})
 
 
 function sentData(members) {
+    console.log(boardListSockets);
     members.forEach(m => getBoard(m._id)
-        .then(r => boardListSockets[m._id.toString()].send(JSON.stringify(r)))
+        .then(r => {
+            const id = m._id.toString();
+            if(boardListSockets.hasOwnProperty(id))
+                boardListSockets[id].send(JSON.stringify(r));
+        })
         .catch(e => console.log(e)));
 }
 
@@ -45,7 +50,7 @@ function getBoards(ws, req) {
     //save the socket
     boardListSockets[req.user._id.toString()] = ws;
 
-    console.log('user: ' + req.user);
+    console.log(boardListSockets);
     const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
 
 
@@ -59,33 +64,38 @@ function getBoards(ws, req) {
         console.log(msg);
         const board = JSON.parse(msg);
          if (board._id) { // Checking, does it new or changed board?
-              //TODO: //If '_id' exist, therefore it is a changed board
+              //If '_id' exist, therefore it is a changed board
              if(Object.keys(board).length === 1)//deletion
-                 Board.findByIdAndRemove(board._id,{useFindAndModify: false}, (err, board) =>
-                 sentData(board.members) );
-
-         } else {   //If '_id' does not exist, therefore it is a new board
-                const newBoard = new Board(); //Adding new board in DB
-                newBoard.creatorId = req.user._id;
-                console.log(req.user._id);
-                newBoard.name = board.name;
-                console.log(board.name);
-                newBoard.description = board.description;
-                console.log(board.description);
-                newBoard.members[0] = req.user._id;
-                newBoard.save(function (err, newBoard) {
-                    if (err) console.error(err);
-                    else sentData(newBoard.members);
-                });  //Saving new board in DB
-                console.log(newBoard._id);
-                console.log(newBoard._id.toString());//Trying send new board to all her members (in developing);
+                 Board.findByIdAndRemove(board._id,{useFindAndModify: false},
+                     (err, board) => sentData(board.members) );
+             else//editing
+                 Board.findByIdAndUpdate(board._id, board.update, {useFindAndModify: false, new: true},
+                     (err, board) => {
+                     console.log(board);
+                     sentData(board.members)});
+         }
+         else {   //If '_id' does not exist, therefore it is a new board
+             const newBoard = new Board(); //Adding new board in DB
+             newBoard.creatorId = req.user._id;
+             console.log(req.user._id);
+             newBoard.name = board.name;
+             console.log(board.name);
+             newBoard.description = board.description;
+             console.log(board.description);
+             newBoard.members[0] = req.user._id;
+             newBoard.save(function (err, newBoard) {
+                 if (err) console.error(err);
+                 else sentData(newBoard.members);
+             });  //Saving new board in DB
+             console.log(newBoard._id);
+             console.log(newBoard._id.toString());//Trying send new board to all her members (in developing);
                // newBoard.members.forEach(m => getBoard(m._id).then(r => boardListSockets[m._id.toString()].send(JSON.stringify(r))).catch(e => console.log(e)));
          }
-
     });
 
     ws.on('close', function() {
         //remove ws
+        console.log('close')
         delete boardListSockets[req.user._id];
     });
 }
