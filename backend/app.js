@@ -3,7 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-const initialise = require('./passport/init');
+const passportinitialise = require('./passport/init');
 const passport = require('passport');
 const flash = require('connect-flash'),
     bodyParser = require('body-parser');
@@ -18,7 +18,7 @@ mongoose.connect(process.env.DB_CONNECTION_URL, {useNewUrlParser: true});
     //.then(r => console.log(r.models.User));
 
 
-initialise(passport);
+passportinitialise(passport);
 
 app.use(logger('dev'));
 /** For passport correct work */

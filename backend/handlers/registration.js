@@ -2,29 +2,29 @@ const crypto = require('bcrypt');
 const emailCheck = require('email-check');
 const User = require('../model/User');
 const sendEmail = require("./sendActivatorMail");
+const { v5: uuidv5} = require('uuid');
+
 const size = 10;
+const day = 24*60*60*1000;
+//import { v5 as uuidv5, v4 as uuidv4 } from 'uuid';
+const namespase = "232db7a9-94ae-5a90-80e1-93ccee46fcde";
 
 function activate (req, resp) {
     // eslint-disable-next-line no-unused-vars
-    /*User.findOneAndUpdate({activatorId: req.query.activate}, { active: true }, (err, user) => {
-        resp.send(err || "Successful activate");
-    }); */
-    User.findOne({activatorId: decodeURI(req.query.activate)}, (e, u) => {
-        if(e)
+    User.findOne({activatorId: decodeURI(req.query.activate)}, (err, user) => {
+        if(err)
         {
-            console.log(e);
-            resp.send(e);
+            console.log(err);
+            resp.send(err);
         }
-        else if (!u)
+        else if (!user)
             resp.redirect('/activation?error=' +  encodeURI('Such user has not been found/'));
-        else if(Math.abs(u.registrationData.valueOf() - Date.now().valueOf()) > 24*60*60*1000)
-            //resp.send({error: "Activator link expired"});
+        else if(Math.abs(user.registrationData.valueOf() - Date.now().valueOf()) > day)
             resp.redirect(`/activation?error=${encodeURI('The link has expired. Please press reactivate button to obtain new link.')}&activate=` + req.query.activate);
         else
             // eslint-disable-next-line no-unused-vars
             User.findOneAndUpdate({activatorId: req.query.activate}, { active: true }, (err, user) => {
                 resp.redirect(err ? '/activation?error=' + encodeURI(err) : '/activation?result=' + encodeURI('Successful activation'))
-                //resp.send(err || "Successful activate");
             });
     });
 
@@ -32,16 +32,16 @@ function activate (req, resp) {
 
 function reactivate (req, resp) {
     console.log('reactivate' + req.query.activate);
-    User.findOne({activatorId: decodeURI(req.query.activate)}, (err, u) => {
-        if(!u)
+    User.findOne({activatorId: decodeURI(req.query.activate)}, (err, user) => {
+        if(!user)
         {
             resp.redirect('/activation?error=' + encodeURI('Such user has not been found/'));
             return;
         }
-        console.log(u.login);
-        const activator = generateActivatorId(u.login);
-        User.findByIdAndUpdate(u.id, {activatorId: activator, registrationData: Date.now()}, (err, u) => {
-            sendEmail(u.email, activator)
+        console.log(user.login);
+        const activator = generateActivatorId(user.login);
+        User.findByIdAndUpdate(user.id, {activatorId: activator, registrationData: Date.now()}, (err, user) => {
+            sendEmail(user.email, activator)
                 .then(i => {
                     console.log("sent");
                     console.log(i);
@@ -52,11 +52,12 @@ function reactivate (req, resp) {
     })
 }
 
-function generateActivatorId (login) {//TODO: Rewrite?
-    let res = login;
+function generateActivatorId (login) {
+    /*let res = login;
     for (let i = 0; i < 15; i++)
         res += String.fromCodePoint(Math.round(48 + Math.random() * 74));
-    return res;
+    return res;*/
+    return uuidv5(login, namespase);
 }
 
 async function RegistrationHandler(req, res)
@@ -70,7 +71,7 @@ async function RegistrationHandler(req, res)
         return;
     }
     const password = req.body.password;
-    User.findOne({'email' : email}, (err, user) => {
+    User.findOne({email}, (err, user) => {
         if(!user)
         {
             User.findOne({ 'login' : username}, (err, user) => {
@@ -81,12 +82,11 @@ async function RegistrationHandler(req, res)
                     newUser.login = username;
                     newUser.activatorId = generateActivatorId(username);
                     // eslint-disable-next-line no-unused-vars
-                    newUser.save(event => {
-                        //console.log(event);
+                    newUser.save( () => {
                         sendEmail(newUser.email, newUser.activatorId)
                             .then(i => {
                                 console.log(i);
-                                res.json({result: "OK"});
+                                res.status(200);
                             })
                             .catch(i =>
                             {
