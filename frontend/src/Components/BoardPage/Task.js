@@ -38,6 +38,7 @@ class Task extends React.Component {
 
     delete = event => {
         //TODO: Make deletion
+        this.props.onDelete(this.props.id);
         alert("deletion")
     };
 

@@ -1,9 +1,10 @@
 import React from "react";
 import Column from "./Column";
 import getWSURL from "../getWSURL";
-import {LoadingWheel} from "../LoadingWheel";
+import { LoadingWheel } from "../LoadingWheel";
 import AddColumn from "./AddColumn";
-import $ from 'jquery';
+import { Members } from "./Members";
+import Member from "./Member";
 //import SlimSelect from 'slim-select';
 
 //import { useParams } from "react-router-dom";
@@ -43,6 +44,7 @@ class Board extends React.Component {
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
             console.log(data);
+            console.log(data.columns);
             if(data.error)
                 alert(data.error);
             else {
@@ -102,6 +104,13 @@ class Board extends React.Component {
         this.setState({/*board: this.state.board,*/ columns: columns});
     };
 
+    deleteTask = id => {
+        console.log(id);
+        this.ws.send(JSON.stringify({
+            _id: id,
+            collection: 'Task'
+        }))
+    };
 
     render() {
         //const { id } = useParams();
@@ -129,9 +138,9 @@ class Board extends React.Component {
                         {
                             this.state.columns ? (
                                     <>
-                                        {this.state.columns.map(c=>
+                                        {this.state.columns.map(c =>
                                             <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns}
-                                                    moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
+                                                    moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}/>)}
                                         <AddColumn/>
                                     </>) :
                                 <LoadingWheel/>
@@ -140,56 +149,6 @@ class Board extends React.Component {
                 </div>
             </>
         );
-    }
-}
-
-const Member = props => (<div className='member'>
-    {props.children}
-    {props.onDelete ?
-        <span className='arrow' style={{fontSize: "0.8em"}} onClick={props.onDelete}>&#10006;</span>
-        : ""}
-</div>);
-
-class Members extends React.Component {
-    show = () => {
-        $('#members-cont').fadeIn(400);
-    };
-    hide =() => {
-        $('#members-cont').fadeOut(400);
-    };
-    render() {
-        return (
-            <header id='memsHeader'>
-                <h4>{this.props.board.name}
-                    <button className='arrow' id='showMems' onClick={this.show}>v</button>
-                </h4>
-                <div id='members-cont' className='members-cont'>
-                    <b>Creator:</b>
-                    <Member>{this.props.board.creator.login}</Member>
-                    <b>Participants:</b>
-                    <div className='members'>
-                        {this.props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
-                        <AddMember/>
-                    </div>
-                    <button className='link-button' id='hideMems' onClick={this.hide}>&#8679;</button>
-                </div>
-                <a className='link-button back' href='/list'>&lt;</a>
-            </header>
-        );
-    }
-}
-
-class AddMember extends React.Component {
-    add() {
-        const identifier = prompt("Enter user id/login/email");
-        alert(identifier)
-        //TODO: send adding
-    }
-
-    render() {
-        return (<div className='member add-member' onClick={this.add}>
-            +
-        </div>);
     }
 }
 

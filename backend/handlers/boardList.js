@@ -1,21 +1,9 @@
+const sendBoardData = require("./sendBoardData");
 
 const Board = require('../model/Board');
 const getBoard = require('./getBoard');
 const boardListSockets = {}; // It is all sockets for getBoard
 
-
-
-function sendBoard(members) {
-    //console.log(boardListSockets);
-    members.forEach(m => getBoard(m._id)
-        .then(r => {
-            const id = m._id.toString();
-            // eslint-disable-next-line no-prototype-builtins
-            if(boardListSockets.hasOwnProperty(id))
-                boardListSockets[id].send(JSON.stringify(r));
-        })
-        .catch(e => console.log(e)));
-}
 
 function boardListWSHandler(ws, req) {
     //save the socket
@@ -49,11 +37,11 @@ function replyBoardListMessage(msg, userId) {
             Board.findByIdAndUpdate(board._id , board.update , {useFindAndModify: false , new: true} ,
                 (err , board) => {
                     console.log(board);
-                    sendBoard(board.members)
+                    sendBoardData(board.members, boardListSockets)
                 });
         else//deletion
             Board.findByIdAndRemove(board._id , {useFindAndModify: false} ,
-                (err , board) => sendBoard(board.members));
+                (err , board) => sendBoardData(board.members, boardListSockets));
     }
     else {   //If '_id' does not exist, therefore it is a new board
         const newBoard = new Board(); //Adding new board in DB
@@ -66,7 +54,7 @@ function replyBoardListMessage(msg, userId) {
         newBoard.members[0] = userId;
         newBoard.save(function (err, newBoard) {
             if (err) console.error(err);
-            else sendBoard(newBoard.members);
+            else sendBoardData(newBoard.members);
         });  //Saving new board in DB
         //console.log(newBoard._id.toString());//Trying send new board to all her members (in developing);
         // newBoard.members.forEach(m => getBoard(m._id).then(r => boardListSockets[m._id.toString()].send(JSON.stringify(r))).catch(e => console.log(e)));
