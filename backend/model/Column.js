@@ -22,11 +22,11 @@ const Column = mongoose.model('Column', new Schema({
     orderNumber: {
         type: Number
     },
-    name : {
+    name: {
         type : String,
         required : true
     },
-    board : {
+    board: {
         type : Schema.Types.ObjectId,
         required : true,
         ref: 'Board'

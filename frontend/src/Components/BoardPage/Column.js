@@ -11,13 +11,14 @@ class Column extends React.Component {
     moveRight = event => {
         this.props.moveRight(this.props.column._id);
     };
-    addTask = () => {
+    addTask = (name, workerId, description, date) => {
         //TODO:implement sending to server new task
-    };
+        this.props.addTask(name, workerId, description, date, this.props.column._id);
+    };/*
     constructor() {
         super();
-        this.state = { name: "Title", addingDate: "", endDate: "", tasks: [ {name: "sdcvsds" } ], editing: false};
-    }
+        this.state = { name: "Title", tasks: [ {name: "sdcvsds" } ], editing: false};
+    }*/
 
     delete = event => {
         //TODO: Make deletion

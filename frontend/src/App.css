@@ -76,6 +76,7 @@ footer {
 .arrow {
   font-weight: bold;
   font-size: 1.25em;
+  transition: color 0.4s;
   color: rgba(110,110,110, 0.7);
 }
 

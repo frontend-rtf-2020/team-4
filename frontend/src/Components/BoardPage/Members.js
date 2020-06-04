@@ -14,7 +14,7 @@ export class Members extends React.Component {
         return (
             <header id='memsHeader'>
                 <h4>{this.props.board.name}
-                    <button className='arrow' id='showMems' onClick={this.show}>v</button>
+                    <span className='arrow' id='showMems' onClick={this.show}>v</span>
                 </h4>
                 <div id='members-cont' className='members-cont'>
                     <b>Creator:</b>
@@ -24,7 +24,9 @@ export class Members extends React.Component {
                         {this.props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
                         <AddMember/>
                     </div>
-                    <button className='link-button' id='hideMems' onClick={this.hide}>&#8679;</button>
+                    <div align='center'>
+                        <span className='arrow' id='hideMems' onClick={this.hide}>^</span>
+                    </div>
                 </div>
                 <a className='link-button back' href='/list'>&lt;</a>
             </header>

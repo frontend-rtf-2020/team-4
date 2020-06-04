@@ -83,24 +83,28 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
                 .findByIdAndRemove(data._id , {useFindAndModify: false} , (err, obj) => {
                     //TODO: send data
                     sendData(boardId, userId)
-                })
+                })//TODO: catch error
         }
     }
     else {
         //TODO: creation
+        const entity = new mongoose.connection.models[data.collection]();
+
+        for (const f in data.object)
+            entity[f] = f.endsWith('Id') ?
+                new mongoose.Types.ObjectId(data.object[f]) :
+                data.object[f];
+        entity[data.parent.collection.toLowerCase()] = new mongoose.Types.ObjectId(data.parent.id);
+        entity.save()
+            .then(e => mongoose.connection.models[data.parent.collection]
+                    .findByIdAndUpdate(data.parent.id, {$push: { [data.parent.field]: e._id} },
+                        {useFindAndModify: false}, (err, obj) => sendData(boardId, userId)));//TODO: catch error
     }
 }
 
 function sendData(boardId) {
     Board.findById(boardId, (err, board) =>
-        /*boardSockets[boardId]
-        board.members.forEach(m =>
-            getBoard(boardId)
-                .then(data => {
-
-                }));*/
-        sendBoardData(board.members, boardSockets[boardId], getDetailedBoard.bind(null, boardId))
-    )
+        sendBoardData(board.members, boardSockets[boardId], getDetailedBoard.bind(null, boardId)))
 }
 
 module.exports = detailedBoardWSHandler;

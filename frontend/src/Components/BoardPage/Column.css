@@ -146,8 +146,8 @@ header h4 {
     }
 
     #showMems, #hideMems {
-        display: inline;/*
-        font-size: 0.9em;*/
+        display: inline;
+        font-size: 26px;
     }
 
     #showMems:focus {
@@ -161,7 +161,7 @@ header h4 {
     }
 
     .columns {
-        overflow: scroll;
+        overflow-x: scroll;
         width: 100vw;
         justify-content: normal;
     }

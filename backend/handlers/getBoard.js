@@ -24,7 +24,7 @@ function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}})
             }
         },
         //{$unwind: "$members"},
-        {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
+        {$project:{ "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
 
     ])
         //.then(r => JSON.stringify(r));
