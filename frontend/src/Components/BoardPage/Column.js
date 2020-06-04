@@ -20,10 +20,8 @@ class Column extends React.Component {
         this.state = { name: "Title", tasks: [ {name: "sdcvsds" } ], editing: false};
     }*/
 
-    delete = event => {
-        //TODO: Make deletion
-        alert("deletion")
-    };
+    delete = event =>
+        this.props.delete(this.props.column._id);
 
     edit = event => {
 
@@ -41,7 +39,8 @@ class Column extends React.Component {
                     <span className='arrow' onClick={this.delete}>&#10006;</span>
                     <span onClick={this.moveRight} className='arrow' style={{float: "right"}}>&gt;</span>
                     <h3><Field>{this.props.column.name}</Field></h3>
-                    {this.props.column.tasks.filter(this.props.filter).map(b =>
+                    {this.props.column.tasks.filter(this.props.filter)
+                        .filter(t => Object.keys(t).length !== 0).map(b =>
                         <Task columns={this.props.columns} members={this.props.members} onDelete={this.props.deleteTask} key={b._id} id={b._id} task={b} />)}
                     <AddTask onSubmit={this.addTask} members={this.props.members}/>
                 </div>

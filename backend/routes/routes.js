@@ -49,8 +49,8 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
 
 router.get('/agr_col', (req, res) => {
     const id = "5eafafc5d07fde1f84b44873";
-    Column.aggregate([
-        {$match: { board: mongoose.Types.ObjectId(id)}},
+    /*Column.aggregate([
+        {$match: { boardId: mongoose.Types.ObjectId(id)}},
         //{$unwind: "$tasks"},
         {
             $lookup:{
@@ -75,7 +75,10 @@ router.get('/agr_col', (req, res) => {
                 addingDate: {$first: "$addingDate"}, endDate: {$first: "$endDate"}, board: {$first: "$board"}, tasks: { $addToSet: "$tasks" }
             }
         }
-    ]).then(columns => {
+    ])*/
+    Column.find({ boardId: mongoose.Types.ObjectId(id)})
+       // .populate()
+        .run((er, columns) => {
         Board.findById(id)
             .then(b => res.json({
                 board: b,

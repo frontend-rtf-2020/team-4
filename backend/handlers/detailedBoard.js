@@ -14,7 +14,7 @@ function getDetailedBoard(boardId, userId) {
             if(b[0].creator._id.toString() !== userId.toString() && b[0].members.find(m => m._id === userId) === -1)
                 return {"error": "Wrong boardId"};
             const columns = await Column.aggregate([
-                {$match: {board: mongoose.Types.ObjectId(boardId)}},
+                {$match: {boardId: mongoose.Types.ObjectId(boardId)}},
                 //{$unwind: "$tasks"},
                 {
                     $lookup:{
@@ -24,7 +24,10 @@ function getDetailedBoard(boardId, userId) {
                         as: 'tasks'
                     }
                 },
-                {$unwind: "$tasks"},
+                {$unwind: {
+                        path: "$tasks",
+                        preserveNullAndEmptyArrays: true
+                    }},
                 {
                     $lookup:{
                         from: 'users',
@@ -33,7 +36,8 @@ function getDetailedBoard(boardId, userId) {
                         as: 'tasks.worker'
                     }
                 },
-                {$unwind: "$tasks.worker"},
+                {$unwind: { path: "$tasks.worker",
+                        preserveNullAndEmptyArrays: true}},
                 {$project:{"tasks.worker.login": 1, "tasks.name": 1, "tasks.endDate": 1, "tasks.done": 1,
                         "orderNumber": 1, "_id": 1, "name": 1, "tasks.description": 1, "tasks._id": 1}},
                 {$group: {
@@ -94,11 +98,13 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
             entity[f] = f.endsWith('Id') ?
                 new mongoose.Types.ObjectId(data.object[f]) :
                 data.object[f];
-        entity[data.parent.collection.toLowerCase()] = new mongoose.Types.ObjectId(data.parent.id);
+        if(data.parent)
+            entity[data.parent.collection.toLowerCase()] = new mongoose.Types.ObjectId(data.parent.id);
         entity.save()
-            .then(e => mongoose.connection.models[data.parent.collection]
+            .then(e => data.parent ? mongoose.connection.models[data.parent.collection]
                     .findByIdAndUpdate(data.parent.id, {$push: { [data.parent.field]: e._id} },
-                        {useFindAndModify: false}, (err, obj) => sendData(boardId, userId)));//TODO: catch error
+                        {useFindAndModify: false}, (err, obj) => sendData(boardId)) : sendData(boardId))
+            .catch(e => console.log(e));//TODO: catch error
     }
 }
 

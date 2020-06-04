@@ -92,13 +92,14 @@ class Board extends React.Component {
         this.setState({ columns: columns});
     };
 
-    deleteTask = id => {
-        console.log(id);
-        this.ws.send(JSON.stringify({
-            _id: id,
-            collection: 'Task'
-        }))
-    };
+    delete = (id, col) => this.ws.send(JSON.stringify({
+        _id: id,
+        collection: col
+    }));
+
+    deleteTask = id => this.delete(id, 'Task');
+
+    deleteColumn = id => this.delete(id, 'Column');
 
     addTask = (name, workerId, description, date, columnId) => {
         this.ws.send(JSON.stringify({
@@ -113,6 +114,19 @@ class Board extends React.Component {
                 id: columnId,
                 collection: 'Column',
                 field: 'tasks'
+            }
+        }))
+    };
+
+    addColumn = name => {
+        console.log(this.state.board._id);
+        console.log(name)
+        this.ws.send(JSON.stringify({
+            collection: 'Column',
+            object: {
+                name: name,
+                boardId: this.state.board._id,
+                orderNumber: this.state.columns.length
             }
         }))
     };
@@ -141,11 +155,14 @@ class Board extends React.Component {
                             this.state.columns ? (
                                     <>
                                         {this.state.columns.map(c =>
-                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns} addTask={this.addTask}
+                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns}
+                                                    addTask={this.addTask} delete={this.deleteColumn}
                                                     moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}/>)}
-                                        <AddColumn/>
+                                        <AddColumn addColumn={this.addColumn}/>
                                     </>) :
-                                <LoadingWheel/>
+                                (<div className='centered'>
+                                    <LoadingWheel/>
+                                </div>)
                         }
                     </div>
                 </div>

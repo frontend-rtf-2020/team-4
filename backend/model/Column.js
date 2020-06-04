@@ -26,7 +26,7 @@ const Column = mongoose.model('Column', new Schema({
         type : String,
         required : true
     },
-    board: {
+    boardId: {
         type : Schema.Types.ObjectId,
         required : true,
         ref: 'Board'

@@ -35,7 +35,7 @@ export default class AddTask extends React.Component {
             <br/>
             <b>Do before:</b>
             <br/>
-            <input name='date' type='date' />
+            <input value="2020-06-01" name='date' type='date' />
             <br/>
             <button onClick={this.onSubmit}>Submit</button>
             <button onClick={this.cancel}>Cancel</button>
