@@ -6,10 +6,7 @@ class Task extends React.Component {
     constructor() {
         super();
         this.state = {editing: false};
-
-    }
-
-    componentDidMount() {
+        this.formRef = React.createRef();
     }
 
     sendDone = event => {
@@ -26,9 +23,18 @@ class Task extends React.Component {
         else return 'Task';
     };
 
-    edit = () => {
-        this.setState({/*...this.state, */editing: true});
+    init = () => {
+        const inputs = this.formRef.current.getElementsByTagName('input');
+        inputs[0].value = this.props.task.name;
+        inputs[1].value = this.props.task.description;
+        inputs[2].value = this.props.task.endDate;
+        const selects = this.formRef.current.getElementsByTagName('select');
+        selects[0].selectedOptions[0].value = this.props.task.workerId._id;
+        selects[1].selectedOptions[0].value = this.props.columnId;
     };
+
+    edit = () =>
+        this.setState({/*...this.state, */editing: true}, this.init);
 
     cancel = event => {
         event.preventDefault();
@@ -39,30 +45,39 @@ class Task extends React.Component {
     delete = event =>
         this.props.onDelete(this.props.id);
 
-    onSubmit = event => {
+    onSubmit = e => {
         alert("send!");
-        //To obtain selected column id use: columnSelect.selectedOptions[0].id
+        const inputs = e.target.parentElement.getElementsByTagName('input');
+        const name = inputs[0].value;
+        const description = inputs[1].value;
+        const date = inputs[2].value;
+        const selects = e.target.parentElement.getElementsByTagName('select');
+        const worker = selects[0].selectedOptions[0].value;
+        const column = selects[1].selectedOptions[0].value;
+        this.props.onEdit(this.props.task._id, name, worker, description, date, column);
+        this.cancel(e);
+        //To obtain selected column id use: columnSelect.selectedOptions[0].value
     };
 
     render() {
         const date = new Date(this.props.task.endDate);
         return (
-            <div className={this.getClass()}>
+            <div className={this.getClass()} ref={this.formRef}>
                 {this.state.editing ?
                     <>
                         <h4>Edit task</h4>
-                        <input placeholder='Name' value={this.props.task.name}/>
-                        <select value={this.props.task.workerId.login}>
-                            {this.props.members.map(m => <option key={m.login}>{m.login}</option>)}
+                        <input placeholder='Name'/>
+                        <select>
+                            {this.props.members.map(m => <option value={m._id} key={m.login}>{m.login}</option>)}
                         </select>
-                        <input placeholder='Description' value={this.props.task.description}/>
+                        <input placeholder='Description'/>
                         <br/>
                         <b>Do before:</b>
                         <br/>
                         <input type='date'/>
                         <br/>
-                        <select id='columnSelect'>
-                            {this.props.columns.map(m => <option id={m._id} key={m._id}>{m.name}</option>)}
+                        <select>
+                            {this.props.columns.map(m => <option value={m._id} key={m._id}>{m.name}</option>)}
                         </select>
                         <br/>
                         <button onClick={this.onSubmit}>Submit</button>

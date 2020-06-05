@@ -8,8 +8,6 @@ const sendBoardData = require("./sendBoardData");
 const boardSockets = {};//All sockets for detailed board page
 
 function getDetailedBoard(boardId, userId) {
-
-
     return getBoard(boardId, { _id: mongoose.Types.ObjectId(boardId) })
         .then(async b => {
             console.log(b);
@@ -18,40 +16,8 @@ function getDetailedBoard(boardId, userId) {
             const columns = await Column.find({ boardId: mongoose.Types.ObjectId(boardId)})//TODO: Add select/project
                     .populate('tasks', 'name _id workerId description done endDate')
                     .exec(/*(er, c) => Column.populate(c, {path: 'tasks.workerId', select: "login -_id"})*/)
-                    .then(c => Column.populate(c, {path: 'tasks.workerId', select: "login -_id"}))
+                    .then(c => Column.populate(c, {path: 'tasks.workerId', select: "login"}))
                     .catch(e => console.log(e));
-            /* await Column.aggregate([
-                {$match: {boardId: mongoose.Types.ObjectId(boardId)}},
-                //{$unwind: "$tasks"},
-                {
-                    $lookup:{
-                        from: 'tasks',
-                        localField: 'tasks',//
-                        foreignField: '_id',
-                        as: 'tasks'
-                    }
-                },
-                {$unwind: {
-                        path: "$tasks",
-                        preserveNullAndEmptyArrays: true
-                    }},
-                {
-                    $lookup:{
-                        from: 'users',
-                        localField: 'tasks.workerId',
-                        foreignField: '_id',
-                        as: 'tasks.worker'
-                    }
-                },
-                {$unwind: { path: "$tasks.worker",
-                        preserveNullAndEmptyArrays: true}},
-                {$project:{"tasks.worker.login": 1, "tasks.name": 1, "tasks.endDate": 1, "tasks.done": 1,
-                        "orderNumber": 1, "_id": 1, "name": 1, "tasks.description": 1, "tasks._id": 1}},
-                {$group: {
-                        _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"}, orderNumber: {$first: "$orderNumber"}, tasks: { $addToSet: "$tasks" }
-                    }
-                }
-            ]);*/
             return {board: b[0], columns: columns};
         })
 }
@@ -89,6 +55,8 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
 
             mongoose.connection.models[data.collection].
                 findByIdAndUpdate(data._id, data.object, {useFindAndModify: false}, (err, obj) => {
+                if(err)
+                    console.log(err);
                 sendData(boardId, userId)
             })//TODO: catch error)
         }
