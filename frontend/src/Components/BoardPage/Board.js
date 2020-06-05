@@ -70,11 +70,19 @@ class Board extends React.Component {
         const c = columns[ind].orderNumber;
         columns[ind].orderNumber = columns[ind - 1].orderNumber;
         columns[ind - 1].orderNumber = c;
-        const queryData = {[columns[ind]._id]: columns[ind].orderNumber,
-            [columns[ind - 1]._id]: columns[ind - 1].orderNumber};
-        //TODO: Send queryData
+        /**const queryData = [{
+            _id:columns[ind]._id,
 
-        alert(JSON.stringify(queryData));
+        }];
+            {[columns[ind]._id]: columns[ind].orderNumber,
+            [columns[ind - 1]._id]: columns[ind - 1].orderNumber};*/
+        //TODO: Send queryData
+        this.ws.send(JSON.stringify([
+            this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
+            this.getColumnChangingObject(columns[ind - 1]._id, "orderNumber", columns[ind - 1].orderNumber),
+        ]));
+
+        //alert(JSON.stringify(queryData));
         columns.sort((a, b) => a.orderNumber - b.orderNumber);
         this.setState({ columns: columns});
     };
@@ -85,12 +93,18 @@ class Board extends React.Component {
         const columns = [...this.state.columns];
         const c = columns[ind].orderNumber;
         columns[ind].orderNumber = columns[ind + 1].orderNumber;
-        columns[ind + 1].orderNumber = c;
+        columns[ind + 1].orderNumber = c;/*
         const queryData = {[columns[ind]._id]: columns[ind].orderNumber,
             [columns[ind + 1]._id]: columns[ind + 1].orderNumber};
         //TODO: Send queryData
 
-        alert(JSON.stringify(queryData));
+        alert(JSON.stringify(queryData));*/
+        const data = JSON.stringify([
+            this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
+            this.getColumnChangingObject(columns[ind + 1]._id, "orderNumber", columns[ind + 1].orderNumber),
+        ]);
+        console.log(data);
+        this.ws.send(data);
         columns.sort((a, b) => a.orderNumber - b.orderNumber);
         this.setState({ columns: columns});
     };
@@ -114,7 +128,7 @@ class Board extends React.Component {
     });
 
     addTask = (name, workerId, description, date, columnId) => {
-        console.log(date.toString())
+        console.log(date.toString());
         this.ws.send(JSON.stringify({
             collection: 'Task',
             object: {
@@ -144,15 +158,16 @@ class Board extends React.Component {
         }))
     };
 
-    changeColumn = (id, fieldName, value) => {
-        this.ws.send(JSON.stringify({
-            _id: id,
-            object: {
-                [fieldName]: value,
-            },
-            collection: 'Column',
-        }))
-    };
+    getColumnChangingObject = (id, fieldName, value) => ({
+        _id: id,
+        object: {
+            [fieldName]: value,
+        },
+        collection: 'Column',
+    });
+
+    changeColumn = (id, fieldName, value) =>
+        this.ws.send(JSON.stringify(this.getColumnChangingObject(id, fieldName, value)));
 
     changeTask = (oldId, id, name, workerId, description, date, columnId) => {
         console.log(date.toString())
