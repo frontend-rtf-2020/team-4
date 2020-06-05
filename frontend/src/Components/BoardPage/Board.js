@@ -116,7 +116,7 @@ class Board extends React.Component {
                 name: name,
                 workerId: workerId,
                 description: description,
-                date: date
+                endDate: date
             },
             parent: {
                 id: columnId,

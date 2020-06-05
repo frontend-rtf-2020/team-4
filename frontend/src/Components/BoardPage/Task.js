@@ -36,11 +36,8 @@ class Task extends React.Component {
         this.setState({/*...this.state, */editing: false});
     };
 
-    delete = event => {
-        //TODO: Make deletion
+    delete = event =>
         this.props.onDelete(this.props.id);
-        alert("deletion")
-    };
 
     onSubmit = event => {
         alert("send!");

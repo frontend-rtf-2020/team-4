@@ -100,8 +100,12 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
                     if(err)
                         console.log(err);
                     data.parent ? mongoose.connection.models[data.parent.collection]
-                        .findByIdAndUpdate(data.parent.id, {$pullAll: { [data.parent.field]: obj._id} },
-                            (err, obj) => sendData(boardId)) : sendData(boardId)
+                        .findByIdAndUpdate(data.parent.id, {$pull: { [data.parent.field]: obj._id } },
+                            {useFindAndModify: false},(err, obj) => {
+                            if(err)
+                                console.log(err);
+                            sendData(boardId)
+                        }) : sendData(boardId)
                 })
         }
     }
@@ -118,7 +122,7 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
         entity.save()
             .then(e => data.parent ? mongoose.connection.models[data.parent.collection]
                     .findByIdAndUpdate(data.parent.id, {$addToSet: { [data.parent.field]: e._id} },
-                        (err, obj) => sendData(boardId)) : sendData(boardId))
+                        {useFindAndModify: false},(err, obj) => sendData(boardId)) : sendData(boardId))
             .then(r => console.log('YY'))
             .catch(e => console.log(e));//TODO: catch error
     }

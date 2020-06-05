@@ -6,6 +6,7 @@ export default class AddTask extends React.Component {
         this.state = { adding: false };
         //this.formRef = React.createRef();
     }
+
     onSubmit = e => {
         //alert(e.target.parentElement.getElementsByTagName('select')[0].value);
         const inputs = e.target.parentElement.getElementsByTagName('input');
@@ -17,13 +18,16 @@ export default class AddTask extends React.Component {
         this.props.onSubmit(name, worker, description, date);
         this.cancel(e);
     };
+
     add = () =>
         this.setState({ adding: true });
+
     cancel = event => {
         event.preventDefault();
         event.stopPropagation();
         this.setState({adding: false});
     };
+
     getAddingForm = () => (
         <>
             <h4>Add task</h4>
@@ -35,12 +39,13 @@ export default class AddTask extends React.Component {
             <br/>
             <b>Do before:</b>
             <br/>
-            <input value="2020-06-01" name='date' type='date' />
+            <input name='date' type='date' />
             <br/>
             <button onClick={this.onSubmit}>Submit</button>
             <button onClick={this.cancel}>Cancel</button>
         </>
     );
+
     render() {
         console.log(this.props.members);
         return <div className='Task my-add'  onClick={this.add}>
