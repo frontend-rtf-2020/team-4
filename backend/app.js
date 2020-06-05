@@ -13,7 +13,6 @@ const MongoStore = require('connect-mongo')(session);
 const staticLocation = require('./staticLocation');
 const app = express();
 
-
 mongoose.connect(process.env.DB_CONNECTION_URL, {useNewUrlParser: true});
     //.then(r => console.log(r.models.User));
 

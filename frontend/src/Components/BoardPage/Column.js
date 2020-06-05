@@ -11,10 +11,9 @@ class Column extends React.Component {
     moveRight = event => {
         this.props.moveRight(this.props.column._id);
     };
-    addTask = (name, workerId, description, date) => {
-        //TODO:implement sending to server new task
+    addTask = (name, workerId, description, date) =>
         this.props.addTask(name, workerId, description, date, this.props.column._id);
-    };/*
+    /*
     constructor() {
         super();
         this.state = { name: "Title", tasks: [ {name: "sdcvsds" } ], editing: false};
@@ -36,6 +35,7 @@ class Column extends React.Component {
                     <span onClick={this.moveLeft} className='arrow' style={{float: "left"}}>&lt;</span>
                     {/* <span className='arrow edit' onClick={this.edit}>&#10000;</span>*/}
                     <span className='arrow' onClick={this.delete}>&#10006;</span>
+                    {/** TODO: add button for correct moving corresponding to the task */}
                     <span onClick={this.moveRight} className='arrow' style={{float: "right"}}>&gt;</span>
                     <h3><Field name='name' onEdit={this.edit}>{this.props.column.name}</Field></h3>
                     {this.props.column.tasks.filter(this.props.filter)

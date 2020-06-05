@@ -1,4 +1,6 @@
 
+const User = require('../model/User');
+
 function getUserData(req, res) {
     res.send({login: req.user.login, email: req.user.email});
 }
@@ -34,4 +36,18 @@ function logout(req, res) {
     res.send({ result: 'Successful logout' });
 }
 
-module.exports = { getUserData, checkAuthenticated, checkNotAuthenticated, logout, checkWsAuthenticated };
+function findUser(req, resp) {
+    const identifier = decodeURI(req.query.identifier);
+    const conditions = [{login: identifier },//TODO: cast to ObjectId
+        {email: identifier }];
+    if(identifier.length === 12)
+        conditions.push({_id:  identifier});
+    console.log(identifier);
+
+    User.findOne({$or: conditions}, (err, user) =>
+        resp.json({error: (!user || !user._id) ? err || "Such user hasn't been found." : undefined, result: user ? user._id : undefined}));
+
+            /*err || user ? user._id : "Such user hasn't been found."*/
+}
+
+module.exports = { getUserData, checkAuthenticated, checkNotAuthenticated, logout, checkWsAuthenticated, findUser };

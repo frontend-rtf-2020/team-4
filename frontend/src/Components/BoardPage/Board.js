@@ -6,6 +6,11 @@ import AddColumn from "./AddColumn";
 import { Members } from "./Members";
 import Member from "./Member";
 
+/**
+ * TODO: Divide class into several parts, introducing all ws functions to another class!
+ *
+ */
+
 class Board extends React.Component {
     clearFilter = event => {
         this.setState({/*...this.state,*/ filter: t => true})
@@ -17,7 +22,8 @@ class Board extends React.Component {
 
         const members = this.state.filterMembers;
 
-        const filter = task => (task.description.includes(text) || task.name.includes(text)) && members.has(task.worker.login);
+        const filter = task => (task.description.includes(text) || task.name.includes(text))
+            &&  (members.size === 0 || members.has(task.workerId.login));
 
         this.setState({ filter: filter})
     };
@@ -58,7 +64,7 @@ class Board extends React.Component {
     }
 
     removeMemberFromFilter = m => {
-        const state = {...this.state};//TODO: maybe rewrite without ...state
+        const state = {...this.state};
         state.filterMembers.delete(m);
         this.setState(state)
     };
@@ -96,8 +102,6 @@ class Board extends React.Component {
         columns[ind + 1].orderNumber = c;/*
         const queryData = {[columns[ind]._id]: columns[ind].orderNumber,
             [columns[ind + 1]._id]: columns[ind + 1].orderNumber};
-        //TODO: Send queryData
-
         alert(JSON.stringify(queryData));*/
         const data = JSON.stringify([
             this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
@@ -199,8 +203,18 @@ class Board extends React.Component {
         }))
     };
 
-    addMember = identifier =>
-        this.ws.send(`{"newMember":"${identifier}"}`);
+    addMember = identifier => {
+        fetch('/api/checkUser?identifier=' + encodeURI(identifier))
+            .then(r => r.json())
+            .then(r => {
+                console.log(r)
+                if(r.error)
+                    alert(r.error);
+                else
+                    this.ws.send(`{"newMemberId":"${r.result}"}`);
+            })
+            .catch(console.log);
+    };
 
     render() {
         return (

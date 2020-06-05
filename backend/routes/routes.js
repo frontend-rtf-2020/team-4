@@ -10,7 +10,7 @@ const passport = require('passport');
 const Task = require('../model/Task');
 const Column = require('../model/Column');
 const Board = require('../model/Board');
-const { getUserData, checkAuthenticated, checkNotAuthenticated, logout } = require('../handlers/handlers');
+const { getUserData, checkAuthenticated, checkNotAuthenticated, logout, findUser } = require('../handlers/handlers');
 
 /** The following handlers have been made only for testing operations and will be removed in future */
 /** The following agr handlers illustrate how to use mongoose aggregation function */
@@ -82,6 +82,8 @@ router.get('/auth/error', function (req, res) {
 router.get('/auth/success', checkAuthenticated, function (req, res) {
     res.send({ result: "You have successfully authorized!" })
 });
+
+router.get('/checkUser', checkAuthenticated, findUser);
 
 module.exports = router;
 

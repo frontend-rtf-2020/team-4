@@ -3,12 +3,11 @@ import $ from "jquery";
 import Member from "./Member";
 
 export class Members extends React.Component {
-    show = () => {
+    show = () =>
         $('#members-cont').fadeIn(400);
-    };
-    hide = () => {
+
+    hide = () =>
         $('#members-cont').fadeOut(400);
-    };
 
     render() {
         return (
@@ -35,12 +34,10 @@ export class Members extends React.Component {
 }
 
 class AddMember extends React.Component {
-    add() {
+    add = () => {
         const identifier = prompt("Enter user id/login/email");
-        //alert(identifier)
         this.props.onAdd(identifier);
-        //TODO: send adding
-    }
+    };
 
     render() {
         return (<div className='member add-member' onClick={this.add}>

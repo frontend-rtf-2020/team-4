@@ -58,7 +58,7 @@ function addNewObject(data , boardId) {
     entity.save()
         .then(e => data.parent ? mongoose.connection.models[data.parent.collection]
             .findByIdAndUpdate(data.parent.id , {$addToSet: {[data.parent.field]: e._id}} ,
-                {useFindAndModify: false} , (err , obj) => sendData(boardId)) : sendData(boardId))
+                {useFindAndModify: false}, standardResend.bind(null, boardId)) : sendData(boardId))
         .then(r => console.log('Creation'))
         .catch(e => console.log(e));
 }
@@ -71,47 +71,52 @@ function deleteObject(data , boardId) {
             console.log(obj[data.children.field]);
             if (data.children)
                 mongoose.connection.models[data.children.collection]
-                    .deleteMany({_id: {$in: obj[data.children.field]}} , {} , (err , obj) => console.log(err || ''));
+                    .deleteMany({_id: {$in: obj[data.children.field]}} , {} ,err => console.log(err || ''));
             data.parent ? mongoose.connection.models[data.parent.collection]
                 .findByIdAndUpdate(data.parent.id , {$pull: {[data.parent.field]: obj._id}} ,
-                    {useFindAndModify: false} , (err , obj) => {
-                        if (err)
-                            console.log(err);
-                        sendData(boardId)
-                    }) : sendData(boardId)
+                    {useFindAndModify: false} , standardResend.bind(null, boardId)) : sendData(boardId)
         })
 }
 
 function updateObject(data , boardId) {
+    const standardResend = standardResend.bind(null, boardId);
     mongoose.connection.models[data.collection].findByIdAndUpdate(data._id , data.object , {useFindAndModify: false} , (err , obj) => {
         if (err)
             console.log(err);
         if (data.parent && data.parent.oldId !== data.parent.id) {
             mongoose.connection.models[data.parent.collection]
                 .findByIdAndUpdate(data.parent.oldId , {$pull: {[data.parent.field]: data._id}} ,
-                    {useFindAndModify: false} , (err , o) => sendData(boardId));//TODO: catch error
+                    {useFindAndModify: false}, standardResend);
             mongoose.connection.models[data.parent.collection]
                 .findByIdAndUpdate(data.parent.id , {$addToSet: {[data.parent.field]: data._id}} ,
-                    {useFindAndModify: false} , (err , o) => sendData(boardId));
+                    {useFindAndModify: false} , standardResend);
         } else
             sendData(boardId)
     })
 }
 
+function standardResend(boardId, err)  {
+    if(err)
+        console.log(err);
+    sendData(boardId)
+}
+
 function handleObject(data , boardId) {
-    if (data._id) {
+    if(data.newMemberId)
+        Board.findByIdAndUpdate(boardId, {$addToSet: {members: data.newMemberId}},
+            {useFindAndModify: false}, standardResend.bind(null, boardId));
+    else if (data._id) {
         if (data.object) //update
             updateObject(data , boardId);
         else//deletion
             //console.log(mongoose.connection.models)
             deleteObject(data , boardId);
-    } else //creation
+    }
+    else //creation
         addNewObject(data , boardId);
 }
 
-//TODO:Split into several functions
 function replyDetailedBoardMessage(msg, boardId) {
-    //TODO:
     console.log(msg);
     const data = JSON.parse(msg);
     if(data instanceof Array)
