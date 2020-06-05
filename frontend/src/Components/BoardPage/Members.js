@@ -18,7 +18,7 @@ export class Members extends React.Component {
                 </h4>
                 <div id='members-cont' className='members-cont'>
                     <b>Creator:</b>
-                    <Member>{this.props.board.creator.login}</Member>
+                    <Member>{this.props.board.creatorId.login}</Member>
                     <b>Participants:</b>
                     <div className='members'>
                         {this.props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}

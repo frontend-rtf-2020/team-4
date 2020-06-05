@@ -60,7 +60,7 @@ class BoardList extends React.Component {
                             <BoardItem key={b._id} description={b.description} id={b._id}
                                        delete={this.deleteBoard} onEdit={this.editField}
                                        name={b.name} members={b.members} endDate={b.endDate}
-                                       addingDate={b.addingDate} creator={b.creator}/>)}
+                                       addingDate={b.addingDate} creator={b.creatorId}/>)}
                         <AddBoard addBoard={this.addBoard}/>
                     </div> : <LoadingWheel/>
                 }

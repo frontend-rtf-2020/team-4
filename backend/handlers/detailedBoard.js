@@ -10,10 +10,10 @@ const boardSockets = {};//All sockets for detailed board page
 function getDetailedBoard(boardId, userId) {
 
 
-    return getBoard(boardId, {$match: { _id: mongoose.Types.ObjectId(boardId) }})
+    return getBoard(boardId, { _id: mongoose.Types.ObjectId(boardId) })
         .then(async b => {
             console.log(b);
-            if(b[0].creator._id.toString() !== userId.toString() && b[0].members.find(m => m._id === userId) === -1)
+            if(b[0].creatorId._id.toString() !== userId.toString() && b[0].members.find(m => m._id === userId) === -1)
                 return {"error": "Wrong boardId"};
             const columns = await Column.find({ boardId: mongoose.Types.ObjectId(boardId)})//TODO: Add select/project
                     .populate('tasks', 'name _id workerId description done endDate')

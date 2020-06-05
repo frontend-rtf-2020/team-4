@@ -32,7 +32,7 @@ class Board extends React.Component {
         super();
         this.filterText = React.createRef();
         this.memsFilter = React.createRef();
-        this.state = {board: {name: "", description: "", members: [], creator: {login: ""}}, columns: null, filterMembers: new Set(), filter: t => true};
+        this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}}, columns: null, filterMembers: new Set(), filter: t => true};
     }
 
     componentDidMount() {
@@ -46,6 +46,7 @@ class Board extends React.Component {
             else {
                 /*if(data.message)
                     alert(data.message);*/
+                console.log(data)
                 data.columns.sort((a, b) => a.orderNumber - b.orderNumber);
                 this.setState({...data,  filter: t => true});
             }
