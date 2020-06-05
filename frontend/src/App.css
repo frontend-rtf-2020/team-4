@@ -139,14 +139,14 @@ header a {
   text-decoration: none;
   color: lightyellow;
   margin: 0;
-  background: linear-gradient(var(--dark-main-color), var(--main-color));
+  background: linear-gradient(var(--main-color), var(--dark-main-color));
   /*height: 100%;*/
   align-self: stretch;
 }
 
 .link-button:hover {
+  background: linear-gradient(var(--dark-main-color), var(--main-color));
   cursor: pointer;
-  background: linear-gradient(var(--main-color), var(--dark-main-color));
 }
 
 .App-link {

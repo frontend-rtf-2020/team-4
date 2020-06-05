@@ -27,8 +27,8 @@ export default class AddBoard extends React.PureComponent {
             <h3>Add new board</h3>
             <Input ref={this.name} label='Board name'/>
             <Input ref={this.descr} label='Board description'/>
-            <button onClick={this.onAddingBoard} >Add</button>
-            <button onClick={this.cancel}>Cancel</button>
+            <button className='editButton' onClick={this.onAddingBoard} >Add</button>
+            <button className='editButton' onClick={this.cancel}>Cancel</button>
         </>
     );
     render() {

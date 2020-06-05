@@ -36,20 +36,7 @@ div .board {
     font-weight: lighter;
 }
 
-.editButton {
-    border-radius: 5px;
-    color: black;/*
-    box-shadow: 1px 1px 1px 1px darkgray, -1px -1px 1px 1px darkgray;*/
-    min-width: 25px;
-    min-height: 25px;
-    border: 1px solid lightgray;
-    background: linear-gradient(rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4));
-}
-
-.editButton:hover {
-    color: black;
-    background: linear-gradient(/*gray, lightgray*/rgba(150, 150, 150, 0.4), rgba(120, 120, 120, 0.7));
-}/*
+/*
 
 button.edit-ico {
     background:  url('./edit-icon.png') center no-repeat,  linear-gradient(rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4));

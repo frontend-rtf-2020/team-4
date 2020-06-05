@@ -25,8 +25,8 @@ export default class AddColumn extends React.Component {
         <div className='content Column my-add' id='addColumn'>
             <h3>Add column</h3>
             <input placeholder='Name'/>
-            <button onClick={this.onadd}>Add</button>
-            <button onClick={this.cancel}>Cancel</button>
+            <button className='editButton' onClick={this.onadd}>Add</button>
+            <button className='editButton' onClick={this.cancel}>Cancel</button>
         </div>
     );
     render() {

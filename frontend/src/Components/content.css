@@ -14,6 +14,26 @@
     transition: background-color 0.4s;
 }
 
+.editButton {
+    border-radius: 5px;
+    color: black;/*
+    box-shadow: 1px 1px 1px 1px darkgray, -1px -1px 1px 1px darkgray;*/
+    width: 55px;
+    min-height: 25px;
+    border: 1px solid lightgray;
+    background: linear-gradient(rgba(150, 150, 150, 0.4), rgba(120, 120, 120, 0.7));
+    /**transition: background 0.4s;*/
+}
+
+.editButton:hover {
+    color: black;
+    background: linear-gradient(rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4));
+}
+
+.editButton:focus {
+    box-shadow: inset 1px 1px 1px 1px #555, inset -1px -1px 1px 1px #555;
+}
+
 header h2 a:hover {
     color: dimgrey;
 }

@@ -79,8 +79,8 @@ class Task extends React.Component {
                             {this.props.columns.map(m => <option value={m._id} key={m._id}>{m.name}</option>)}
                         </select>
                         <br/>
-                        <button onClick={this.onSubmit}>Submit</button>
-                        <button onClick={this.cancel}>Cancel</button>
+                        <button className='editButton' onClick={this.onSubmit}>Submit</button>
+                        <button className='editButton' onClick={this.cancel}>Cancel</button>
                     </> :
                     <>
                         <h4>

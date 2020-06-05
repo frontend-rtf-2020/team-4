@@ -41,8 +41,8 @@ export default class AddTask extends React.Component {
             <br/>
             <input name='date' type='date' />
             <br/>
-            <button onClick={this.onSubmit}>Submit</button>
-            <button onClick={this.cancel}>Cancel</button>
+            <button className='editButton' onClick={this.onSubmit}>Submit</button>
+            <button className='editButton' onClick={this.cancel}>Cancel</button>
         </>
     );
 
