@@ -18,7 +18,7 @@ class Task extends React.Component {
     };
 
     getClass = () => {
-        const date = new Date(this.props.task.endDate).valueOf(), now = Date.now().valueOf();
+        const date = Date.parse(this.props.task.endDate).valueOf(), now = Date.now().valueOf();
         if( !this.props.task.done && date < now)
             return 'Task overdue-task';
         else if(!this.props.task.done && date - now <= 24*60*60*1000)
@@ -55,7 +55,7 @@ class Task extends React.Component {
                     <>
                         <h4>Edit task</h4>
                         <input placeholder='Name' value={this.props.task.name}/>
-                        <select value={this.props.task.worker.login}>
+                        <select value={this.props.task.workerId.login}>
                             {this.props.members.map(m => <option key={m.login}>{m.login}</option>)}
                         </select>
                         <input placeholder='Description' value={this.props.task.description}/>
@@ -81,7 +81,7 @@ class Task extends React.Component {
                         <br/>
                         {date.getDay()}.{date.getMonth()}.{date.getFullYear()}
                         <br/>
-                        Worker: {this.props.task.worker.login}
+                        Worker: {this.props.task.workerId.login}
                         <br/>
                         Done: <input type='checkbox' onChange={this.sendDone} value={this.props.task.done}/>
                     </>}
@@ -90,6 +90,6 @@ class Task extends React.Component {
     }
 }
 
-const ColumnOption = props => (<option>{props.children}</option>);
+//const ColumnOption = props => (<option>{props.children}</option>);
 
 export default Task;

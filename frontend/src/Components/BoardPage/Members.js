@@ -22,7 +22,7 @@ export class Members extends React.Component {
                     <b>Participants:</b>
                     <div className='members'>
                         {this.props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
-                        <AddMember/>
+                        <AddMember onAdd={this.props.onAdd}/>
                     </div>
                     <div align='center'>
                         <span className='arrow' id='hideMems' onClick={this.hide}>^</span>
@@ -37,7 +37,8 @@ export class Members extends React.Component {
 class AddMember extends React.Component {
     add() {
         const identifier = prompt("Enter user id/login/email");
-        alert(identifier)
+        //alert(identifier)
+        this.props.onAdd(identifier);
         //TODO: send adding
     }
 

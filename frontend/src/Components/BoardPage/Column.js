@@ -23,12 +23,9 @@ class Column extends React.Component {
     delete = event =>
         this.props.delete(this.props.column._id);
 
-    edit = event => {
+    edit = this.props.changeColumn.bind(null, this.props.column._id);
 
-    };
-
-    componentDidMount() {
-    }
+    deleteTask = this.props.deleteTask.bind(null, this.props.column._id);
 
     render() {
         console.log('props' + this.props);
@@ -38,10 +35,10 @@ class Column extends React.Component {
                     {/* <span className='arrow edit' onClick={this.edit}>&#10000;</span>*/}
                     <span className='arrow' onClick={this.delete}>&#10006;</span>
                     <span onClick={this.moveRight} className='arrow' style={{float: "right"}}>&gt;</span>
-                    <h3><Field>{this.props.column.name}</Field></h3>
+                    <h3><Field name='name' onEdit={this.edit}>{this.props.column.name}</Field></h3>
                     {this.props.column.tasks.filter(this.props.filter)
                         .filter(t => Object.keys(t).length !== 0).map(b =>
-                        <Task columns={this.props.columns} members={this.props.members} onDelete={this.props.deleteTask} key={b._id} id={b._id} task={b} />)}
+                        <Task columns={this.props.columns} members={this.props.members} onDelete={this.deleteTask} key={b._id} id={b._id} task={b} />)}
                     <AddTask onSubmit={this.addTask} members={this.props.members}/>
                 </div>
         );

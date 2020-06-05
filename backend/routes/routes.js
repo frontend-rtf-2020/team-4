@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 
 const mongoose = require('mongoose');
@@ -5,6 +7,7 @@ const router = express.Router();
 const { activate, RegistrationHandler, reactivate } = require('../handlers/registration');
 const passport = require('passport');
 
+const Task = require('../model/Task');
 const Column = require('../model/Column');
 const Board = require('../model/Board');
 const { getUserData, checkAuthenticated, checkNotAuthenticated, logout } = require('../handlers/handlers');
@@ -47,7 +50,7 @@ router.get("/agr_test3", function(req, res)  {//retrieve boards along with their
 });
 
 
-router.get('/agr_col', (req, res) => {
+router.get('/agr_col', async (req, res) => {
     const id = "5eafafc5d07fde1f84b44873";
     /*Column.aggregate([
         {$match: { boardId: mongoose.Types.ObjectId(id)}},
@@ -76,17 +79,50 @@ router.get('/agr_col', (req, res) => {
             }
         }
     ])*/
-    Column.find({ boardId: mongoose.Types.ObjectId(id)})
-       // .populate()
-        .run((er, columns) => {
-        Board.findById(id)
-            .then(b => res.json({
-                board: b,
-                columns: columns
-            }));
+    /*
+    *
+     {$project:{"tasks.worker.login": 1, "tasks.name": 1, "tasks.endDate": 1, "tasks.done": 1,
+     "orderNumber": 1, "_id": 1, "name": 1, "tasks.description": 1, "tasks._id": 1}},
+    * */
+    /*Column.find({ boardId: mongoose.Types.ObjectId(id)})//TODO: Add select/project
+        .populate('tasks', 'name _id workerId description done', 'Task', {}, {}, 'workerId')
+        .exec((er, c) => {
+            Board.findById(id)
+                .then(b => res.json({
+                    board: b,
+                    columns: c
+                }));
+            //.exec()
+            //res.send(r)
+        });*/
+    const c = await Column.find({ boardId: mongoose.Types.ObjectId(id)})//TODO: Add select/project
+        ///.populate('tasks', 'name _id workerId description done endDate')
+        ///.populate('tasks.workerId', "login -_id")
+        .exec(/*(er, c) => Column.populate(c, {path: 'tasks.workerId', select: "login -_id"})*/)
+        //.then(c => Column.populate(c, {path: 'tasks.workerId', select: "login -_id"}))
+        .catch(e => console.log(e));
+    Board.findById(id)
+        .then(b => res.json({
+            board: b,
+            columns: c
+        }))
+});
+
+/**
+ * Column.find({ boardId: mongoose.Types.ObjectId(id)})//TODO: Add select/project
+ .populate('tasks', 'name _id workerId description done')
+ .exec((er, c) => {
+            Column.populate(c, 'tasks.workerId', "",  (er, columns) => {
+                Board.findById(id)
+                    .then(b => res.json({
+                        board: b,
+                        columns: columns
+                    }));
+                })
+                //.exec()
         //res.send(r)
     });
-});
+ * */
 
 /**  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
 

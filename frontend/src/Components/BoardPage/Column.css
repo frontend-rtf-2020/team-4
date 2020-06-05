@@ -144,6 +144,10 @@ div.centered {
     justify-content: center;
 }
 
+.Task input[type="checkbox"] {
+    width: auto;
+}
+
 @media (max-width: 1020px) {
     .members-cont {
         flex-wrap: wrap;
@@ -180,10 +184,6 @@ div.centered {
     .Task input, .Task select {
         width: 85%;
         max-width: none;
-    }
-
-    .Task input[type="checkbox"] {
-        width: auto;
     }
 
     .filter input, select {

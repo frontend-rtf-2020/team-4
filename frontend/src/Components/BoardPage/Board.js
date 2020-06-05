@@ -44,6 +44,8 @@ class Board extends React.Component {
             if(data.error)
                 alert(data.error);
             else {
+                /*if(data.message)
+                    alert(data.message);*/
                 data.columns.sort((a, b) => a.orderNumber - b.orderNumber);
                 this.setState({...data,  filter: t => true});
             }
@@ -92,16 +94,22 @@ class Board extends React.Component {
         this.setState({ columns: columns});
     };
 
-    delete = (id, col) => this.ws.send(JSON.stringify({
+    delete = (id, col, parent) => this.ws.send(JSON.stringify({
         _id: id,
-        collection: col
+        collection: col,
+        parent: parent
     }));
 
-    deleteTask = id => this.delete(id, 'Task');
+    deleteTask = (columnId, id) => this.delete(id, 'Task', {
+        id: columnId,
+        collection: 'Column',
+        field: 'tasks'
+    });
 
     deleteColumn = id => this.delete(id, 'Column');
 
     addTask = (name, workerId, description, date, columnId) => {
+        console.log(date.toString())
         this.ws.send(JSON.stringify({
             collection: 'Task',
             object: {
@@ -131,10 +139,23 @@ class Board extends React.Component {
         }))
     };
 
+    changeColumn = (id, fieldName, value) => {
+        this.ws.send(JSON.stringify({
+            _id: id,
+            object: {
+                [fieldName]: value,
+            },
+            collection: 'Column',
+        }))
+    };
+
+    addMember = identifier =>
+        this.ws.send(`{"newMember":"${identifier}"}`);
+
     render() {
         return (
             <>
-                <Members board={this.state.board}/>
+                <Members board={this.state.board} onAdd={this.addMember} />
                 <header className='filter'>
                     <h5>Filter:</h5>
                     <input ref={this.filterText} placeholder='Text'/>
@@ -156,7 +177,7 @@ class Board extends React.Component {
                                     <>
                                         {this.state.columns.map(c =>
                                             <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns}
-                                                    addTask={this.addTask} delete={this.deleteColumn}
+                                                    addTask={this.addTask} delete={this.deleteColumn} changeColumn={this.changeColumn}
                                                     moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}/>)}
                                         <AddColumn addColumn={this.addColumn}/>
                                     </>) :
