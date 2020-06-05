@@ -121,7 +121,7 @@ class Board extends React.Component {
                 name: name,
                 workerId: workerId,
                 description: description,
-                endDate: date
+                endDate: date//TODO: fix date format
             },
             parent: {
                 id: columnId,
@@ -163,7 +163,7 @@ class Board extends React.Component {
                 name: name,
                 workerId: workerId,
                 description: description,
-                endDate: date
+                endDate: date//TODO: fix date format
             },
             parent: {
                 id: columnId,

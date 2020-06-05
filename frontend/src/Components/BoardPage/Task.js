@@ -27,7 +27,7 @@ class Task extends React.Component {
         const inputs = this.formRef.current.getElementsByTagName('input');
         inputs[0].value = this.props.task.name;
         inputs[1].value = this.props.task.description;
-        inputs[2].value = this.props.task.endDate;
+        inputs[2].value = this.props.task.endDate;//TODO: fix
         const selects = this.formRef.current.getElementsByTagName('select');
         selects[0].value = this.props.task.workerId._id;
         selects[1].value = this.props.columnId;
@@ -90,7 +90,7 @@ class Task extends React.Component {
                         </h4>
                         {this.props.task.description}
                         <br/>
-                        {date.getDay()}.{date.getMonth()}.{date.getFullYear()}
+                        {date.getDay()}.{date.getMonth() + 1}.{date.getFullYear()}
                         <br/>
                         Worker: {this.props.task.workerId.login}
                         <br/>

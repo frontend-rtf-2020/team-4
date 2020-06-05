@@ -6,7 +6,7 @@ function sendBoardData(members , sockets, getData = getBoard) {
         .then(r => {
             const id = m._id.toString();
             // eslint-disable-next-line no-prototype-builtins
-            if (sockets.hasOwnProperty(id))
+            if (sockets[id])
                 sockets[id].send(JSON.stringify(r));
         })
         .catch(e => console.log(e)));

@@ -1,5 +1,9 @@
+
+
+const Column = require('../model/Column');
 const sendBoardData = require("./sendBoardData");
 
+const Task = require('../model/Task');
 const Board = require('../model/Board');
 const getBoard = require('./getBoard');
 const boardListSockets = {}; // It is all sockets for getBoard
@@ -25,8 +29,8 @@ function boardListWSHandler(ws, req) {
     });
 }
 
-
-function replyBoardListMessage(msg, userId) {
+//TODO:Split into several functions
+async function replyBoardListMessage(msg , userId) {
     //adding board
     //ws.send(msg);
     console.log(msg);
@@ -37,12 +41,19 @@ function replyBoardListMessage(msg, userId) {
             Board.findByIdAndUpdate(board._id , board.update , {useFindAndModify: false , new: true} ,
                 (err , board) => {
                     console.log(board);
-                    sendBoardData(board.members, boardListSockets)
+                    sendBoardData(board.members , boardListSockets)
                 });
         else//deletion
             //TODO: remove all its columns & tasks
+        {
             Board.findByIdAndRemove(board._id , {useFindAndModify: false} ,
-                (err , board) => sendBoardData(board.members, boardListSockets));
+                (err , board) => sendBoardData(board.members , boardListSockets));
+
+            for await (const column of Column.find({boardId: board._id} , {useFindAndModify: false})) {
+                Task.deleteMany({_id: { $in: column.tasks }}, console.log);
+                Column.findByIdAndRemove(column._id, {useFindAndModify: false}, console.log);
+            }
+        }
     }
     else {   //If '_id' does not exist, therefore it is a new board
         const newBoard = new Board(); //Adding new board in DB
@@ -53,9 +64,9 @@ function replyBoardListMessage(msg, userId) {
         newBoard.description = board.description;
         console.log(board.description);
         newBoard.members[0] = userId;
-        newBoard.save(function (err, newBoard) {
+        newBoard.save(function (err , newBoard) {
             if (err) console.error(err);
-            else sendBoardData(newBoard.members);
+            else sendBoardData(newBoard.members , boardListSockets);
         });  //Saving new board in DB
         //console.log(newBoard._id.toString());//Trying send new board to all her members (in developing);
         // newBoard.members.forEach(m => getBoard(m._id).then(r => boardListSockets[m._id.toString()].send(JSON.stringify(r))).catch(e => console.log(e)));

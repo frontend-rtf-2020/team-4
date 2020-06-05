@@ -13,7 +13,7 @@ function getDetailedBoard(boardId, userId) {
             console.log(b);
             if(b[0].creatorId._id.toString() !== userId.toString() && b[0].members.find(m => m._id === userId) === -1)
                 return {"error": "Wrong boardId"};
-            const columns = await Column.find({ boardId: mongoose.Types.ObjectId(boardId)})//TODO: Add select/project
+            const columns = await Column.find({ boardId: mongoose.Types.ObjectId(boardId)})//TODO: sort
                     .populate('tasks', 'name _id workerId description done endDate')
                     .exec(/*(er, c) => Column.populate(c, {path: 'tasks.workerId', select: "login -_id"})*/)
                     .then(c => Column.populate(c, {path: 'tasks.workerId', select: "login"}))
@@ -46,7 +46,8 @@ function closeDetailedBoard(boardId, userId) {
         delete boardSockets[boardId];
 }
 
-function replyDetailedBoardMessage(msg, boardId, userId) {
+//TODO:Split into several functions
+function replyDetailedBoardMessage(msg, boardId) {
     //TODO:
     console.log(msg);
     const data = JSON.parse(msg);
@@ -60,10 +61,10 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
                 if (data.parent && data.parent.oldId !== data.parent.id) {
                     mongoose.connection.models[data.parent.collection]
                         .findByIdAndUpdate(data.parent.oldId, {$pull: {[data.parent.field]: data._id}} ,
-                            {useFindAndModify: false} , (err , obj) => sendData(boardId));
+                            {useFindAndModify: false} , (err , o) => sendData(boardId));//TODO: catch error
                     mongoose.connection.models[data.parent.collection]
                         .findByIdAndUpdate(data.parent.id , {$addToSet: {[data.parent.field]: data._id}} ,
-                            {useFindAndModify: false} , (err , obj) => sendData(boardId));
+                            {useFindAndModify: false} , (err , o) => sendData(boardId));
                 }
                 else
                     sendData(boardId)
@@ -75,6 +76,7 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
                 .findByIdAndRemove(data._id , {useFindAndModify: false} , (err, obj) => {
                     if(err)
                         console.log(err);
+                    console.log(obj[data.children.field]);
                     if(data.children)
                         mongoose.connection.models[data.children.collection]
                             .deleteMany({_id: { $in: obj[data.children.field] }}, {}, (err, obj) => console.log(err || ''));
@@ -88,7 +90,7 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
                 })
         }
     }
-    else {
+    else {//creation
         const entity = new mongoose.connection.models[data.collection]();
         console.log(data.object.date);
         for (const f in data.object)
@@ -101,8 +103,8 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
             .then(e => data.parent ? mongoose.connection.models[data.parent.collection]
                     .findByIdAndUpdate(data.parent.id, {$addToSet: { [data.parent.field]: e._id} },
                         {useFindAndModify: false},(err, obj) => sendData(boardId)) : sendData(boardId))
-            .then(r => console.log('YY'))
-            .catch(e => console.log(e));//TODO: catch error
+            .then(r => console.log('Creation'))
+            .catch(e => console.log(e));
     }
 }
 
