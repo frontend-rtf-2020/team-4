@@ -27,6 +27,8 @@ class Column extends React.Component {
 
     deleteTask = this.props.deleteTask.bind(null, this.props.column._id);
 
+    editTask = this.props.changeTask.bind(null, this.props.column._id);
+
     render() {
         console.log('props' + this.props);
         return  (
@@ -38,7 +40,7 @@ class Column extends React.Component {
                     <h3><Field name='name' onEdit={this.edit}>{this.props.column.name}</Field></h3>
                     {this.props.column.tasks.filter(this.props.filter)
                         .filter(t => Object.keys(t).length !== 0).map(b =>
-                        <Task columns={this.props.columns} members={this.props.members} onEdit={this.props.changeTask} columnId={this.props.column._id} onDelete={this.deleteTask} key={b._id} id={b._id} task={b} />)}
+                        <Task columns={this.props.columns} members={this.props.members} onEdit={this.editTask} columnId={this.props.column._id} onDelete={this.deleteTask} key={b._id} id={b._id} task={b} />)}
                     <AddTask onSubmit={this.addTask} members={this.props.members}/>
                 </div>
         );

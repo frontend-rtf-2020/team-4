@@ -51,17 +51,25 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
     console.log(msg);
     const data = JSON.parse(msg);
     if(data._id) {
-        if(data.object) {//TODO: update
+        if(data.object) {//update
 
             mongoose.connection.models[data.collection].
                 findByIdAndUpdate(data._id, data.object, {useFindAndModify: false}, (err, obj) => {
                 if(err)
                     console.log(err);
-                sendData(boardId, userId)
-            })//TODO: catch error)
+                if (data.parent && data.parent.oldId !== data.parent.id) {
+                    mongoose.connection.models[data.parent.collection]
+                        .findByIdAndUpdate(data.parent.oldId, {$pull: {[data.parent.field]: data._id}} ,
+                            {useFindAndModify: false} , (err , obj) => sendData(boardId));
+                    mongoose.connection.models[data.parent.collection]
+                        .findByIdAndUpdate(data.parent.id , {$addToSet: {[data.parent.field]: data._id}} ,
+                            {useFindAndModify: false} , (err , obj) => sendData(boardId));
+                }
+                else
+                    sendData(boardId)
+            })
         }
         else { //deletion
-            //TODO:remove from parent
             //console.log(mongoose.connection.models)
             mongoose.connection.models[data.collection]
                 .findByIdAndRemove(data._id , {useFindAndModify: false} , (err, obj) => {
@@ -78,7 +86,6 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
         }
     }
     else {
-        //TODO: creation
         const entity = new mongoose.connection.models[data.collection]();
         console.log(data.object.date);
         for (const f in data.object)

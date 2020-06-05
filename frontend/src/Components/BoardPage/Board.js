@@ -150,7 +150,7 @@ class Board extends React.Component {
         }))
     };
 
-    changeTask = (id, name, workerId, description, date, columnId) => {
+    changeTask = (oldId, id, name, workerId, description, date, columnId) => {
         console.log(date.toString())
         this.ws.send(JSON.stringify({
             collection: 'Task',
@@ -160,12 +160,13 @@ class Board extends React.Component {
                 workerId: workerId,
                 description: description,
                 endDate: date
-            },/*
+            },
             parent: {
                 id: columnId,
+                oldId: oldId,
                 collection: 'Column',
                 field: 'tasks'
-            }*/
+            }
         }))
     };
 

@@ -23,37 +23,36 @@ class Task extends React.Component {
         else return 'Task';
     };
 
-    init = () => {
+    initEditForm = () => {
         const inputs = this.formRef.current.getElementsByTagName('input');
         inputs[0].value = this.props.task.name;
         inputs[1].value = this.props.task.description;
         inputs[2].value = this.props.task.endDate;
         const selects = this.formRef.current.getElementsByTagName('select');
-        selects[0].selectedOptions[0].value = this.props.task.workerId._id;
-        selects[1].selectedOptions[0].value = this.props.columnId;
+        selects[0].value = this.props.task.workerId._id;
+        selects[1].value = this.props.columnId;
     };
 
     edit = () =>
-        this.setState({/*...this.state, */editing: true}, this.init);
+        this.setState({editing: true}, this.initEditForm);
 
     cancel = event => {
         event.preventDefault();
         event.stopPropagation();
-        this.setState({/*...this.state, */editing: false});
+        this.setState({editing: false});
     };
 
     delete = event =>
         this.props.onDelete(this.props.id);
 
     onSubmit = e => {
-        alert("send!");
         const inputs = e.target.parentElement.getElementsByTagName('input');
         const name = inputs[0].value;
         const description = inputs[1].value;
         const date = inputs[2].value;
         const selects = e.target.parentElement.getElementsByTagName('select');
-        const worker = selects[0].selectedOptions[0].value;
-        const column = selects[1].selectedOptions[0].value;
+        const worker = selects[0].value;
+        const column = selects[1].value;
         this.props.onEdit(this.props.task._id, name, worker, description, date, column);
         this.cancel(e);
         //To obtain selected column id use: columnSelect.selectedOptions[0].value
