@@ -40,6 +40,7 @@ function replyBoardListMessage(msg, userId) {
                     sendBoardData(board.members, boardListSockets)
                 });
         else//deletion
+            //TODO: remove all its columns & tasks
             Board.findByIdAndRemove(board._id , {useFindAndModify: false} ,
                 (err , board) => sendBoardData(board.members, boardListSockets));
     }

@@ -95,10 +95,11 @@ class Board extends React.Component {
         this.setState({ columns: columns});
     };
 
-    delete = (id, col, parent) => this.ws.send(JSON.stringify({
+    delete = (id, col, parent, children) => this.ws.send(JSON.stringify({
         _id: id,
         collection: col,
-        parent: parent
+        parent: parent,
+        children: children
     }));
 
     deleteTask = (columnId, id) => this.delete(id, 'Task', {
@@ -107,7 +108,10 @@ class Board extends React.Component {
         field: 'tasks'
     });
 
-    deleteColumn = id => this.delete(id, 'Column');
+    deleteColumn = id => this.delete(id, 'Column', undefined, {
+        collection: 'Task',
+        field: 'tasks'
+    });
 
     addTask = (name, workerId, description, date, columnId) => {
         console.log(date.toString())
@@ -170,6 +174,16 @@ class Board extends React.Component {
         }))
     };
 
+    toggleDoneTask = (id, done) => {
+        this.ws.send(JSON.stringify({
+            collection: 'Task',
+            _id: id,
+            object: {
+                done: done
+            }
+        }))
+    };
+
     addMember = identifier =>
         this.ws.send(`{"newMember":"${identifier}"}`);
 
@@ -197,7 +211,7 @@ class Board extends React.Component {
                             this.state.columns ? (
                                     <>
                                         {this.state.columns.map(c =>
-                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns}
+                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns} toggleDoneTask={this.toggleDoneTask}
                                                     addTask={this.addTask} delete={this.deleteColumn} changeColumn={this.changeColumn} changeTask={this.changeTask}
                                                     moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}/>)}
                                         <AddColumn addColumn={this.addColumn}/>

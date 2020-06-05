@@ -75,6 +75,9 @@ function replyDetailedBoardMessage(msg, boardId, userId) {
                 .findByIdAndRemove(data._id , {useFindAndModify: false} , (err, obj) => {
                     if(err)
                         console.log(err);
+                    if(data.children)
+                        mongoose.connection.models[data.children.collection]
+                            .deleteMany({_id: { $in: obj[data.children.field] }}, {}, (err, obj) => console.log(err || ''));
                     data.parent ? mongoose.connection.models[data.parent.collection]
                         .findByIdAndUpdate(data.parent.id, {$pull: { [data.parent.field]: obj._id } },
                             {useFindAndModify: false},(err, obj) => {

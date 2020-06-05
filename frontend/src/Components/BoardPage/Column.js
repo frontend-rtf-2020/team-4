@@ -40,7 +40,10 @@ class Column extends React.Component {
                     <h3><Field name='name' onEdit={this.edit}>{this.props.column.name}</Field></h3>
                     {this.props.column.tasks.filter(this.props.filter)
                         .filter(t => Object.keys(t).length !== 0).map(b =>
-                        <Task columns={this.props.columns} members={this.props.members} onEdit={this.editTask} columnId={this.props.column._id} onDelete={this.deleteTask} key={b._id} id={b._id} task={b} />)}
+                        <Task columns={this.props.columns} members={this.props.members}
+                              onEdit={this.editTask} columnId={this.props.column._id}
+                              toggleDoneTask={this.props.toggleDoneTask}
+                              onDelete={this.deleteTask} key={b._id} id={b._id} task={b} />)}
                     <AddTask onSubmit={this.addTask} members={this.props.members}/>
                 </div>
         );

@@ -9,10 +9,10 @@ class Task extends React.Component {
         this.formRef = React.createRef();
     }
 
-    sendDone = event => {
+    sendDone = event =>
         //TODO:send
-        console.log(event.target.checked)
-    };
+        this.props.toggleDoneTask(this.props.task._id, event.target.checked);
+        //console.log(event.target.checked)
 
     getClass = () => {
         const date = Date.parse(this.props.task.endDate).valueOf(), now = Date.now().valueOf();
@@ -94,7 +94,7 @@ class Task extends React.Component {
                         <br/>
                         Worker: {this.props.task.workerId.login}
                         <br/>
-                        Done: <input type='checkbox' onChange={this.sendDone} value={this.props.task.done}/>
+                        Done: <input type='checkbox' onChange={this.sendDone} checked={this.props.task.done}/>
                     </>}
             </div>
         );
