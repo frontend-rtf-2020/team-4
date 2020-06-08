@@ -18,16 +18,8 @@ const Board = mongoose.model('Board', new Schema({
     }],
     description : {
         type: String,
-        required: true
-    },
-    addingDate : {
-        type : Date,
-        required : true
-    },
-    endDate : {
-        type : Date,
-        required : true
-    },
+        required: false
+    }
 }));
 
 module.exports = Board;

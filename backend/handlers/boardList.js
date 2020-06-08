@@ -1,124 +1,77 @@
 
-const Board = require('../model/Board');
+
 const Column = require('../model/Column');
-const mongoose = require('mongoose');
+const sendBoardData = require("./sendBoardData");
 
-function getBoard(id, match = {$match: {$or: [{creatorId: id}, {members: id}]}}) {
-    return Board.aggregate([
-        match,
-        {
-            $lookup:{
-                from: 'users',
-                localField: 'creatorId',
-                foreignField: '_id',
-                as: 'creator'
-            }
-        },
-        {$unwind: "$creator"},
-        {$project: {"creatorId.hash": 0, "creatorId.active": 0, "creatorId.activatorId": 0, "creatorId.registrationData": 0}},
-        //{$unwind: "$members"},
-        {
-            $lookup:{
-                from: 'users',
-                localField: 'members',//
-                foreignField: '_id',
-                as: 'members'
-            }
-        },
-        //{$unwind: "$members"},
-        {$project:{"members._id": 0, "members.hash": 0, "members.active": 0, "members.activatorId": 0, "members.registrationData": 0}},
-        
-    ])
-}
+const Task = require('../model/Task');
+const Board = require('../model/Board');
+const getBoard = require('./getBoard');
+const boardListSockets = {}; // It is all sockets for getBoard
 
 
-function getBoards(ws, req) {
-    //TODO: save the socket
-    console.log('user: ' + req.user);
+function boardListWSHandler(ws, req) {
+    //save the socket
+    boardListSockets[req.user._id.toString()] = ws;
+
+    //console.log(boardListSockets);
     const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
-
 
     getBoard(id)
         .then(r => ws.send(JSON.stringify(r)))
         .catch(e => console.log(e));
 
-    ws.on('message', function(msg) {
-        //TODO: add adding board
-        ws.send(msg);
-    });
+    ws.on('message', msg => replyBoardListMessage(msg, id));
 
     ws.on('close', function() {
-        //TODO: remove ws
+        //remove ws
+        console.log('close');
+        delete boardListSockets[id];
     });
 }
 
-function getDetailedBoard(ws, req) {
-    const id = req.params.id;//"5eafafc5d07fde1f84b44873";
-    //TODO: save the sockets
-    console.log(id);
-    //console.log(req.user._id.toString());
-    getBoard(id, {$match: { _id: mongoose.Types.ObjectId(id) }})
-        .then(b => {
-            console.log(b);
-            if(b[0].creator._id.toString() !== req.user._id.toString() && b[0].members.find(m => m._id === req.user._id) === -1)
-            {
-                ws.send('{"error": "Wrong id"}');
-                return;
+//TODO:Split into several functions
+async function replyBoardListMessage(msg , userId) {
+    //adding board
+    //ws.send(msg);
+    console.log(msg);
+    const board = JSON.parse(msg);
+    if (board._id) { // Checking, does it new or changed board?
+        //If '_id' exist, therefore it is a changed board
+        if (board.update)//editing
+            Board.findByIdAndUpdate(board._id , board.update , {useFindAndModify: false , new: true} ,
+                (err , board) => {
+                    console.log(board);
+                    sendBoardData(board.members , boardListSockets)
+                });
+        else//deletion
+            //TODO: remove all its columns & tasks
+        {
+            Board.findByIdAndRemove(board._id , {useFindAndModify: false} ,
+                (err , board) => sendBoardData(board.members , boardListSockets));
+
+            for await (const column of Column.find({boardId: board._id} , {useFindAndModify: false})) {
+                Task.deleteMany({_id: { $in: column.tasks }}, console.log);
+                Column.findByIdAndRemove(column._id, {useFindAndModify: false}, console.log);
             }
-            Column.aggregate([
-                {$match: {board: mongoose.Types.ObjectId(id)}},
-                //{$unwind: "$tasks"},
-                {
-                    $lookup:{
-                        from: 'tasks',
-                        localField: 'tasks',//
-                        foreignField: '_id',
-                        as: 'tasks'
-                    }
-                },
-                {$unwind: "$tasks"},
-                {
-                    $lookup:{
-                        from: 'users',
-                        localField: 'tasks.workerId',
-                        foreignField: '_id',
-                        as: 'tasks.worker'
-                    }
-                },
-                {$unwind: "$tasks.worker"},
-                {$project:{"tasks.worker.login": 1, "tasks.name": 1, "tasks.endDate": 1, "tasks.done": 1, "orderNumber": 1, "_id": 1, "name": 1, "tasks.description": 1}},
-                {$group: {
-                        _id: "$_id", name: {$first: "$name"}, description: {$first: "$description"}, orderNumber: {$first: "$orderNumber"}, tasks: { $addToSet: "$tasks" }
-                    }
-                }
-            ]).then(columns => {
-                //console.log(columns);
-                ws.send(JSON.stringify({
-                    board: b[0],
-                    columns: columns
-                }));
-                //res.send(r)
-            });
-        });
-
-    ws.on('message', function(msg) {
-        //TODO:
-        ws.send(msg);
-    });
-    ws.on('close', function() {
-        //TODO: remove ws
-    });
-}
-
-// eslint-disable-next-line no-unused-vars
-function editBoard(ws, req) {
-    //TODO: save the socket
-
-    // eslint-disable-next-line no-unused-vars
-    ws.on('message', msg => {
-        //TODO: Add message editing of board
-    });
+        }
+    }
+    else {   //If '_id' does not exist, therefore it is a new board
+        const newBoard = new Board(); //Adding new board in DB
+        newBoard.creatorId = userId;
+        console.log(userId);
+        newBoard.name = board.name;
+        console.log(board.name);
+        newBoard.description = board.description;
+        console.log(board.description);
+        newBoard.members[0] = userId;
+        newBoard.save(function (err , newBoard) {
+            if (err) console.error(err);
+            else sendBoardData(newBoard.members , boardListSockets);
+        });  //Saving new board in DB
+        //console.log(newBoard._id.toString());//Trying send new board to all her members (in developing);
+        // newBoard.members.forEach(m => getBoard(m._id).then(r => boardListSockets[m._id.toString()].send(JSON.stringify(r))).catch(e => console.log(e)));
+    }
 }
 
 
-module.exports = { getBoards, getDetailedBoard, editBoard };
+module.exports =  boardListWSHandler;// getDetailedBoard: detailedBoardWSHandler };

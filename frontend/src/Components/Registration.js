@@ -39,8 +39,9 @@ export default class Registration extends React.Component {
                 password: password
             })
         }).then(res => res.json()).then(res => {
+            console.log(res);
             if(res.error)
-                alert(res.error.message);
+                this.setState({errorMessage: res.error.message || res.error});
             else {
                 alert(res.result);
                 window.location.href = '/';

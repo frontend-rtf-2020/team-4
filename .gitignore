@@ -1,8 +1,5 @@
-./idea
-.idea/vcs.xml
-.idea/team-4.iml
-.idea/modules.xml
-.idea/misc.xml
-.idea/jsLibraryMappings.xml
-.idea/inspectionProfiles/Project_Default.xml
-.idea/workspace.xml
+# Intellij
+.idea/*
+
+### VisualStudioCode ###
+.vscode/*

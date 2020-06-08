@@ -1,28 +1,31 @@
 import React from "react";
 import Column from "./Column";
 import getWSURL from "../getWSURL";
-import {LoadingWheel} from "../LoadingWheel";
+import { LoadingWheel } from "../LoadingWheel";
 import AddColumn from "./AddColumn";
-import $ from 'jquery';
-//import SlimSelect from 'slim-select';
+import { Members } from "./Members";
+import Member from "./Member";
 
-//import { useParams } from "react-router-dom";
+/**
+ * TODO: Divide class into several parts, introducing all ws functions to another class!
+ *
+ */
+
 class Board extends React.Component {
     clearFilter = event => {
-        this.setState({...this.state, filter: t => true})
+        this.setState({/*...this.state,*/ filter: t => true})
     };
 
     applyFilter = event => {
 
         const text = this.filterText.current.value;
 
-        const members = this.state.filterMembers;//[this.memsFilter.current.value];
+        const members = this.state.filterMembers;
 
-        function filter(task) {
-            return (task.description.includes(text)  || task.name.includes(text)) && members.has(task.worker.login);
-        }
+        const filter = task => (task.description.includes(text) || task.name.includes(text))
+            &&  (members.size === 0 || members.has(task.workerId.login));
 
-        this.setState({...this.state, filter: filter})
+        this.setState({ filter: filter})
     };
 
     addFilterMem = event => {
@@ -35,7 +38,7 @@ class Board extends React.Component {
         super();
         this.filterText = React.createRef();
         this.memsFilter = React.createRef();
-        this.state = {board: {name: "", description: "", members: [], creator: {login: ""}}, columns: null, filterMembers: new Set(), filter: t => true};
+        this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}}, columns: null, filterMembers: new Set(), filter: t => true};
     }
 
     componentDidMount() {
@@ -43,10 +46,16 @@ class Board extends React.Component {
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
             console.log(data);
+            console.log(data.columns);
             if(data.error)
                 alert(data.error);
-            else
+            else {
+                /*if(data.message)
+                    alert(data.message);*/
+                console.log(data)
+                data.columns.sort((a, b) => a.orderNumber - b.orderNumber);
                 this.setState({...data,  filter: t => true});
+            }
         };
     }
 
@@ -54,64 +63,171 @@ class Board extends React.Component {
         this.ws.close();
     }
 
+    removeMemberFromFilter = m => {
+        const state = {...this.state};
+        state.filterMembers.delete(m);
+        this.setState(state)
+    };
+
     moveLeft = id => {
         const ind = this.state.columns.findIndex(c => c._id === id);
         if(ind === 0) return;
         const columns = [...this.state.columns];
-        const c = columns[ind];
-        columns[ind] = columns[ind - 1];
-        columns[ind - 1] = c;
-        const queryData = {};
-        columns.forEach((e, i) => {
-            e.orderNumber = i;
-            queryData[e._id] = i;
-        });
-        //TODO: Send queryData
-        alert(JSON.stringify(queryData));
-        this.setState({board: this.state.board, columns: columns});
-    };
+        const c = columns[ind].orderNumber;
+        columns[ind].orderNumber = columns[ind - 1].orderNumber;
+        columns[ind - 1].orderNumber = c;
+        /**const queryData = [{
+            _id:columns[ind]._id,
 
-    deleteMember = m => {
-        const state = {...this.state};
-        state.filterMembers.delete(m);
-        this.setState(state)
+        }];
+            {[columns[ind]._id]: columns[ind].orderNumber,
+            [columns[ind - 1]._id]: columns[ind - 1].orderNumber};*/
+        //TODO: Send queryData
+        this.ws.send(JSON.stringify([
+            this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
+            this.getColumnChangingObject(columns[ind - 1]._id, "orderNumber", columns[ind - 1].orderNumber),
+        ]));
+
+        //alert(JSON.stringify(queryData));
+        columns.sort((a, b) => a.orderNumber - b.orderNumber);
+        this.setState({ columns: columns});
     };
 
     moveRight = id => {
         const ind = this.state.columns.findIndex(c => c._id === id);
         if(ind === this.state.columns.length - 1) return;
         const columns = [...this.state.columns];
-        const c = columns[ind];
-        columns[ind] = columns[ind + 1];
-        columns[ind + 1] = c;
-        const queryData = {};
-        columns.forEach((e, i) => {
-            e.orderNumber = i;
-            queryData[e._id] = i;
-        });
-        //TODO: Send queryData
-        alert(JSON.stringify(queryData));
-        this.setState({board: this.state.board, columns: columns});
+        const c = columns[ind].orderNumber;
+        columns[ind].orderNumber = columns[ind + 1].orderNumber;
+        columns[ind + 1].orderNumber = c;/*
+        const queryData = {[columns[ind]._id]: columns[ind].orderNumber,
+            [columns[ind + 1]._id]: columns[ind + 1].orderNumber};
+        alert(JSON.stringify(queryData));*/
+        const data = JSON.stringify([
+            this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
+            this.getColumnChangingObject(columns[ind + 1]._id, "orderNumber", columns[ind + 1].orderNumber),
+        ]);
+        console.log(data);
+        this.ws.send(data);
+        columns.sort((a, b) => a.orderNumber - b.orderNumber);
+        this.setState({ columns: columns});
     };
 
+    delete = (id, col, parent, children) => this.ws.send(JSON.stringify({
+        _id: id,
+        collection: col,
+        parent: parent,
+        children: children
+    }));
+
+    deleteTask = (columnId, id) => this.delete(id, 'Task', {
+        id: columnId,
+        collection: 'Column',
+        field: 'tasks'
+    });
+
+    deleteColumn = id => this.delete(id, 'Column', undefined, {
+        collection: 'Task',
+        field: 'tasks'
+    });
+
+    addTask = (name, workerId, description, date, columnId) => {
+        console.log(date.toString());
+        this.ws.send(JSON.stringify({
+            collection: 'Task',
+            object: {
+                name: name,
+                workerId: workerId,
+                description: description,
+                endDate: date//TODO: fix date format
+            },
+            parent: {
+                id: columnId,
+                collection: 'Column',
+                field: 'tasks'
+            }
+        }))
+    };
+
+    addColumn = name => {
+        console.log(this.state.board._id);
+        console.log(name)
+        this.ws.send(JSON.stringify({
+            collection: 'Column',
+            object: {
+                name: name,
+                boardId: this.state.board._id,
+                orderNumber: this.state.columns.length
+            }
+        }))
+    };
+
+    getColumnChangingObject = (id, fieldName, value) => ({
+        _id: id,
+        object: {
+            [fieldName]: value,
+        },
+        collection: 'Column',
+    });
+
+    changeColumn = (id, fieldName, value) =>
+        this.ws.send(JSON.stringify(this.getColumnChangingObject(id, fieldName, value)));
+
+    changeTask = (oldId, id, name, workerId, description, date, columnId) => {
+        console.log(date.toString())
+        this.ws.send(JSON.stringify({
+            collection: 'Task',
+            _id: id,
+            object: {
+                name: name,
+                workerId: workerId,
+                description: description,
+                endDate: date//TODO: fix date format
+            },
+            parent: {
+                id: columnId,
+                oldId: oldId,
+                collection: 'Column',
+                field: 'tasks'
+            }
+        }))
+    };
+
+    toggleDoneTask = (id, done) => {
+        this.ws.send(JSON.stringify({
+            collection: 'Task',
+            _id: id,
+            object: {
+                done: done
+            }
+        }))
+    };
+
+    addMember = identifier => {
+        fetch('/api/checkUser?identifier=' + encodeURI(identifier))
+            .then(r => r.json())
+            .then(r => {
+                console.log(r)
+                if(r.error)
+                    alert(r.error);
+                else
+                    this.ws.send(`{"newMemberId":"${r.result}"}`);
+            })
+            .catch(console.log);
+    };
 
     render() {
-        //const { id } = useParams();
-        console.log(this.state);
-        if(this.state.columns)
-            this.state.columns.sort((a, b) => a.orderNumber - b.orderNumber);
         return (
             <>
-                <Members board={this.state.board}/>
+                <Members board={this.state.board} onAdd={this.addMember} />
                 <header className='filter'>
                     <h5>Filter:</h5>
                     <input ref={this.filterText} placeholder='Text'/>
                     <select ref={this.memsFilter}>
                         {this.state.board.members.map(m => <option key={m.login}>{m.login}</option>)}
                     </select>
-                    {[...this.state.filterMembers].map(m => <Member onDelete={l => this.deleteMember(m)} key={m.login}>{m}</Member>)}
+                    {[...this.state.filterMembers].map(m => <Member onDelete={l => this.removeMemberFromFilter(m)} key={m.login}>{m}</Member>)}
                     <button onClick={this.addFilterMem}>Add</button>
-                    {/*<input ref={this.memsFilter} onClick={this.show} readOnly/>*/}
                     <button onClick={this.applyFilter} >Apply</button>
                     <button onClick={this.clearFilter}>Clear</button>
                 </header>
@@ -123,67 +239,20 @@ class Board extends React.Component {
                         {
                             this.state.columns ? (
                                     <>
-                                        {this.state.columns.map(c=>
-                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns}
-                                                    moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c}/>)}
-                                        <AddColumn/>
+                                        {this.state.columns.map(c =>
+                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns} toggleDoneTask={this.toggleDoneTask}
+                                                    addTask={this.addTask} delete={this.deleteColumn} changeColumn={this.changeColumn} changeTask={this.changeTask}
+                                                    moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}/>)}
+                                        <AddColumn addColumn={this.addColumn}/>
                                     </>) :
-                                <LoadingWheel/>
+                                (<div className='centered'>
+                                    <LoadingWheel/>
+                                </div>)
                         }
                     </div>
                 </div>
             </>
         );
-    }
-}
-
-const Member = props => (<div className='member'>
-    {props.children}
-    {props.onDelete ?
-        <span className='arrow' style={{fontSize: "0.8em"}} onClick={props.onDelete}>&#10006;</span>
-        : ""}
-</div>);
-
-class Members extends React.Component {
-    show = () => {
-        $('#members-cont').fadeIn(400);
-    };
-    hide =() => {
-        $('#members-cont').fadeOut(400);
-    };
-    render() {
-        return (
-            <header id='memsHeader'>
-                <h4>{this.props.board.name}
-                    <button className='arrow' id='showMems' onClick={this.show}>v</button>
-                </h4>
-                <div id='members-cont' className='members-cont'>
-                    <b>Creator:</b>
-                    <Member>{this.props.board.creator.login}</Member>
-                    <b>Participants:</b>
-                    <div className='members'>
-                        {this.props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
-                        <AddMember/>
-                    </div>
-                    <button className='link-button' id='hideMems' onClick={this.hide}>&#8679;</button>
-                </div>
-                <a className='link-button back' href='/list'>&lt;</a>
-            </header>
-        );
-    }
-}
-
-class AddMember extends React.Component {
-    add() {
-        const identifier = prompt("Enter user id/login/email");
-        alert(identifier)
-        //TODO: send adding
-    }
-
-    render() {
-        return (<div className='member add-member' onClick={this.add}>
-            +
-        </div>);
     }
 }
 

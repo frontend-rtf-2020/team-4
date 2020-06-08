@@ -15,8 +15,10 @@ class BoardList extends React.Component {
             //console.log(msg.data);
             if(data.error)
                 alert(data.error);
-            else
-                this.setState({boards: data, adding: this.state.adding });
+            else {
+                data.sort((a, b) => a.name.localeCompare(b.name));
+                this.setState({boards: data/*, adding: this.state.adding*/ });
+            }
         };
     }
 
@@ -25,18 +27,29 @@ class BoardList extends React.Component {
     }
 
     componentWillUnmount() {
+        console.log('close');
         this.ws.close();
     }
 
-    addBoard = data => {
+    editField = (name, value, id) => {
+        const data = {_id: id, update: {[name]: value}};
+        this.ws.send(JSON.stringify(data));
+    };
+
+    addBoard = (newBname, newBdescr) => { //Sending data from create board dialog
         alert('sent');
+        const data = JSON.stringify({
+            name: newBname,
+            description: newBdescr,
+        });
         this.ws.send(data);
     };
 
+    deleteBoard = id =>
+        this.ws.send(`{"_id": "${id}"}`);
+
     render() {
         console.log(this.state);
-        if(this.state.boards)
-            this.state.boards.sort((a, b) => a.name.localeCompare(b.name));
         return (
             <>
                 <h1>Boards</h1>
@@ -45,8 +58,9 @@ class BoardList extends React.Component {
                     <div className='boardList'>
                         {this.state.boards.map(b=>
                             <BoardItem key={b._id} description={b.description} id={b._id}
-                                                             name={b.name} members={b.members} endDate={b.endDate}
-                                                             addingDate={b.addingDate} creator={b.creator}/>)}
+                                       delete={this.deleteBoard} onEdit={this.editField}
+                                       name={b.name} members={b.members} endDate={b.endDate}
+                                       addingDate={b.addingDate} creator={b.creatorId}/>)}
                         <AddBoard addBoard={this.addBoard}/>
                     </div> : <LoadingWheel/>
                 }

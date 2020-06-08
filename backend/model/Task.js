@@ -7,12 +7,12 @@ const Task = mongoose.model('Task', new Schema({
         required : true,
         ref: 'User'
     },
-
+/*
     column : {
         type : Schema.Types.ObjectId,
         required : true,
         ref: 'Column'
-    },
+    },*/
     name : {
         type : String,
         required : true,

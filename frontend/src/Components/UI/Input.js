@@ -10,6 +10,7 @@ class Input extends React.Component {
     {
         return this.Field.current.value;
     }
+
     clickField = event => {
         event.preventDefault();
         event.stopPropagation();

@@ -6,19 +6,16 @@ class Task extends React.Component {
     constructor() {
         super();
         this.state = {editing: false};
-
+        this.formRef = React.createRef();
     }
 
-    componentDidMount() {
-    }
-
-    sendDone = event => {
+    sendDone = event =>
         //TODO:send
-        console.log(event.target.checked)
-    };
+        this.props.toggleDoneTask(this.props.task._id, event.target.checked);
+        //console.log(event.target.checked)
 
     getClass = () => {
-        const date = new Date(this.props.task.endDate).valueOf(), now = Date.now().valueOf();
+        const date = Date.parse(this.props.task.endDate).valueOf(), now = Date.now().valueOf();
         if( !this.props.task.done && date < now)
             return 'Task overdue-task';
         else if(!this.props.task.done && date - now <= 24*60*60*1000)
@@ -26,48 +23,64 @@ class Task extends React.Component {
         else return 'Task';
     };
 
-    edit = () => {
-        this.setState({...this.state, editing: true});
+    initEditForm = () => {
+        const inputs = this.formRef.current.getElementsByTagName('input');
+        inputs[0].value = this.props.task.name;
+        inputs[1].value = this.props.task.description;
+        inputs[2].value = this.props.task.endDate;//TODO: fix
+        const selects = this.formRef.current.getElementsByTagName('select');
+        selects[0].value = this.props.task.workerId._id;
+        selects[1].value = this.props.columnId;
     };
+
+    edit = () =>
+        this.setState({editing: true}, this.initEditForm);
 
     cancel = event => {
         event.preventDefault();
         event.stopPropagation();
-        this.setState({...this.state, editing: false});
+        this.setState({editing: false});
     };
 
-    delete = event => {
-        //TODO: Make deletion
-        alert("deletion")
-    };
+    delete = event =>
+        this.props.onDelete(this.props.id);
 
-    onSubmit = event => {
-        alert("send!");
-        //To obtain selected column id use: columnSelect.selectedOptions[0].id
+    onSubmit = e => {
+        const inputs = e.target.parentElement.getElementsByTagName('input');
+        const name = inputs[0].value;
+        const description = inputs[1].value;
+        const date = inputs[2].value;
+        const selects = e.target.parentElement.getElementsByTagName('select');
+        const worker = selects[0].value;
+        const column = selects[1].value;
+        this.props.onEdit(this.props.task._id, name, worker, description, date, column);
+        this.cancel(e);
+        //To obtain selected column id use: columnSelect.selectedOptions[0].value
     };
 
     render() {
+        const date = new Date(this.props.task.endDate);
         return (
-            <div className={this.getClass()}>
+            <div className={this.getClass()} ref={this.formRef}>
                 {this.state.editing ?
                     <>
                         <h4>Edit task</h4>
-                        <input placeholder='Name' value={this.props.task.name}/>
-                        <select value={this.props.task.worker.login}>
-                            {this.props.members.map(m => <option key={m.login}>{m.login}</option>)}
+                        <input placeholder='Name'/>
+                        <select>
+                            {this.props.members.map(m => <option value={m._id} key={m.login}>{m.login}</option>)}
                         </select>
-                        <input placeholder='Description' value={this.props.task.description}/>
+                        <input placeholder='Description'/>
                         <br/>
                         <b>Do before:</b>
                         <br/>
                         <input type='date'/>
                         <br/>
-                        <select id='columnSelect'>
-                            {this.props.columns.map(m => <option id={m._id} key={m._id}>{m.name}</option>)}
+                        <select>
+                            {this.props.columns.map(m => <option value={m._id} key={m._id}>{m.name}</option>)}
                         </select>
                         <br/>
-                        <button onClick={this.onSubmit}>Submit</button>
-                        <button onClick={this.cancel}>Cancel</button>
+                        <button className='editButton' onClick={this.onSubmit}>Submit</button>
+                        <button className='editButton' onClick={this.cancel}>Cancel</button>
                     </> :
                     <>
                         <h4>
@@ -76,17 +89,18 @@ class Task extends React.Component {
                             <span className='arrow' onClick={this.delete}>&#10006;</span>
                         </h4>
                         {this.props.task.description}
-                        {new Date(this.props.task.endDate).toDateString()}
                         <br/>
-                        Worker: {this.props.task.worker.login}
+                        {date.getDay()}.{date.getMonth() + 1}.{date.getFullYear()}
                         <br/>
-                        Done: <input type='checkbox' onChange={this.sendDone} value={this.props.task.done}/>
+                        Worker: {this.props.task.workerId.login}
+                        <br/>
+                        Done: <input type='checkbox' onChange={this.sendDone} checked={this.props.task.done}/>
                     </>}
             </div>
         );
     }
 }
 
-const ColumnOption = props => (<option>{props.children}</option>);
+//const ColumnOption = props => (<option>{props.children}</option>);
 
 export default Task;

@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {getBoards, getDetailedBoard, editBoard} = require('../handlers/boardList');
+const boardListWSHandler = require('../handlers/boardList');
+const detailedBoardWSHandler = require('../handlers/detailedBoard');
 const { checkWsAuthenticated } = require('../handlers/handlers');
 
-router.ws('/get_boards', checkWsAuthenticated, getBoards);
+router.ws('/get_boards', checkWsAuthenticated, boardListWSHandler);
 
-router.ws('/get_detailed_board/:id', checkWsAuthenticated, getDetailedBoard);
-
-router.ws('/edit_board', checkWsAuthenticated, editBoard);
-
+router.ws('/get_detailed_board/:id', checkWsAuthenticated, detailedBoardWSHandler);
 
 module.exports = router;
