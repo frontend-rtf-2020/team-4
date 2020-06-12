@@ -7,6 +7,12 @@ const getBoard = require('./getBoard');
 const sendBoardData = require("./sendBoardData");
 const boardSockets = {};//All sockets for detailed board page
 
+function standardResend(boardId, err)  {
+    if(err)
+        console.log(err);
+    sendData(boardId)
+}
+
 function getDetailedBoard(boardId, userId) {
     return getBoard(boardId, { _id: mongoose.Types.ObjectId(boardId) })
         .then(async b => {
@@ -79,26 +85,20 @@ function deleteObject(data , boardId) {
 }
 
 function updateObject(data , boardId) {
-    const standardResend = standardResend.bind(null, boardId);
+    const resend = standardResend.bind(null, boardId);
     mongoose.connection.models[data.collection].findByIdAndUpdate(data._id , data.object , {useFindAndModify: false} , (err , obj) => {
         if (err)
             console.log(err);
         if (data.parent && data.parent.oldId !== data.parent.id) {
             mongoose.connection.models[data.parent.collection]
                 .findByIdAndUpdate(data.parent.oldId , {$pull: {[data.parent.field]: data._id}} ,
-                    {useFindAndModify: false}, standardResend);
+                    {useFindAndModify: false}, resend);
             mongoose.connection.models[data.parent.collection]
                 .findByIdAndUpdate(data.parent.id , {$addToSet: {[data.parent.field]: data._id}} ,
-                    {useFindAndModify: false} , standardResend);
+                    {useFindAndModify: false} , resend);
         } else
             sendData(boardId)
     })
-}
-
-function standardResend(boardId, err)  {
-    if(err)
-        console.log(err);
-    sendData(boardId)
 }
 
 function handleObject(data , boardId) {

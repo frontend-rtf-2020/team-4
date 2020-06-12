@@ -59,7 +59,8 @@ class Task extends React.Component {
     };
 
     render() {
-        const date = new Date(this.props.task.endDate);
+        //console.log(this.props.task.endDate)
+        const date = new Date(Date.parse(this.props.task.endDate));
         return (
             <div className={this.getClass()} ref={this.formRef}>
                 {this.state.editing ?
@@ -90,7 +91,8 @@ class Task extends React.Component {
                         </h4>
                         {this.props.task.description}
                         <br/>
-                        {date.getDay()}.{date.getMonth() + 1}.{date.getFullYear()}
+                        {/*{date.getDay()}.{date.getMonth() + 1}.{date.getFullYear()}*/}
+                        {this.props.task.endDate}
                         <br/>
                         Worker: {this.props.task.workerId.login}
                         <br/>
