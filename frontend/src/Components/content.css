@@ -9,6 +9,7 @@
     min-width: 150px;
     min-height: 150px;
     border-radius: 5px;
+    box-shadow: 0 0 5px 5px #BBB;
     margin: 20px;
     animation: appear  500ms 1 ease-in-out;
     transition: background-color 0.4s;
@@ -31,7 +32,7 @@
 }
 
 .editButton:focus {
-    box-shadow: inset 1px 1px 1px 1px #555, inset -1px -1px 1px 1px #555;
+    box-shadow: inset 0 0 2px 2px #555
 }
 
 header h2 a:hover {

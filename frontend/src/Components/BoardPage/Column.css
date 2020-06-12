@@ -51,8 +51,8 @@ select {
 
 
 .Column {
-    border: solid black 1px;
-    /*width: 15vw;*/
+    /*border: solid black 1px;
+    width: 15vw;*/
     max-width: 225px;
 }
 
@@ -125,9 +125,9 @@ header h4 {
 */
 .columns {
     display: flex;
-    justify-content: center;
+    overflow-x: auto;
+    padding: 0 20px;
 }
-
 
 .description {
     margin: 20px;
@@ -171,14 +171,13 @@ div.centered {
         height: 40px;
     }
 
-    .columns {
-        overflow-x: scroll;
-        width: 98vw;
-        justify-content: normal;
-    }
 
     #memsHeader{
         flex-direction: column;
+    }
+
+    .columns {
+        width: 98vw;
     }
 
     .Task input, .Task select {

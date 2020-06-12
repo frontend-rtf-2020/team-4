@@ -37,7 +37,6 @@ input:focus, select:focus {
 
 .mainPart > div {
   width: 100%;
-  max-width: 1000px;
 }
 
 .mainPart h1 {
@@ -66,7 +65,7 @@ header {
 header, footer {
   background-color: var(--main-color);
   z-index: 1;
-  box-shadow: 1px 1px 1px 1px grey, -1px -1px 1px 1px grey;
+  box-shadow: 0 0 2px 2px grey;
 }
 
 footer {
@@ -120,7 +119,7 @@ button:hover {
 button:focus {
   outline: none;
   font-weight: bold;
-  box-shadow: inset 1px 1px 1px 1px var(--dark-main-color), inset -1px -1px 1px 1px var(--dark-main-color);
+  box-shadow: inset 0 0 2px 2px var(--dark-main-color);
 }
 
 header a {
