@@ -9,7 +9,7 @@ import Authorization from "./Components/Authorization";
 import Registration from "./Components/Registration";
 import Board from "./Components/BoardPage/Board";
 import Activation from "./Components/Activation";
-
+import "./Components/BoardPage/DragNDrop";
 //const LoginContext = React.createContext({logged: false});
 
 const NotFound = props => (<div className='content'><h1>The page not found</h1></div>);

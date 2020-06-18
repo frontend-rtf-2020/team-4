@@ -28,10 +28,12 @@ class Column extends React.Component {
 
     editTask = this.props.changeTask.bind(null, this.props.column._id);
 
+
+
     render() {
         console.log('props' + this.props);
         return  (
-                <div className='Column content'>
+                <div className='Column content draggable'>
                     <span onClick={this.moveLeft} className='arrow' style={{float: "left"}}>&lt;</span>
                     {/* <span className='arrow edit' onClick={this.edit}>&#10000;</span>*/}
                     <span className='arrow' onClick={this.delete}>&#10006;</span>

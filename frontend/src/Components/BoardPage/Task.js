@@ -9,10 +9,11 @@ class Task extends React.Component {
         this.formRef = React.createRef();
     }
 
-    sendDone = event =>
+    sendDone = event => {
         //TODO:send
-        this.props.toggleDoneTask(this.props.task._id, event.target.checked);
+            this.props.toggleDoneTask(this.props.task._id, event.target.checked);
         //console.log(event.target.checked)
+    };
 
     getClass = () => {
         const date = Date.parse(this.props.task.endDate).valueOf(), now = Date.now().valueOf();

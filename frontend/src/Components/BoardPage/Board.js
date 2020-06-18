@@ -52,7 +52,7 @@ class Board extends React.Component {
             else {
                 /*if(data.message)
                     alert(data.message);*/
-                console.log(data)
+                console.log(data);
                 data.columns.sort((a, b) => a.orderNumber - b.orderNumber);
                 this.setState({...data,  filter: t => true});
             }
@@ -151,7 +151,7 @@ class Board extends React.Component {
 
     addColumn = name => {
         console.log(this.state.board._id);
-        console.log(name)
+        console.log(name);
         this.ws.send(JSON.stringify({
             collection: 'Column',
             object: {
@@ -174,7 +174,7 @@ class Board extends React.Component {
         this.ws.send(JSON.stringify(this.getColumnChangingObject(id, fieldName, value)));
 
     changeTask = (oldId, id, name, workerId, description, date, columnId) => {
-        console.log(date.toString())
+        console.log(date.toString());
         this.ws.send(JSON.stringify({
             collection: 'Task',
             _id: id,
@@ -207,7 +207,7 @@ class Board extends React.Component {
         fetch('/api/checkUser?identifier=' + encodeURI(identifier))
             .then(r => r.json())
             .then(r => {
-                console.log(r)
+                console.log(r);
                 if(r.error)
                     alert(r.error);
                 else
@@ -235,7 +235,7 @@ class Board extends React.Component {
                     <div align='center' className='description'>
                         {this.state.board.description}
                     </div>
-                    <div className='columns'>
+                    <div className='columns droppable'>
                         {
                             this.state.columns ? (
                                     <>
