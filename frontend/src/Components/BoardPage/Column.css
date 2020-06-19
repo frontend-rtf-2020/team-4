@@ -148,6 +148,23 @@ div.centered {
     width: auto;
 }
 
+.row {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.popup_inner {
+    position: absolute;
+    text-align: center;
+    width: 200px;
+    height: 150px;
+    margin-left: 44%;
+    margin-right: auto;
+    padding-right: 8px;
+    border-radius: 5px;
+    background: linear-gradient(rgba(230,230,230, 1),rgba(210,210,210, 1));
+}
+
 @media (max-width: 1020px) {
     .members-cont {
         flex-wrap: wrap;
@@ -191,5 +208,17 @@ div.centered {
 
     .filter {
         flex-wrap: wrap;
+    }
+
+
+    .popup_inner {
+        position: absolute;
+        align-items: center;
+        left: 100%;
+        right: 25%;
+        top: 25%;
+        bottom: 25%;
+        margin: auto;
+        background: green;
     }
 }

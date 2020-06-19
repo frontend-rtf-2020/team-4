@@ -1,28 +1,28 @@
+import $ from 'jquery';
 let DragManager = new function() {
+
 
     let dragObject = {};
 
     let self = this;
-
     function onMouseDown(e) {
 
         if (e.which !== 1) return;
-
+        console.log(document.activeElement);
         let elem = e.target.closest('.draggable');
-        if (document.activeElement.tagName === 'INPUT') {
-            return; // block dragging
-        }
-        else {
+        if (elem) {
             dragObject.elem = elem;
             dragObject.downX = e.pageX;
             dragObject.downY = e.pageY;
-            return false;
+            return false; // block dragging
+        }
+        else {
+            return;
         }
     }
 
     function onMouseMove(e) {
         if (!dragObject.elem) return;
-
         if (!dragObject.avatar) {
             let moveX = e.pageX - dragObject.downX;
             let moveY = e.pageY - dragObject.downY;
@@ -117,9 +117,17 @@ let DragManager = new function() {
         return elem.closest('.droppable');
     }
 
+  /*  window.onload = function(){
+        $(".Column.content.draggable").on('mousedown', onMouseDown);
+        $(".Column.content.draggable").on('mouseup', onMouseUp);
+        $(".Column.content.draggable").on('mousemove', onMouseMove());
+        document.getElementsByClassName("Column").onmousemove = onMouseMove;
+        document.getElementsByClassName("Column").onmouseup = onMouseUp;
+        document.getElementsByClassName("Column").onmousedown = onMouseDown;
+    };
     document.onmousemove = onMouseMove;
     document.onmouseup = onMouseUp;
-    document.onmousedown = onMouseDown;
+    document.onmousedown = onMouseDown; */
 
     this.onDragEnd = function(dragObject, dropElem) {};
     this.onDragCancel = function(dragObject) {};
@@ -153,3 +161,6 @@ DragManager.onDragEnd = function(dragObject, dropElem) {
             dragObject.avatar.rollback();
     }
 };
+
+
+export default DragManager;

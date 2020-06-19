@@ -5,7 +5,9 @@ import { LoadingWheel } from "../LoadingWheel";
 import AddColumn from "./AddColumn";
 import { Members } from "./Members";
 import Member from "./Member";
-
+import DragManager from "./DragNDrop";
+import $ from 'jquery';
+import Popup from "../UI/Popup";
 /**
  * TODO: Divide class into several parts, introducing all ws functions to another class!
  *
@@ -34,11 +36,17 @@ class Board extends React.Component {
         this.setState(state)
     };
 
+    togglePopup = () => {
+        this.setState({
+            showPopup: !this.state.showPopup
+        });
+    };
+
     constructor() {
         super();
         this.filterText = React.createRef();
         this.memsFilter = React.createRef();
-        this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}}, columns: null, filterMembers: new Set(), filter: t => true};
+        this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}}, columns: null, filterMembers: new Set(), filter: t => true, showPopup: false};
     }
 
     componentDidMount() {
@@ -50,11 +58,14 @@ class Board extends React.Component {
             if(data.error)
                 alert(data.error);
             else {
-                /*if(data.message)
-                    alert(data.message);*/
                 console.log(data);
                 data.columns.sort((a, b) => a.orderNumber - b.orderNumber);
-                this.setState({...data,  filter: t => true});
+                this.setState({...data,  filter: t => true}, () => {
+                    document.getElementsByClassName(".draggable").onMouseDown = (event) => DragManager.onMouseDown(event);
+                    document.getElementsByClassName(".draggable").onmousemove = (event) => DragManager.onMouseMove(event);
+                    document.getElementsByClassName(".draggable").onmouseup = (event) =>  DragManager.onMouseUp(event);
+
+                });
             }
         };
     }
@@ -82,7 +93,6 @@ class Board extends React.Component {
         }];
             {[columns[ind]._id]: columns[ind].orderNumber,
             [columns[ind - 1]._id]: columns[ind - 1].orderNumber};*/
-        //TODO: Send queryData
         this.ws.send(JSON.stringify([
             this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
             this.getColumnChangingObject(columns[ind - 1]._id, "orderNumber", columns[ind - 1].orderNumber),
@@ -219,7 +229,7 @@ class Board extends React.Component {
     render() {
         return (
             <>
-                <Members board={this.state.board} onAdd={this.addMember} />
+                <Members board={this.state.board} popup={this.togglePopup} onAdd={this.addMember} />
                 <header className='filter'>
                     <h5>Filter:</h5>
                     <input ref={this.filterText} placeholder='Text'/>
@@ -232,6 +242,14 @@ class Board extends React.Component {
                     <button onClick={this.clearFilter}>Clear</button>
                 </header>
                 <div>
+                    {this.state.showPopup ?
+                        <Popup
+                            addMember = {this.addMember}
+                            text='Add Member'
+                            closePopup={this.togglePopup.bind(this)}
+                        />
+                        : null
+                    }
                     <div align='center' className='description'>
                         {this.state.board.description}
                     </div>

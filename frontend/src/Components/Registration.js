@@ -15,9 +15,9 @@ export default class Registration extends React.Component {
 
     registerHandler = (event) => {
         event.preventDefault();
-        const username = this.usernameField.current.getValue(),
-              password = this.passwordField.current.getValue(),
-                confirm = this.confirmField.current.getValue();
+        const username = this.usernameField.current.getValue,
+              password = this.passwordField.current.getValue,
+                confirm = this.confirmField.current.getValue;
         if(confirm !== password)
         {
             this.setState({errorMessage: "Password and its confirm are different "});
