@@ -1,5 +1,4 @@
 
-const Task = require('../model/Task');
 const Board = require('../model/Board');
 const Column = require('../model/Column');
 const mongoose = require('mongoose');
@@ -65,7 +64,7 @@ function addNewObject(data , boardId) {
         .then(e => data.parent ? mongoose.connection.models[data.parent.collection]
             .findByIdAndUpdate(data.parent.id , {$addToSet: {[data.parent.field]: e._id}} ,
                 {useFindAndModify: false}, standardResend.bind(null, boardId)) : sendData(boardId))
-        .then(r => console.log('Creation'))
+        //.then(r => console.log('Creation'))
         .catch(e => console.log(e));
 }
 
@@ -86,7 +85,7 @@ function deleteObject(data , boardId) {
 
 function updateObject(data , boardId) {
     const resend = standardResend.bind(null, boardId);
-    mongoose.connection.models[data.collection].findByIdAndUpdate(data._id , data.object , {useFindAndModify: false} , (err , obj) => {
+    mongoose.connection.models[data.collection].findByIdAndUpdate(data._id , data.object , {useFindAndModify: false} , (err) => {
         if (err)
             console.log(err);
         if (data.parent && data.parent.oldId !== data.parent.id) {

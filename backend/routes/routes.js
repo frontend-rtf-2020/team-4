@@ -7,7 +7,7 @@ const router = express.Router();
 const { activate, RegistrationHandler, reactivate } = require('../handlers/registration');
 const passport = require('passport');
 
-const Task = require('../model/Task');
+
 const Column = require('../model/Column');
 const Board = require('../model/Board');
 const { getUserData, checkAuthenticated, checkNotAuthenticated, logout, findUser } = require('../handlers/handlers');
