@@ -81,6 +81,10 @@ span {
     margin: 5px;
 }
 
+.error {
+    color: red;
+}
+
 @keyframes appear {
     from {
         opacity: 0;

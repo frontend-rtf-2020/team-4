@@ -23,7 +23,7 @@ export default class Registration extends React.Component {
             this.setState({errorMessage: "Password and its confirm are different "});
             return;
         }
-        if(username.indexOf('@') !== -1)
+        if(username.toString().indexOf('@') !== -1)
         {
             this.setState({errorMessage: "Login must not contain symbol @"});
             return;
@@ -54,7 +54,7 @@ export default class Registration extends React.Component {
         return(
             <>
                 <div>
-                    <h1>Registration</h1>
+                    <h1>Sign up</h1>
                 </div>
                 <form className="content">
                     <Input ref={this.usernameField} label="Login" />

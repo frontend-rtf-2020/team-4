@@ -1,20 +1,22 @@
 import React from "react";
 
 const NotAuthorizedLinks = props => (<>
-    <a href='/auth' className='link-button'>Authorization</a>
-    <a href='/reg' className='link-button'>Registration</a>
+    <a href='/auth' className='link-button'>Sign in</a>
+    <a href='/reg' className='link-button'>Sign up</a>
 </>);
 
 
 class AuthorizedLinks extends React.Component {
+
     logout() {
         fetch('/api/logout')
             .then(r => r.json())
             .then(r => {
-                if(r.error)
+                if(r.error) {
                     alert(r.error);
+                }
                 else {
-                    alert(r.result);
+                   // alert(r.result);
                     window.location.href = '/';
                 }
                 sessionStorage.setItem('user', null);
