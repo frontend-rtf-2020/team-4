@@ -3,7 +3,6 @@ const mail = require('nodemailer');
 const transporter = mail.createTransport({
     host: "smtp.mail.ru",
     port: 465,
-    //secure: false,
     auth: {
         user: process.env.MAIL_ADDRESS,
         pass: process.env.MAIL_PASSWORD

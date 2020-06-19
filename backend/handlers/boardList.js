@@ -67,9 +67,7 @@ async function replyBoardListMessage(msg , userId) {
         newBoard.save(function (err , newBoard) {
             if (err) console.error(err);
             else sendBoardData(newBoard.members , boardListSockets);
-        });  //Saving new board in DB
-        //console.log(newBoard._id.toString());//Trying send new board to all her members (in developing);
-        // newBoard.members.forEach(m => getBoard(m._id).then(r => boardListSockets[m._id.toString()].send(JSON.stringify(r))).catch(e => console.log(e)));
+        });
     }
 }
 

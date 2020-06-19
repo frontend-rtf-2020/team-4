@@ -14,7 +14,7 @@ div .board {
 .board:hover {
     box-shadow: inset 2px 2px 2px 2px darkgray, inset -2px -2px 2px 2px darkgray;
     background-color: rgba(250, 250, 250, 0.7);
-    /*background-color: var(--content-color);*/
+
     cursor: pointer;
 }
 
@@ -22,9 +22,7 @@ div .board {
     margin: 0;
 }
 
-.board-delete {/*
-    display: block;
-    text-align: end;*/
+.board-delete {
     float: right;
     margin: 0;
 }
@@ -36,13 +34,3 @@ div .board {
     font-weight: lighter;
 }
 
-/*
-
-button.edit-ico {
-    background:  url('./edit-icon.png') center no-repeat,  linear-gradient(rgba(120, 120, 120, 0.7), rgba(150, 150, 150, 0.4));
-}
-
-button.edit-ico:hover {
-     background: url('./edit-icon.png') center no-repeat, linear-gradient(rgba(150, 150, 150, 0.4), rgba(120, 120, 120, 0.7));
- }
-*/

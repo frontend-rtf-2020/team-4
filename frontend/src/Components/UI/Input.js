@@ -17,10 +17,8 @@ class Input extends React.Component {
     };
     render() {
         const inputType = this.props.type || 'text';
-        //const cls = [classes.Input];
-        ///const htmlFor= `${inputType}-${Math.random()}`;
         return (
-            <div /*className={cls.join(' ')}*/ className='Input'>
+            <div className='Input'>
                 <label htmlFor={this.props.id}>{this.props.label}</label>
                 <input
                     onClick={this.clickField}

@@ -14,7 +14,6 @@ export default class Field extends React.PureComponent {
         this.inputRef = createRef();
     }
     componentDidUpdate(prevProps , prevState , snapshot) {
-        //super.componentDidUpdate(prevProps, prevState, snapshot);
         console.log(this.inputRef);
         if(this.state.editing)
             this.inputRef.current.value = this.props.children;
@@ -24,7 +23,6 @@ export default class Field extends React.PureComponent {
         event.preventDefault();
         event.stopPropagation();
         this.setState({editing: true});
-        //this.inputRef.current.value = this.props.children;
     };
 
     cancel = event => {

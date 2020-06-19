@@ -8,12 +8,9 @@ class BoardItem extends React.Component {
 
     onClick = () => {
         document.location.href = `/item/${this.props.id}`
-        //window.
     };
     delete = event => {
         event.stopPropagation();
-        //TODO: Make deletion
-        //alert("deletion")
         this.props.delete(this.props.id)
     };
 
@@ -21,7 +18,6 @@ class BoardItem extends React.Component {
         this.props.onEdit(name, value, this.props.id);
 
     click = event => {
-        //event.preventDefault();
         event.stopPropagation();
     };
     render() {

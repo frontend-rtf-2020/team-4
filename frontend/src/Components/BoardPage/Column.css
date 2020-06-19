@@ -118,11 +118,7 @@ header h4 {
     background-color: var(--dark-main-color);
     cursor: pointer;
 }
-/*
-.member:hover {
-    background-color: var(--main-color);
-}
-*/
+
 .columns {
     display: flex;
     overflow-x: auto;

@@ -4,11 +4,9 @@ export default class AddTask extends React.Component {
     constructor() {
         super();
         this.state = { adding: false };
-        //this.formRef = React.createRef();
     }
 
     onSubmit = e => {
-        //alert(e.target.parentElement.getElementsByTagName('select')[0].value);
         const inputs = e.target.parentElement.getElementsByTagName('input');
         const name = inputs[0].value;
         const description = inputs[1].value;

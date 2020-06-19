@@ -1,18 +1,5 @@
 import React from "react";
-/*
-function parseQueryString(strQuery = window.location.search) {
-    let strSearch   = strQuery.substr(1),
-        strPattern  = /([^=]+)=([^&]+)&?/ig,
-        arrMatch    = strPattern.exec(strSearch),
-        objRes      = {};
-    while (arrMatch != null) {
-        objRes[arrMatch[1]] = arrMatch[2];
-        arrMatch = strPattern.exec(strSearch);
-    }
-    return objRes;
-}
 
-*/
 export default class Activation extends React.Component {
 
     constructor() {

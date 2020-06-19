@@ -6,7 +6,6 @@ import AddColumn from "./AddColumn";
 import { Members } from "./Members";
 import Member from "./Member";
 import DragManager from "./DragNDrop";
-import $ from 'jquery';
 import Popup from "../UI/Popup";
 /**
  * TODO: Divide class into several parts, introducing all ws functions to another class!
@@ -15,7 +14,7 @@ import Popup from "../UI/Popup";
 
 class Board extends React.Component {
     clearFilter = event => {
-        this.setState({/*...this.state,*/ filter: t => true})
+        this.setState({filter: t => true})
     };
 
     applyFilter = event => {
@@ -97,8 +96,6 @@ class Board extends React.Component {
             this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
             this.getColumnChangingObject(columns[ind - 1]._id, "orderNumber", columns[ind - 1].orderNumber),
         ]));
-
-        //alert(JSON.stringify(queryData));
         columns.sort((a, b) => a.orderNumber - b.orderNumber);
         this.setState({ columns: columns});
     };

@@ -1,5 +1,4 @@
 import React from "react";
-import AddTask from "./AddTask";
 class Task extends React.Component {
 
     constructor() {
@@ -58,7 +57,6 @@ class Task extends React.Component {
     };
 
     render() {
-        //console.log(this.props.task.endDate)
         const date = new Date(Date.parse(this.props.task.endDate));
         return (
             <div className={this.getClass()} ref={this.formRef}>
@@ -90,7 +88,6 @@ class Task extends React.Component {
                         </h4>
                         {this.props.task.description}
                         <br/>
-                        {/*{date.getDay()}.{date.getMonth() + 1}.{date.getFullYear()}*/}
                         {this.props.task.endDate ? this.props.task.endDate.substring(0, 10) : this.props.task.endDate}
                         <br/>
                         Worker: {this.props.task.workerId.login}
@@ -102,6 +99,5 @@ class Task extends React.Component {
     }
 }
 
-//const ColumnOption = props => (<option>{props.children}</option>);
 
 export default Task;

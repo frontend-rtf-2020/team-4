@@ -13,11 +13,6 @@ class Column extends React.Component {
     };
     addTask = (name, workerId, description, date) =>
         this.props.addTask(name, workerId, description, date, this.props.column._id);
-    /*
-    constructor() {
-        super();
-        this.state = { name: "Title", tasks: [ {name: "sdcvsds" } ], editing: false};
-    }*/
 
     delete = event =>
         this.props.delete(this.props.column._id);

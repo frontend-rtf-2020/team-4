@@ -6,7 +6,6 @@ function webSocketsInitialization(app, server) {
             perMessageDeflate: false
         }
     });
-    //console.log(ews.getWss());
 }
 
 module.exports =  webSocketsInitialization;

@@ -13,9 +13,6 @@ function checkAuthenticated(req, res, next) {
 }
 
 function checkWsAuthenticated(ws, req, next) {
-
-    //console.log(ws.upgradeReq.session.passport.user);
-    //console.log('req: ' + JSON.stringify(req));
     if(req.user)
         next();
     else {
