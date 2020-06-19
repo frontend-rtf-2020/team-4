@@ -10,9 +10,7 @@ class Task extends React.Component {
     }
 
     sendDone = event => {
-        //TODO:send
             this.props.toggleDoneTask(this.props.task._id, event.target.checked);
-        //console.log(event.target.checked)
     };
 
     getClass = () => {
@@ -28,7 +26,8 @@ class Task extends React.Component {
         const inputs = this.formRef.current.getElementsByTagName('input');
         inputs[0].value = this.props.task.name;
         inputs[1].value = this.props.task.description;
-        inputs[2].value = this.props.task.endDate;//TODO: fix
+        console.log(this.props.task.endDate);
+        inputs[2].value = this.props.task.endDate.substring(0, 10);//TODO: fix
         const selects = this.formRef.current.getElementsByTagName('select');
         selects[0].value = this.props.task.workerId._id;
         selects[1].value = this.props.columnId;
@@ -93,7 +92,7 @@ class Task extends React.Component {
                         {this.props.task.description}
                         <br/>
                         {/*{date.getDay()}.{date.getMonth() + 1}.{date.getFullYear()}*/}
-                        {this.props.task.endDate}
+                        {this.props.task.endDate ? this.props.task.endDate.substring(0, 10) : this.props.task.endDate}
                         <br/>
                         Worker: {this.props.task.workerId.login}
                         <br/>

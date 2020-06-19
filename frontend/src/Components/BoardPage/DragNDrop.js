@@ -9,14 +9,15 @@ let DragManager = new function() {
         if (e.which !== 1) return;
 
         let elem = e.target.closest('.draggable');
-        if (!elem) return;
-
-        dragObject.elem = elem;
-
-        dragObject.downX = e.pageX;
-        dragObject.downY = e.pageY;
-
-        return false;
+        if (document.activeElement.tagName === 'INPUT') {
+            return; // block dragging
+        }
+        else {
+            dragObject.elem = elem;
+            dragObject.downX = e.pageX;
+            dragObject.downY = e.pageY;
+            return false;
+        }
     }
 
     function onMouseMove(e) {
