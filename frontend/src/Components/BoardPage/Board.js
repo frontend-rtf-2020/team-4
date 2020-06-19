@@ -5,7 +5,6 @@ import { LoadingWheel } from "../LoadingWheel";
 import AddColumn from "./AddColumn";
 import { Members } from "./Members";
 import Member from "./Member";
-import DragManager from "./DragNDrop";
 import Popup from "../UI/Popup";
 /**
  * TODO: Divide class into several parts, introducing all ws functions to another class!
@@ -45,7 +44,9 @@ class Board extends React.Component {
         super();
         this.filterText = React.createRef();
         this.memsFilter = React.createRef();
-        this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}}, columns: null, filterMembers: new Set(), filter: t => true, showPopup: false};
+        this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}},
+            columns: null, filterMembers: new Set(), filter: t => true, showPopup: false,
+            dragId: ""};
     }
 
     componentDidMount() {
@@ -59,12 +60,7 @@ class Board extends React.Component {
             else {
                 console.log(data);
                 data.columns.sort((a, b) => a.orderNumber - b.orderNumber);
-                this.setState({...data,  filter: t => true}, () => {
-                    document.getElementsByClassName(".draggable").onMouseDown = (event) => DragManager.onMouseDown(event);
-                    document.getElementsByClassName(".draggable").onmousemove = (event) => DragManager.onMouseMove(event);
-                    document.getElementsByClassName(".draggable").onmouseup = (event) =>  DragManager.onMouseUp(event);
-
-                });
+                this.setState({...data,  filter: t => true});
             }
         };
     }
@@ -99,6 +95,7 @@ class Board extends React.Component {
         columns.sort((a, b) => a.orderNumber - b.orderNumber);
         this.setState({ columns: columns});
     };
+
 
     moveRight = id => {
         const ind = this.state.columns.findIndex(c => c._id === id);
@@ -223,6 +220,45 @@ class Board extends React.Component {
             .catch(console.log);
     };
 
+    onDragOver = (event) => {
+    event.preventDefault();
+    };
+
+    onDragEnter = (event, id) => {
+        if ( event.target.className === "Column content") {
+            event.target.style.border = "dotted black 3px";
+            event.target.style.background= "rgb(255, 255, 128)";
+            this.setState({dropId : id});
+        }
+    };
+
+    onDragEnd = (event, id) => {
+        const indDrop = this.state.columns.findIndex(c => c._id === this.state.dropId);
+        const columns = [...this.state.columns];
+        const drop = columns[indDrop].orderNumber;
+        console.log(drop);
+        const indDrag = this.state.columns.findIndex(c => c._id === this.state.dragId);
+        const drag = columns[indDrag].orderNumber;
+        console.log(drag);
+        columns[indDrag].orderNumber = columns[indDrop].orderNumber;
+        columns[indDrop].orderNumber = drag;
+        const data = JSON.stringify([
+            this.getColumnChangingObject(columns[indDrag]._id, "orderNumber", columns[indDrag].orderNumber),
+            this.getColumnChangingObject(columns[indDrop]._id, "orderNumber", columns[indDrop].orderNumber),
+        ]);
+        this.ws.send(data);
+        columns.sort((a, b) => a.orderNumber - b.orderNumber);
+        this.setState({ columns: columns});
+        event.target.style.background = "linear-gradient(rgba(230,230,230, 0.9),rgba(210,210,210, 0.8))";
+        event.target.style.border = ""
+    };
+
+    onDragStart = (event, id) => {
+       // event.dataTransfer.setData("id", id);
+        this.setState({dragId : id});
+    };
+
+
     render() {
         return (
             <>
@@ -257,7 +293,9 @@ class Board extends React.Component {
                                         {this.state.columns.map(c =>
                                             <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns} toggleDoneTask={this.toggleDoneTask}
                                                     addTask={this.addTask} delete={this.deleteColumn} changeColumn={this.changeColumn} changeTask={this.changeTask}
-                                                    moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}/>)}
+                                                    moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}
+                                                    onDragOver={this.onDragOver} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
+                                            />)}
                                         <AddColumn addColumn={this.addColumn}/>
                                     </>) :
                                 (<div className='centered'>

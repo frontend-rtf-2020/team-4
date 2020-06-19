@@ -25,10 +25,37 @@ class Column extends React.Component {
 
 
 
+    onDragLeave = (event) => {
+        if ( event.target.className === "Column content") {
+            event.target.style.background = "linear-gradient(rgba(230,230,230, 0.9),rgba(210,210,210, 0.8))";
+            event.target.style.border = ""
+        }
+    };
+
+    onDragEnd = (event) => {
+        this.props.onDragEnd(event, this.props.column._id);
+    };
+
+    onDrop = (event) => {
+        event.target.style.background = "linear-gradient(rgba(230,230,230, 0.9),rgba(210,210,210, 0.8))";
+        event.target.style.border = ""
+    };
+
+    onDragStart = (event) => {
+        this.props.onDragStart(event, this.props.column._id)
+    };
+
+    onDragEnter = (event) => {
+        this.props.onDragEnter(event, this.props.column._id);
+    };
+
     render() {
         console.log('props' + this.props);
         return  (
-                <div className='Column content draggable'>
+                <div draggable="true" className='Column content' onDragEnter={this.onDragEnter}
+                     onDragStart={this.onDragStart} onDragLeave={this.onDragLeave}
+                     onDragOver={this.props.onDragOver} onDragEnd={this.onDragEnd}
+                     onDrop={this.onDrop}>
                     <span onClick={this.moveLeft} className='arrow' style={{float: "left"}}>&lt;</span>
                     {/* <span className='arrow edit' onClick={this.edit}>&#10000;</span>*/}
                     <span className='arrow' onClick={this.delete}>&#10006;</span>
