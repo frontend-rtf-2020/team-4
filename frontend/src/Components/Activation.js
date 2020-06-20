@@ -1,4 +1,5 @@
 import React from "react";
+import './content.css';
 
 export default class Activation extends React.Component {
 
@@ -15,7 +16,7 @@ export default class Activation extends React.Component {
             <h2>{this.state.error || this.state.result || "Default message"}</h2>
             <form method='get' action={needReactivate ? '/api/reactivate' : '/'}>
                 {needReactivate ? <input type='hidden' value={this.state.activate} name='activate'/> : ''}
-                <button>{needReactivate ? 'Reactivate' : 'Ok'}</button>
+                <button>{needReactivate ? 'Reactivate' : 'Return to homepage'}</button>
             </form>
         </div>)
     }
