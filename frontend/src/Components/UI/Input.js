@@ -20,14 +20,28 @@ class Input extends React.Component {
         return (
             <div className='Input'>
                 <label htmlFor={this.props.id}>{this.props.label}</label>
-                <input
-                    onClick={this.clickField}
-                    ref={this.Field}
-                    placeholder={this.props.label}
-                    type={inputType}
-                    id={this.props.id}
-                    value={this.props.value}
-                    onChange={this.props.onChange}/>
+                {this.props.mail ?
+                    <input
+                        pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+                        required="true"
+                        onClick={this.clickField}
+                        ref={this.Field}
+                        placeholder={this.props.label}
+                        type={inputType}
+                        id={this.props.id}
+                        value={this.props.value}
+                        onChange={this.props.onChange}/>
+                    :
+                    <input
+                        onClick={this.clickField}
+                        ref={this.Field}
+                        required="true"
+                        placeholder={this.props.label}
+                        type={inputType}
+                        id={this.props.id}
+                        value={this.props.value}
+                        onChange={this.props.onChange}/>
+                }
                 <span>{this.props.errorMessage}</span>
             </div>
         )
