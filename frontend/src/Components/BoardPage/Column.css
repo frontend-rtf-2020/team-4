@@ -237,4 +237,8 @@ div.centered {
     .addMember {
         margin-bottom: 10px;
     }
+
+    .smallText {
+        font-size: 0.8em;
+    }
 }
