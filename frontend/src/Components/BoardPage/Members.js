@@ -29,7 +29,7 @@ export class Members extends React.Component {
                     <b>Participants:</b>
                     <div className='members'>
                         {this.props.board.members.map(m => <Member key={m.login}>{m.login}</Member>)}
-                        <AddMember toggle={this.props.popup} />
+                        <AddMember />
                     </div>
                     <div align='center'>
                         <span className='arrow' id='hideMems' onClick={this.hide}>^</span>
@@ -43,14 +43,13 @@ export class Members extends React.Component {
 }
 
 class AddMember extends React.Component {
-    add = () => {
 
-      //  const identifier = prompt("Enter user id/login/email");
-       // this.props.onAdd(identifier);
-    };
+    toggle() {
+        $('.popup_inner').fadeToggle(400);
+    }
 
     render() {
-        return (<div className='member add-member' onClick={this.props.toggle}>
+        return (<div className='member add-member' onClick={this.toggle}>
             +
         </div>);
     }

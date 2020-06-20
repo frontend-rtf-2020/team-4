@@ -33,20 +33,19 @@ class Board extends React.Component {
         state.filterMembers.add(this.memsFilter.current.value);
         this.setState(state)
     };
-
+/*
     togglePopup = () => {
         this.setState({
             showPopup: !this.state.showPopup
         });
     };
-
+*/
     constructor() {
         super();
         this.filterText = React.createRef();
         this.memsFilter = React.createRef();
         this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}},
-            columns: null, filterMembers: new Set(), filter: t => true, showPopup: false,
-            dragId: ""};
+            columns: null, filterMembers: new Set(), filter: t => true, dragId: ""};
     }
 
     componentDidMount() {
@@ -262,7 +261,7 @@ class Board extends React.Component {
     render() {
         return (
             <>
-                <Members board={this.state.board} popup={this.togglePopup} onAdd={this.addMember} />
+                <Members board={this.state.board} onAdd={this.addMember} />
                 <header className='filter'>
                     <h5>Filter:</h5>
                     <input ref={this.filterText} placeholder='Text'/>
@@ -275,14 +274,9 @@ class Board extends React.Component {
                     <button onClick={this.clearFilter}>Clear</button>
                 </header>
                 <div>
-                    {this.state.showPopup ?
-                        <Popup
+                    <Popup
                             addMember = {this.addMember}
-                            text='Add Member'
-                            closePopup={this.togglePopup.bind(this)}
-                        />
-                        : null
-                    }
+                            text='Add Member'/>
                     <div align='center' className='description'>
                         {this.state.board.description}
                     </div>
