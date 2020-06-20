@@ -53,10 +53,6 @@ function reactivate (req, resp) {
 }
 
 function generateActivatorId (login) {
-    /*let res = login;
-    for (let i = 0; i < 15; i++)
-        res += String.fromCodePoint(Math.round(48 + Math.random() * 74));
-    return res;*/
     return uuidv5(login, namespase);
 }
 
@@ -86,7 +82,7 @@ async function RegistrationHandler(req, res)
                         sendEmail(newUser.email, newUser.activatorId)
                             .then(i => {
                                 console.log(i);
-                                res.status(200);
+                                res.send('');
                             })
                             .catch(i =>
                             {
