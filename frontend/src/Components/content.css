@@ -82,7 +82,11 @@ span {
 }
 
 .error {
-    color: red;
+     color: red;
+ }
+
+.success {
+    color: green;
 }
 
 @keyframes appear {

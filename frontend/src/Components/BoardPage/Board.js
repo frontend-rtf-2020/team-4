@@ -45,7 +45,7 @@ class Board extends React.Component {
         this.filterText = React.createRef();
         this.memsFilter = React.createRef();
         this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}},
-            columns: null, filterMembers: new Set(), filter: t => true, dragId: ""};
+            columns: null, filterMembers: new Set(), filter: t => true, dragId: "", addError: "", addSucces: ""};
     }
 
     componentDidMount() {
@@ -212,9 +212,13 @@ class Board extends React.Component {
             .then(r => {
                 console.log(r);
                 if(r.error)
-                    alert(r.error);
-                else
+                    //alert(r.error);
+                    this.setState({addError: r.error, addSuccess : ""});
+                else {
+                    this.setState({addSuccess: "User has been successfully added!", addError: ""});
                     this.ws.send(`{"newMemberId":"${r.result}"}`);
+                }
+
             })
             .catch(console.log);
     };
@@ -253,7 +257,6 @@ class Board extends React.Component {
     };
 
     onDragStart = (event, id) => {
-       // event.dataTransfer.setData("id", id);
         this.setState({dragId : id});
     };
 
@@ -275,6 +278,8 @@ class Board extends React.Component {
                 </header>
                 <div>
                     <Popup
+                            success = {this.state.addSuccess}
+                            error = {this.state.addError}
                             addMember = {this.addMember}
                             text='Add Member'/>
                     <div align='center' className='description'>

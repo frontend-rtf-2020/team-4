@@ -22,7 +22,6 @@ export default class Authorization extends React.Component {
                 this.setState({errBool: true, errText : res.error});
             }
             else {
-                alert(res.result);
                 window.location.href = '/';
             }
         });

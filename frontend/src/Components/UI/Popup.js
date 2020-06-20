@@ -7,16 +7,29 @@ class Popup extends React.Component {
         super();
         this.identifier = React.createRef();
     }
-    add = () => {
-        const id = this.identifier.current.getValue;
+
+    add = (event) => {
+        event.preventDefault();
+        const id = this.identifier.current.value;
         this.props.addMember(id);
+        console.log(id);
     };
 
     render() {
         return (
             <div>
                 <div className="popup_inner">
-                    <h2>{this.props.text}</h2>
+                    <h2 className="addMember">{this.props.text}</h2>
+                    {this.props.error ?
+                        <label className="error smallText">{this.props.error}</label>
+                        :
+                        null
+                    }
+                    {this.props.success ?
+                        <label className="success smallText">{this.props.success}</label>
+                        :
+                        null
+                    }
                     <input ref={this.identifier} placeholder="Email address or nickname"/>
                     <div className="row">
                         <button  onClick={this.add}>Add</button>

@@ -163,6 +163,14 @@ div.centered {
     display: none;
 }
 
+.addMember {
+    margin-bottom: 10px;
+}
+
+.smallText {
+    font-size: 0.8em;
+}
+
 @media (max-width: 1020px) {
     .members-cont {
         flex-wrap: wrap;
@@ -224,5 +232,9 @@ div.centered {
         padding-right: 8px;
         border-radius: 5px;
         background: linear-gradient(rgba(230,230,230, 1),rgba(210,210,210, 1));
+    }
+
+    .addMember {
+        margin-bottom: 10px;
     }
 }
