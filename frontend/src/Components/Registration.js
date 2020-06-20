@@ -41,7 +41,7 @@ export default class Registration extends React.Component {
                     username: username,
                     password: password
                 })
-            }).then(res => res.json()).then(res => {
+            }).then(res => {console.log(res); return res.json()}).then(res => {
                 console.log(res);
                 if (res.error)
                     this.setState({errorMessage: res.error.message || res.error});
