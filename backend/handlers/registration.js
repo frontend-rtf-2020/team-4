@@ -82,7 +82,7 @@ async function RegistrationHandler(req, res)
                         sendEmail(newUser.email, newUser.activatorId)
                             .then(i => {
                                 console.log(i);
-                                res.send('');
+                                res.send('{}');
                             })
                             .catch(i =>
                             {

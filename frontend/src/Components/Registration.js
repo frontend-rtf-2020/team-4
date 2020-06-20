@@ -67,7 +67,7 @@ export default class Registration extends React.Component {
                 })
             }).then(res => {
                 console.log(res);
-                return res.status === 200 ? {} : res.json()
+                return res.json()
             }).then(res => {
                 console.log(res);
                 if (res.error)
