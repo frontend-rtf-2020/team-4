@@ -11,7 +11,6 @@ const signUp = new LocalStrategy((email, username, done, password) => {
         console.log(email);
         console.log(username);
         console.log(password);
-
         if(!user)
         {
             console.log('correct1');

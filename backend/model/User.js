@@ -28,7 +28,7 @@ const User  = mongoose.model('User', new Schema({
     },
     registrationData : {
       type : Date,
-      required : true,
+      required : false,
       default : Date.now
     }
 
