@@ -16,6 +16,7 @@ class Board extends React.Component {
         this.memsFilter = React.createRef();
         this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}},
             columns: null, filterMembers: new Set(), filter: t => true, dragId: "", addError: "", addSucces: ""};
+        this.WsClient = new WsClient();
     }
 
     clearFilter = event => {
@@ -44,17 +45,14 @@ class Board extends React.Component {
         this.ws = new WebSocket(getWSURL(`ws/get_detailed_board/${this.props.match.params.id}`));
         this.ws.onmessage = msg => {
             const data = JSON.parse(msg.data);
-            console.log(data);
-            console.log(data.columns);
             if(data.error)
                 alert(data.error);
             else {
-                console.log(data);
                 data.columns.sort((a, b) => a.orderNumber - b.orderNumber);
                 this.setState({...data,  filter: t => true});
             }
         };
-        this.WsClient = new WsClient(this.ws);
+        this.WsClient.setWS(this.ws);
     }
 
     componentWillUnmount() {
@@ -94,7 +92,6 @@ class Board extends React.Component {
             this.WsClient.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
             this.WsClient.getColumnChangingObject(columns[ind + 1]._id, "orderNumber", columns[ind + 1].orderNumber),
         ]);
-        console.log(data);
         this.ws.send(data);
         columns.sort((a, b) => a.orderNumber - b.orderNumber);
         this.setState({ columns: columns});
@@ -106,17 +103,17 @@ class Board extends React.Component {
         field: 'tasks'
     });
 
-    deleteColumn = id => this.delete(id, 'Column', undefined, {
-        collection: 'Task',
-        field: 'tasks'
-    });
-
     delete = (id, col, parent, children) => this.ws.send(JSON.stringify({
         _id: id,
         collection: col,
         parent: parent,
         children: children
     }));
+
+    deleteColumn = id => this.WsClient.delete(id, 'Column', undefined, {
+        collection: 'Task',
+        field: 'tasks'
+    });
 
     addTask = (name, workerId, description, date, columnId) =>
         this.WsClient.addTask(name, workerId, description, date, columnId);
@@ -126,13 +123,6 @@ class Board extends React.Component {
 
     changeColumn = (id, fieldName, value) =>
             this.WsClient.changeColumn(id, fieldName, value);
-
-    changeTask = (oldId, id, name, workerId, description, date, columnId) =>
-            this.WsClient.changeTask(oldId, id, name, workerId, description, date, columnId);
-
-
-    toggleDoneTask = (id, done) =>
-            this.WsClient.toggleDoneTask(id, done);
 
     addMember = identifier => {
         fetch('/api/checkUser?identifier=' + encodeURI(identifier))
@@ -216,10 +206,12 @@ class Board extends React.Component {
                             this.state.columns ? (
                                     <>
                                         {this.state.columns.map(c =>
-                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns} toggleDoneTask={this.toggleDoneTask}
-                                                    addTask={this.addTask} delete={this.deleteColumn} changeColumn={this.changeColumn} changeTask={this.changeTask}
-                                                    moveLeft={this.moveLeft} moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}
-                                                    onDragOver={this.onDragOver} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
+                                            <Column filter={this.state.filter} members={this.state.board.members} columns={this.state.columns}
+                                                    changeColumn={this.changeColumn} changeTask={this.WsClient.changeTask} moveLeft={this.moveLeft}
+                                                    moveRight={this.moveRight} key={c._id} column={c} deleteTask={this.deleteTask}
+                                                    delete={this.deleteColumn}
+                                                    onDragOver={this.onDragOver} onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}
+                                                    onDragEnter={this.onDragEnter} WsClient={this.WsClient}
                                             />)}
                                         <AddColumn addColumn={this.addColumn}/>
                                     </>) :

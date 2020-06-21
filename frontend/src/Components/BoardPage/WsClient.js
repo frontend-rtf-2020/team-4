@@ -1,7 +1,10 @@
 
 class WsClient {
 
-    constructor(ws) {
+    constructor() {
+    }
+
+    setWS(ws) {
         this.ws = ws;
     }
 
@@ -15,12 +18,20 @@ class WsClient {
         }))
     };
 
+    deleteTask = (columnId, id) => this.delete(id, 'Task', {
+        id: columnId,
+        collection: 'Column',
+        field: 'tasks'
+    });
+
+
     delete = (id, col, parent, children) => this.ws.send(JSON.stringify({
         _id: id,
         collection: col,
         parent: parent,
         children: children
     }));
+
 
     close = () =>
         this.ws.close();

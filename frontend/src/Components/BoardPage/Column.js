@@ -3,6 +3,7 @@ import Task from "./Task";
 import "./Column.css";
 import AddTask from "./AddTask";
 import Field from "../Field";
+import WsClient from "./WsClient";
 
 class Column extends React.Component {
     moveLeft = event => {
@@ -12,10 +13,9 @@ class Column extends React.Component {
         this.props.moveRight(this.props.column._id);
     };
     addTask = (name, workerId, description, date) =>
-        this.props.addTask(name, workerId, description, date, this.props.column._id);
+        this.props.WsClient.addTask(name, workerId, description, date, this.props.column._id);
 
-    delete = event =>
-        this.props.delete(this.props.column._id);
+    delete = event => this.props.delete(this.props.column._id);
 
     edit = this.props.changeColumn.bind(null, this.props.column._id);
 
@@ -57,16 +57,14 @@ class Column extends React.Component {
                      onDragOver={this.props.onDragOver} onDragEnd={this.onDragEnd}
                      onDrop={this.onDrop}>
                     <span onClick={this.moveLeft} className='arrow' style={{float: "left"}}>&lt;</span>
-                    {/* <span className='arrow edit' onClick={this.edit}>&#10000;</span>*/}
                     <span className='arrow' onClick={this.delete}>&#10006;</span>
-                    {/** TODO: add button for correct moving corresponding to the task */}
                     <span onClick={this.moveRight} className='arrow' style={{float: "right"}}>&gt;</span>
                     <h3><Field name='name' onEdit={this.edit}>{this.props.column.name}</Field></h3>
                     {this.props.column.tasks.filter(this.props.filter)
                         .filter(t => Object.keys(t).length !== 0).map(b =>
                         <Task columns={this.props.columns} members={this.props.members}
                               onEdit={this.editTask} columnId={this.props.column._id}
-                              toggleDoneTask={this.props.toggleDoneTask}
+                              toggleDoneTask={this.props.WsClient.toggleDoneTask}
                               onDelete={this.deleteTask} key={b._id} id={b._id} task={b} />)}
                     <AddTask onSubmit={this.addTask} members={this.props.members}/>
                 </div>
