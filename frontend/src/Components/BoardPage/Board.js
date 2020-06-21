@@ -6,12 +6,18 @@ import AddColumn from "./AddColumn";
 import { Members } from "./Members";
 import Member from "./Member";
 import Popup from "../UI/Popup";
-/**
- * TODO: Divide class into several parts, introducing all ws functions to another class!
- *
- */
+import WsClient from "./WsClient";
 
 class Board extends React.Component {
+
+    constructor() {
+        super();
+        this.filterText = React.createRef();
+        this.memsFilter = React.createRef();
+        this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}},
+            columns: null, filterMembers: new Set(), filter: t => true, dragId: "", addError: "", addSucces: ""};
+    }
+
     clearFilter = event => {
         this.setState({filter: t => true})
     };
@@ -33,20 +39,6 @@ class Board extends React.Component {
         state.filterMembers.add(this.memsFilter.current.value);
         this.setState(state)
     };
-/*
-    togglePopup = () => {
-        this.setState({
-            showPopup: !this.state.showPopup
-        });
-    };
-*/
-    constructor() {
-        super();
-        this.filterText = React.createRef();
-        this.memsFilter = React.createRef();
-        this.state = {board: {name: "", description: "", members: [], creatorId: {login: ""}},
-            columns: null, filterMembers: new Set(), filter: t => true, dragId: "", addError: "", addSucces: ""};
-    }
 
     componentDidMount() {
         this.ws = new WebSocket(getWSURL(`ws/get_detailed_board/${this.props.match.params.id}`));
@@ -62,10 +54,11 @@ class Board extends React.Component {
                 this.setState({...data,  filter: t => true});
             }
         };
+        this.WsClient = new WsClient(this.ws);
     }
 
     componentWillUnmount() {
-        this.ws.close();
+        this.WsClient.close();
     }
 
     removeMemberFromFilter = m => {
@@ -81,15 +74,9 @@ class Board extends React.Component {
         const c = columns[ind].orderNumber;
         columns[ind].orderNumber = columns[ind - 1].orderNumber;
         columns[ind - 1].orderNumber = c;
-        /**const queryData = [{
-            _id:columns[ind]._id,
-
-        }];
-            {[columns[ind]._id]: columns[ind].orderNumber,
-            [columns[ind - 1]._id]: columns[ind - 1].orderNumber};*/
         this.ws.send(JSON.stringify([
-            this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
-            this.getColumnChangingObject(columns[ind - 1]._id, "orderNumber", columns[ind - 1].orderNumber),
+            this.WsClient.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
+            this.WsClient.getColumnChangingObject(columns[ind - 1]._id, "orderNumber", columns[ind - 1].orderNumber),
         ]));
         columns.sort((a, b) => a.orderNumber - b.orderNumber);
         this.setState({ columns: columns});
@@ -102,26 +89,16 @@ class Board extends React.Component {
         const columns = [...this.state.columns];
         const c = columns[ind].orderNumber;
         columns[ind].orderNumber = columns[ind + 1].orderNumber;
-        columns[ind + 1].orderNumber = c;/*
-        const queryData = {[columns[ind]._id]: columns[ind].orderNumber,
-            [columns[ind + 1]._id]: columns[ind + 1].orderNumber};
-        alert(JSON.stringify(queryData));*/
+        columns[ind + 1].orderNumber = c;
         const data = JSON.stringify([
-            this.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
-            this.getColumnChangingObject(columns[ind + 1]._id, "orderNumber", columns[ind + 1].orderNumber),
+            this.WsClient.getColumnChangingObject(columns[ind]._id, "orderNumber", columns[ind].orderNumber),
+            this.WsClient.getColumnChangingObject(columns[ind + 1]._id, "orderNumber", columns[ind + 1].orderNumber),
         ]);
         console.log(data);
         this.ws.send(data);
         columns.sort((a, b) => a.orderNumber - b.orderNumber);
         this.setState({ columns: columns});
     };
-
-    delete = (id, col, parent, children) => this.ws.send(JSON.stringify({
-        _id: id,
-        collection: col,
-        parent: parent,
-        children: children
-    }));
 
     deleteTask = (columnId, id) => this.delete(id, 'Task', {
         id: columnId,
@@ -134,77 +111,28 @@ class Board extends React.Component {
         field: 'tasks'
     });
 
-    addTask = (name, workerId, description, date, columnId) => {
-        console.log(date.toString());
-        this.ws.send(JSON.stringify({
-            collection: 'Task',
-            object: {
-                name: name,
-                workerId: workerId,
-                description: description,
-                endDate: date//TODO: fix date format
-            },
-            parent: {
-                id: columnId,
-                collection: 'Column',
-                field: 'tasks'
-            }
-        }))
-    };
-
-    addColumn = name => {
-        console.log(this.state.board._id);
-        console.log(name);
-        this.ws.send(JSON.stringify({
-            collection: 'Column',
-            object: {
-                name: name,
-                boardId: this.state.board._id,
-                orderNumber: this.state.columns.length
-            }
-        }))
-    };
-
-    getColumnChangingObject = (id, fieldName, value) => ({
+    delete = (id, col, parent, children) => this.ws.send(JSON.stringify({
         _id: id,
-        object: {
-            [fieldName]: value,
-        },
-        collection: 'Column',
-    });
+        collection: col,
+        parent: parent,
+        children: children
+    }));
+
+    addTask = (name, workerId, description, date, columnId) =>
+        this.WsClient.addTask(name, workerId, description, date, columnId);
+
+    addColumn = name =>
+            this.WsClient.addColumn(name, this.state.board._id, this.state.columns.length);
 
     changeColumn = (id, fieldName, value) =>
-        this.ws.send(JSON.stringify(this.getColumnChangingObject(id, fieldName, value)));
+            this.WsClient.changeColumn(id, fieldName, value);
 
-    changeTask = (oldId, id, name, workerId, description, date, columnId) => {
-        console.log(date.toString());
-        this.ws.send(JSON.stringify({
-            collection: 'Task',
-            _id: id,
-            object: {
-                name: name,
-                workerId: workerId,
-                description: description,
-                endDate: date//TODO: fix date format
-            },
-            parent: {
-                id: columnId,
-                oldId: oldId,
-                collection: 'Column',
-                field: 'tasks'
-            }
-        }))
-    };
+    changeTask = (oldId, id, name, workerId, description, date, columnId) =>
+            this.WsClient.changeTask(oldId, id, name, workerId, description, date, columnId);
 
-    toggleDoneTask = (id, done) => {
-        this.ws.send(JSON.stringify({
-            collection: 'Task',
-            _id: id,
-            object: {
-                done: done
-            }
-        }))
-    };
+
+    toggleDoneTask = (id, done) =>
+            this.WsClient.toggleDoneTask(id, done);
 
     addMember = identifier => {
         fetch('/api/checkUser?identifier=' + encodeURI(identifier))
@@ -212,7 +140,6 @@ class Board extends React.Component {
             .then(r => {
                 console.log(r);
                 if(r.error)
-                    //alert(r.error);
                     this.setState({addError: r.error, addSuccess : ""});
                 else {
                     this.setState({addSuccess: "User has been successfully added!", addError: ""});
@@ -246,8 +173,8 @@ class Board extends React.Component {
         columns[indDrag].orderNumber = columns[indDrop].orderNumber;
         columns[indDrop].orderNumber = drag;
         const data = JSON.stringify([
-            this.getColumnChangingObject(columns[indDrag]._id, "orderNumber", columns[indDrag].orderNumber),
-            this.getColumnChangingObject(columns[indDrop]._id, "orderNumber", columns[indDrop].orderNumber),
+            this.WsClient.getColumnChangingObject(columns[indDrag]._id, "orderNumber", columns[indDrag].orderNumber),
+            this.WsClient.getColumnChangingObject(columns[indDrop]._id, "orderNumber", columns[indDrop].orderNumber),
         ]);
         this.ws.send(data);
         columns.sort((a, b) => a.orderNumber - b.orderNumber);
@@ -259,7 +186,6 @@ class Board extends React.Component {
     onDragStart = (event, id) => {
         this.setState({dragId : id});
     };
-
 
     render() {
         return (
@@ -285,7 +211,7 @@ class Board extends React.Component {
                     <div align='center' className='description'>
                         {this.state.board.description}
                     </div>
-                    <div className='columns droppable'>
+                    <div className='columns'>
                         {
                             this.state.columns ? (
                                     <>

@@ -30,7 +30,8 @@ function checkNotAuthenticated(req, res, next) {
 
 function logout(req, res) {
     req.logOut();
-    res.send({ result: 'Successful logout' });
+    //res.send({ result: 'Successful logout' });
+    res.status(200);
 }
 
 function findUser(req, resp) {

@@ -13,7 +13,7 @@ const link = process.env.DEPLOY_LINK || ' https://mytask-board.azurewebsites.net
 
 function sendEmail(address, activ) {
     const mailOptions = {
-        from: `Authorisation service <${process.env.MAIL_ADDRESS}>`,
+        from: `My Task Board Authorization service <${process.env.MAIL_ADDRESS}>`,
         sender: process.env.MAIL_ADDRESS,
         to: address,
         subject: 'Account activation',
