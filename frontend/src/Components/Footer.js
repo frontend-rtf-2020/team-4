@@ -5,6 +5,3 @@ export default function Footer(props) {
         <b>2020</b>
     </footer>);
 }
-/*
-module.export = Footer;
-*/

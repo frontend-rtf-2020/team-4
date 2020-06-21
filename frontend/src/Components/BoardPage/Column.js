@@ -15,7 +15,10 @@ class Column extends React.Component {
     addTask = (name, workerId, description, date) =>
         this.props.WsClient.addTask(name, workerId, description, date, this.props.column._id);
 
-    delete = event => this.props.delete(this.props.column._id);
+    delete = event => this.props.WsClient.delete(this.props.column._id, 'Column', undefined, {
+    collection: 'Task',
+    field: 'tasks'
+});
 
     edit = this.props.changeColumn.bind(null, this.props.column._id);
 

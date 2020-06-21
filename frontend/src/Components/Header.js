@@ -16,7 +16,6 @@ class AuthorizedLinks extends React.Component {
                     alert(r.error);
                 }
                 else {
-                   // alert(r.result);
                     window.location.href = '/';
                 }
                 sessionStorage.setItem('user', null);
@@ -31,10 +30,7 @@ class AuthorizedLinks extends React.Component {
 }
 
 export default class Header extends React.PureComponent {
-   /* constructor() {
-        super();
-        this.state = {user: null};
-    }*/
+
     render() {
         return (<header>
             <h2>
@@ -46,4 +42,3 @@ export default class Header extends React.PureComponent {
 }
 
 
-//module.export = Header;

@@ -23,6 +23,5 @@ const Column = mongoose.model('Column', new Schema({
     }
 }));
 
-//Requires adding an update hook for editorsId field
 
 module.exports = Column;

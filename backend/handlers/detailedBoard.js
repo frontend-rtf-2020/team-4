@@ -20,7 +20,7 @@ function getDetailedBoard(boardId, userId) {
                 return {"error": "Wrong boardId"};
             const columns = await Column.find({ boardId: mongoose.Types.ObjectId(boardId)})//TODO: sort
                     .populate('tasks', 'name _id workerId description done endDate')
-                    .exec(/*(er, c) => Column.populate(c, {path: 'tasks.workerId', select: "login -_id"})*/)
+                    .exec()
                     .then(c => Column.populate(c, {path: 'tasks.workerId', select: "login"}))
                     .catch(e => console.log(e));
             return {board: b[0], columns: columns};
@@ -28,7 +28,7 @@ function getDetailedBoard(boardId, userId) {
 }
 
 function detailedBoardWSHandler(ws, req) {
-    const boardId = req.params.id;  //"5eafafc5d07fde1f84b44873";
+    const boardId = req.params.id;
     const userId = req.user._id.toString();
     //save the sockets
     if(boardSockets[boardId])
@@ -58,13 +58,10 @@ function addNewObject(data , boardId) {
         entity[f] = f.endsWith('Id') ?
             new mongoose.Types.ObjectId(data.object[f]) :
             data.object[f];
-    /*if(data.parent)
-        entity[data.parent.collection.toLowerCase()] = new mongoose.Types.ObjectId(data.parent.id);*/
     entity.save()
         .then(e => data.parent ? mongoose.connection.models[data.parent.collection]
             .findByIdAndUpdate(data.parent.id , {$addToSet: {[data.parent.field]: e._id}} ,
                 {useFindAndModify: false}, standardResend.bind(null, boardId)) : sendData(boardId))
-        //.then(r => console.log('Creation'))
         .catch(e => console.log(e));
 }
 
@@ -73,7 +70,6 @@ function deleteObject(data , boardId) {
         .findByIdAndRemove(data._id , {useFindAndModify: false} , (err , obj) => {
             if (err)
                 console.log(err);
-            console.log(obj[data.children.field]);
             if (data.children)
                 mongoose.connection.models[data.children.collection]
                     .deleteMany({_id: {$in: obj[data.children.field]}} , {} ,err => console.log(err || ''));
@@ -105,10 +101,9 @@ function handleObject(data , boardId) {
         Board.findByIdAndUpdate(boardId, {$addToSet: {members: data.newMemberId}},
             {useFindAndModify: false}, standardResend.bind(null, boardId));
     else if (data._id) {
-        if (data.object) //update
+        if (data.object)
             updateObject(data , boardId);
-        else//deletion
-            //console.log(mongoose.connection.models)
+        else
             deleteObject(data , boardId);
     }
     else //creation

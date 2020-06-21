@@ -1,6 +1,5 @@
 import React from "react";
 import $ from "jquery";
-import Popup from "../UI/Popup";
 import Member from "./Member";
 
 export class Members extends React.Component {

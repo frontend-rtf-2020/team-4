@@ -10,11 +10,10 @@ const boardListSockets = {}; // It is all sockets for getBoard
 
 
 function boardListWSHandler(ws, req) {
-    //save the socket
+
     boardListSockets[req.user._id.toString()] = ws;
 
-    //console.log(boardListSockets);
-    const id = req.user._id;//mongoose.Types.ObjectId("5ea2ffc543a03a3f4133f047");//req.user._id
+    const id = req.user._id;
 
     getBoard(id)
         .then(r => ws.send(JSON.stringify(r)))
@@ -32,7 +31,6 @@ function boardListWSHandler(ws, req) {
 //TODO:Split into several functions
 async function replyBoardListMessage(msg , userId) {
     //adding board
-    //ws.send(msg);
     console.log(msg);
     const board = JSON.parse(msg);
     if (board._id) { // Checking, does it new or changed board?
@@ -43,8 +41,7 @@ async function replyBoardListMessage(msg , userId) {
                     console.log(board);
                     sendBoardData(board.members , boardListSockets)
                 });
-        else//deletion
-            //TODO: remove all its columns & tasks
+        else
         {
             Board.findByIdAndRemove(board._id , {useFindAndModify: false} ,
                 (err , board) => sendBoardData(board.members , boardListSockets));
@@ -55,8 +52,8 @@ async function replyBoardListMessage(msg , userId) {
             }
         }
     }
-    else {   //If '_id' does not exist, therefore it is a new board
-        const newBoard = new Board(); //Adding new board in DB
+    else {
+        const newBoard = new Board();
         newBoard.creatorId = userId;
         console.log(userId);
         newBoard.name = board.name;
@@ -72,4 +69,4 @@ async function replyBoardListMessage(msg , userId) {
 }
 
 
-module.exports =  boardListWSHandler;// getDetailedBoard: detailedBoardWSHandler };
+module.exports =  boardListWSHandler;

@@ -30,7 +30,6 @@ function checkNotAuthenticated(req, res, next) {
 
 function logout(req, res) {
     req.logOut();
-    //res.send({ result: 'Successful logout' });
     res.status(200);
 }
 
@@ -45,7 +44,6 @@ function findUser(req, resp) {
     User.findOne({$or: conditions}, (err, user) =>
         resp.json({error: (!user || !user._id) ? err || "Such user hasn't been found." : undefined, result: user ? user._id : undefined}));
 
-            /*err || user ? user._id : "Such user hasn't been found."*/
 }
 
 module.exports = { getUserData, checkAuthenticated, checkNotAuthenticated, logout, checkWsAuthenticated, findUser };

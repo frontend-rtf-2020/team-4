@@ -23,7 +23,7 @@ const User  = mongoose.model('User', new Schema({
     },
     activatorId : {
         type : String,
-        required : false,          //Until not done activation by mail
+        required : false,
         unique: true
     },
     registrationData : {

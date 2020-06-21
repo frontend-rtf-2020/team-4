@@ -1,5 +1,4 @@
 import React, {createRef} from "react";
-import Input from "./UI/Input";
 
 export default class Field extends React.PureComponent {
     onSubmit = event => {
